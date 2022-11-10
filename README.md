@@ -3,7 +3,7 @@
 ## Tên dự án: Xây dựng ứng dụng quản lý bán hàng cho cửa hàng bán phụ kiện thiết bị di động DAVISY
 
 
-##Thành viên
+## Thành viên
 - Trần Hữu Đang (Project Manager)
 - Nguyễn Khánh Đan (QA, QC, Tester)
 - Phùng Quốc Vinh (Data Scentist)
