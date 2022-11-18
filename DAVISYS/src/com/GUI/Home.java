@@ -12,6 +12,7 @@ import com.UI.drawer.Drawer;
 import com.UI.drawer.DrawerController;
 import com.UI.drawer.scroll.DrawerItem;
 import com.UI.drawer.EventDrawer;
+import com.dao.ThongKeDAO;
 import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,11 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu.Separator;
 import com.swing.*;
 import java.awt.Font;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 /**
@@ -49,6 +55,8 @@ public class Home extends javax.swing.JFrame {
 
     Button btnItemMenu = null;
 
+    ThongKeDAO TKdao = new ThongKeDAO();
+
     public Home() {
         initComponents();
         hideCardMenubar();
@@ -59,11 +67,12 @@ public class Home extends javax.swing.JFrame {
         pnMenu.setSize(0, 670);
         //runFont();
         this.btnItemMenu = btnTrangChu;
-        
+        Clock();
         settingTable();
+        initThongKe();
     }
-    
-    public void settingTable(){
+
+    public void settingTable() {
         tblKhachHang.setRowHeight(30);
         tblKhachHang.getTableHeader().setOpaque(false);
         TableColumnModel columnModelChuyenDe = tblKhachHang.getColumnModel();
@@ -249,12 +258,12 @@ public class Home extends javax.swing.JFrame {
      */
     void setAnimationHr(JPanel pn, JLabel hr, JLabel item) {
         if (!startThread) {
-            
+
             Thread t1 = new Thread() {
                 public void run() {
-                    for (int i=1; i<item.getWidth(); i++){
+                    for (int i = 1; i < item.getWidth(); i++) {
                         hr.setLocation(item.getX(), hr.getY());
-                        hr.setSize(i,hr.getHeight());//110
+                        hr.setSize(i, hr.getHeight());//110
                         try {
                             Thread.sleep(3);
                         } catch (InterruptedException ex) {
@@ -273,7 +282,6 @@ public class Home extends javax.swing.JFrame {
     //điểu chỉnh thanh gạch dưới của menu
     public void setLocationHr(JPanel pn, JLabel hr, JLabel item) {
 
-        
         setAnimationHr(pn, hr, item);
     }
 
@@ -336,6 +344,93 @@ public class Home extends javax.swing.JFrame {
         return true;
     }
 
+    public void initThongKe() {
+        fillCboDay_ThongKe();
+        fillCboMonth_ThongKe();
+        fillCboYear_ThongKe();
+        fillTableNhanVienXX();
+    }
+
+    public void fillCboDay_ThongKe() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboDay.getModel();
+        model.removeAllElements();
+        for (int i = 1; i < 13; i++) {
+            model.addElement(String.valueOf(i));
+        }
+    }
+
+    public void fillCboMonth_ThongKe() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboMonth.getModel();
+        model.removeAllElements();
+        for (int i = 1; i < 32; i++) {
+            model.addElement(String.valueOf(i));
+        }
+    }
+
+    public void fillCboYear_ThongKe() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboYear.getModel();
+        model.removeAllElements();
+        for (int i = 2020; i < 2023; i++) {
+            model.addElement(String.valueOf(i));
+        }
+    }
+
+    public void fillTableSPBanChay() {
+        DefaultTableModel model = (DefaultTableModel) tblSPBanChay.getModel();
+        model.setRowCount(0);
+        String day = (String) cboDay.getSelectedItem();
+        String month = (String) cboMonth.getSelectedItem();
+        String year = (String) cboYear.getSelectedItem();
+        List<Object[]> list = TKdao.getSPBanChay(day, month, year);
+        for (Object[] row : list) {
+            model.addRow(row);
+        }
+    }
+
+    public void fillTableNhanVienXX() {
+        int countNV = 0;
+        List<Object[]> list = TKdao.getNhanVienXX();
+        for (Object[] row : list) {
+            countNV++;
+            if (countNV == 1) {
+                lblNV1.setText(String.valueOf(row[0]));
+            }
+            if (countNV == 2) {
+                lblNV2.setText(String.valueOf(row[0]));
+            }
+            if (countNV == 3) {
+                lblNV3.setText(String.valueOf(row[0]));
+            }
+        }
+    }
+
+    void Clock() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        Date now = new Date();
+                        SimpleDateFormat formater = new SimpleDateFormat();
+                        formater.applyPattern("hh:mm:ss aa");
+                        String time = formater.format(now);
+                        lblTime.setText(time);
+                        long millis = System.currentTimeMillis();
+                        java.sql.Date day = new java.sql.Date(millis);
+                        SimpleDateFormat formater2 = new SimpleDateFormat();
+                        formater2.applyPattern("dd-MM-yyyy");
+                        String dayt = formater2.format(day);
+                        lblDay.setText(String.valueOf(dayt));
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        break;
+                    }
+
+                }
+            }
+        }).start();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -370,7 +465,6 @@ public class Home extends javax.swing.JFrame {
         cardMenubarTrangChu = new javax.swing.JPanel();
         TrangChuTittle2 = new javax.swing.JLabel();
         TrangChuHr = new javax.swing.JLabel();
-        textField1 = new com.swing.TextField();
         cardMenubarTaiKhoan = new javax.swing.JPanel();
         TaiKhoantittle2 = new javax.swing.JLabel();
         TaiKhoantittle3 = new javax.swing.JLabel();
@@ -401,28 +495,24 @@ public class Home extends javax.swing.JFrame {
         textField3 = new com.swing.TextField();
         jplContainer = new javax.swing.JPanel();
         cardTrangChu = new javax.swing.JPanel();
-        cardTrangChuTongQuan = new com.swing.PanelRound();
-        panelRound1 = new com.swing.PanelRound();
-        panelRound5 = new com.swing.PanelRound();
-        panelRound6 = new com.swing.PanelRound();
-        panelRound7 = new com.swing.PanelRound();
-        jLabel12 = new javax.swing.JLabel();
-        panelRound4 = new com.swing.PanelRound();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        lblMessage4 = new javax.swing.JLabel();
-        lblMessage1 = new javax.swing.JLabel();
-        lblMessage2 = new javax.swing.JLabel();
-        lblMessage3 = new javax.swing.JLabel();
-        panelRound2 = new com.swing.PanelRound();
-        panelRound3 = new com.swing.PanelRound();
         cardThongKeDoanhThu = new com.swing.PanelRound();
-        jLabel59 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblSPBanChay1 = new javax.swing.JTable();
+        jLabel29 = new javax.swing.JLabel();
+        cboYear1 = new com.swing.Combobox();
+        jLabel31 = new javax.swing.JLabel();
+        cboDay1 = new com.swing.Combobox();
+        jLabel30 = new javax.swing.JLabel();
+        cboMonth1 = new com.swing.Combobox();
         cardThongKeSanPham = new com.swing.PanelRound();
-        jLabel61 = new javax.swing.JLabel();
+        jLabel34 = new javax.swing.JLabel();
+        cboYear = new com.swing.Combobox();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblSPBanChay = new javax.swing.JTable();
+        jLabel33 = new javax.swing.JLabel();
+        cboDay = new com.swing.Combobox();
+        jLabel32 = new javax.swing.JLabel();
+        cboMonth = new com.swing.Combobox();
         cardTrangChuNoiBat = new com.swing.PanelRound();
         jLabel27 = new javax.swing.JLabel();
         cardTaiKhoanQuanLi = new com.swing.PanelRound();
@@ -573,6 +663,30 @@ public class Home extends javax.swing.JFrame {
         combobox1 = new com.swing.Combobox();
         editButton8 = new com.swing.EditButton();
         editButton9 = new com.swing.EditButton();
+        cardTrangChuTongQuan = new com.swing.PanelRound();
+        panelRound1 = new com.swing.PanelRound();
+        lblTime = new javax.swing.JLabel();
+        lblDay = new javax.swing.JLabel();
+        panelRound5 = new com.swing.PanelRound();
+        panelRound6 = new com.swing.PanelRound();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        panelRound7 = new com.swing.PanelRound();
+        jLabel12 = new javax.swing.JLabel();
+        panelRound4 = new com.swing.PanelRound();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel17 = new javax.swing.JLabel();
+        lblNV1 = new javax.swing.JLabel();
+        lblNV2 = new javax.swing.JLabel();
+        lblNV3 = new javax.swing.JLabel();
+        lblMessage1 = new javax.swing.JLabel();
+        lblMessage2 = new javax.swing.JLabel();
+        lblMessage3 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        panelRound2 = new com.swing.PanelRound();
+        panelRound3 = new com.swing.PanelRound();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -912,9 +1026,6 @@ public class Home extends javax.swing.JFrame {
         TrangChuHr.setOpaque(true);
         cardMenubarTrangChu.add(TrangChuHr, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 110, 5));
 
-        textField1.setLabelText("Tìm kiếm");
-        cardMenubarTrangChu.add(textField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 0, 240, -1));
-
         cardMenubar.add(cardMenubarTrangChu, "card2");
 
         cardMenubarTaiKhoan.setBackground(new java.awt.Color(255, 255, 255));
@@ -1131,176 +1242,6 @@ public class Home extends javax.swing.JFrame {
         cardTrangChu.setBackground(new java.awt.Color(204, 204, 204));
         cardTrangChu.setLayout(new java.awt.CardLayout());
 
-        cardTrangChuTongQuan.setBackground(new java.awt.Color(255, 255, 255));
-        cardTrangChuTongQuan.setRoundBottomLeft(30);
-        cardTrangChuTongQuan.setRoundBottomRight(30);
-        cardTrangChuTongQuan.setRoundTopLeft(30);
-        cardTrangChuTongQuan.setRoundTopRight(20);
-        cardTrangChuTongQuan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        panelRound1.setBackground(new java.awt.Color(204, 255, 204));
-        panelRound1.setRoundBottomRight(50);
-        panelRound1.setRoundTopLeft(50);
-
-        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
-        panelRound1.setLayout(panelRound1Layout);
-        panelRound1Layout.setHorizontalGroup(
-            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 230, Short.MAX_VALUE)
-        );
-        panelRound1Layout.setVerticalGroup(
-            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
-        );
-
-        cardTrangChuTongQuan.add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 230, 140));
-
-        panelRound5.setBackground(new java.awt.Color(255, 204, 204));
-        panelRound5.setRoundBottomRight(50);
-        panelRound5.setRoundTopLeft(50);
-
-        javax.swing.GroupLayout panelRound5Layout = new javax.swing.GroupLayout(panelRound5);
-        panelRound5.setLayout(panelRound5Layout);
-        panelRound5Layout.setHorizontalGroup(
-            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 230, Short.MAX_VALUE)
-        );
-        panelRound5Layout.setVerticalGroup(
-            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
-        );
-
-        cardTrangChuTongQuan.add(panelRound5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 230, 140));
-
-        panelRound6.setBackground(new java.awt.Color(204, 204, 255));
-        panelRound6.setRoundBottomRight(50);
-        panelRound6.setRoundTopLeft(50);
-
-        javax.swing.GroupLayout panelRound6Layout = new javax.swing.GroupLayout(panelRound6);
-        panelRound6.setLayout(panelRound6Layout);
-        panelRound6Layout.setHorizontalGroup(
-            panelRound6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 230, Short.MAX_VALUE)
-        );
-        panelRound6Layout.setVerticalGroup(
-            panelRound6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 140, Short.MAX_VALUE)
-        );
-
-        cardTrangChuTongQuan.add(panelRound6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, 230, 140));
-
-        panelRound7.setBackground(new java.awt.Color(224, 223, 223));
-        panelRound7.setRoundBottomLeft(30);
-        panelRound7.setRoundBottomRight(30);
-        panelRound7.setRoundTopLeft(30);
-        panelRound7.setRoundTopRight(30);
-        panelRound7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/bell.png"))); // NOI18N
-        panelRound7.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 40, 40));
-
-        panelRound4.setBackground(new java.awt.Color(204, 153, 255));
-        panelRound4.setRoundBottomLeft(20);
-        panelRound4.setRoundBottomRight(20);
-        panelRound4.setRoundTopLeft(20);
-        panelRound4.setRoundTopRight(20);
-        panelRound4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 3, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("2 ĐạtVila, 3jack");
-        panelRound4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 190, 50));
-
-        jLabel19.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel19.setText("Tổng doanh thu");
-        panelRound4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 40));
-
-        panelRound7.add(panelRound4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 190, 130));
-        panelRound7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 42, 230, 30));
-
-        jLabel17.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel17.setForeground(new java.awt.Color(255, 51, 51));
-        jLabel17.setText("Thông báo");
-        panelRound7.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 140, 40));
-
-        jLabel21.setBackground(new java.awt.Color(224, 223, 223));
-        jLabel21.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel21.setText("Các mục khác");
-        jLabel21.setOpaque(true);
-        panelRound7.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 190, 40));
-
-        lblMessage4.setBackground(new java.awt.Color(255, 255, 255));
-        lblMessage4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMessage4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMessage4.setOpaque(true);
-        panelRound7.add(lblMessage4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 420, 190, 40));
-
-        lblMessage1.setBackground(new java.awt.Color(255, 255, 255));
-        lblMessage1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMessage1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMessage1.setOpaque(true);
-        panelRound7.add(lblMessage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 190, 40));
-
-        lblMessage2.setBackground(new java.awt.Color(255, 255, 255));
-        lblMessage2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMessage2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMessage2.setOpaque(true);
-        panelRound7.add(lblMessage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, 190, 40));
-
-        lblMessage3.setBackground(new java.awt.Color(255, 255, 255));
-        lblMessage3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        lblMessage3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblMessage3.setOpaque(true);
-        panelRound7.add(lblMessage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 190, 40));
-
-        cardTrangChuTongQuan.add(panelRound7, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 30, 230, 480));
-
-        panelRound2.setBackground(new java.awt.Color(255, 204, 255));
-        panelRound2.setRoundBottomLeft(30);
-        panelRound2.setRoundBottomRight(30);
-        panelRound2.setRoundTopLeft(30);
-        panelRound2.setRoundTopRight(30);
-
-        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
-        panelRound2.setLayout(panelRound2Layout);
-        panelRound2Layout.setHorizontalGroup(
-            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 510, Short.MAX_VALUE)
-        );
-        panelRound2Layout.setVerticalGroup(
-            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        cardTrangChuTongQuan.add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 510, 240));
-
-        panelRound3.setBackground(new java.awt.Color(204, 255, 204));
-        panelRound3.setRoundBottomLeft(30);
-        panelRound3.setRoundBottomRight(30);
-        panelRound3.setRoundTopLeft(30);
-        panelRound3.setRoundTopRight(30);
-
-        javax.swing.GroupLayout panelRound3Layout = new javax.swing.GroupLayout(panelRound3);
-        panelRound3.setLayout(panelRound3Layout);
-        panelRound3Layout.setHorizontalGroup(
-            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 230, Short.MAX_VALUE)
-        );
-        panelRound3Layout.setVerticalGroup(
-            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
-
-        cardTrangChuTongQuan.add(panelRound3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 270, 230, 240));
-
-        cardTrangChu.add(cardTrangChuTongQuan, "card2");
-
         cardThongKeDoanhThu.setBackground(new java.awt.Color(255, 255, 255));
         cardThongKeDoanhThu.setRoundBottomLeft(30);
         cardThongKeDoanhThu.setRoundBottomRight(30);
@@ -1308,8 +1249,56 @@ public class Home extends javax.swing.JFrame {
         cardThongKeDoanhThu.setRoundTopRight(20);
         cardThongKeDoanhThu.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel59.setText("thong ke");
-        cardThongKeDoanhThu.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
+        tblSPBanChay1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "MAHD", "NGAYLAP", "TENDN", "THANHTIEN"
+            }
+        ));
+        jScrollPane6.setViewportView(tblSPBanChay1);
+
+        cardThongKeDoanhThu.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 1180, 500));
+
+        jLabel29.setText("Năm");
+        cardThongKeDoanhThu.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 40, 30));
+
+        cboYear1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2022" }));
+        cboYear1.setLabeText("");
+        cboYear1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboYear1ActionPerformed(evt);
+            }
+        });
+        cardThongKeDoanhThu.add(cboYear1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 24, 130, 40));
+
+        jLabel31.setText("Tháng");
+        cardThongKeDoanhThu.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 40, 30));
+
+        cboDay1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10" }));
+        cboDay1.setLabeText("");
+        cboDay1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboDay1ActionPerformed(evt);
+            }
+        });
+        cardThongKeDoanhThu.add(cboDay1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 24, 130, 40));
+
+        jLabel30.setText("Ngày");
+        cardThongKeDoanhThu.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 40, 30));
+
+        cboMonth1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "6" }));
+        cboMonth1.setLabeText("");
+        cboMonth1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboMonth1ActionPerformed(evt);
+            }
+        });
+        cardThongKeDoanhThu.add(cboMonth1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 24, 130, 40));
 
         cardTrangChu.add(cardThongKeDoanhThu, "card3");
 
@@ -1320,8 +1309,56 @@ public class Home extends javax.swing.JFrame {
         cardThongKeSanPham.setRoundTopRight(20);
         cardThongKeSanPham.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel61.setText("xu huong");
-        cardThongKeSanPham.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, -1, -1));
+        jLabel34.setText("Năm");
+        cardThongKeSanPham.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 10, 40, 30));
+
+        cboYear.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2022" }));
+        cboYear.setLabeText("");
+        cboYear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboYearActionPerformed(evt);
+            }
+        });
+        cardThongKeSanPham.add(cboYear, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 20, 130, -1));
+
+        tblSPBanChay.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "MASP", "TENSP", "LUOTBAN"
+            }
+        ));
+        jScrollPane2.setViewportView(tblSPBanChay);
+
+        cardThongKeSanPham.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 1180, 500));
+
+        jLabel33.setText("Tháng");
+        cardThongKeSanPham.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 10, 40, 30));
+
+        cboDay.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10" }));
+        cboDay.setLabeText("");
+        cboDay.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboDayActionPerformed(evt);
+            }
+        });
+        cardThongKeSanPham.add(cboDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, 130, -1));
+
+        jLabel32.setText("Ngày");
+        cardThongKeSanPham.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, 30, 30));
+
+        cboMonth.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "6" }));
+        cboMonth.setLabeText("");
+        cboMonth.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboMonthActionPerformed(evt);
+            }
+        });
+        cardThongKeSanPham.add(cboMonth, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 130, -1));
 
         cardTrangChu.add(cardThongKeSanPham, "card4");
 
@@ -2444,6 +2481,215 @@ public class Home extends javax.swing.JFrame {
 
         cardTrangChu.add(cardKhachHang, "card16");
 
+        cardTrangChuTongQuan.setBackground(new java.awt.Color(255, 255, 255));
+        cardTrangChuTongQuan.setRoundBottomLeft(30);
+        cardTrangChuTongQuan.setRoundBottomRight(30);
+        cardTrangChuTongQuan.setRoundTopLeft(30);
+        cardTrangChuTongQuan.setRoundTopRight(20);
+        cardTrangChuTongQuan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelRound1.setBackground(new java.awt.Color(204, 255, 204));
+        panelRound1.setRoundBottomRight(50);
+        panelRound1.setRoundTopLeft(50);
+
+        lblTime.setFont(new java.awt.Font("Tahoma", 0, 32)); // NOI18N
+        lblTime.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTime.setText("12:20:30 AM");
+
+        lblDay.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
+        lblDay.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDay.setText("17-11-2022");
+
+        javax.swing.GroupLayout panelRound1Layout = new javax.swing.GroupLayout(panelRound1);
+        panelRound1.setLayout(panelRound1Layout);
+        panelRound1Layout.setHorizontalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDay, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
+        );
+        panelRound1Layout.setVerticalGroup(
+            panelRound1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lblTime)
+                .addGap(18, 18, 18)
+                .addComponent(lblDay)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+
+        cardTrangChuTongQuan.add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 230, 140));
+
+        panelRound5.setBackground(new java.awt.Color(255, 204, 204));
+        panelRound5.setRoundBottomRight(50);
+        panelRound5.setRoundTopLeft(50);
+
+        javax.swing.GroupLayout panelRound5Layout = new javax.swing.GroupLayout(panelRound5);
+        panelRound5.setLayout(panelRound5Layout);
+        panelRound5Layout.setHorizontalGroup(
+            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 230, Short.MAX_VALUE)
+        );
+        panelRound5Layout.setVerticalGroup(
+            panelRound5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 140, Short.MAX_VALUE)
+        );
+
+        cardTrangChuTongQuan.add(panelRound5, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 70, 230, 140));
+
+        panelRound6.setBackground(new java.awt.Color(204, 204, 255));
+        panelRound6.setRoundBottomRight(50);
+        panelRound6.setRoundTopLeft(50);
+
+        jTextArea1.setBackground(new java.awt.Color(204, 204, 255));
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Tổng đài hỗ trợ:\nKỹ thuật: 1800.1763\nKhiếu nại: 1800.1062\nBảo hành: 1800.1064");
+        jTextArea1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane7.setViewportView(jTextArea1);
+
+        javax.swing.GroupLayout panelRound6Layout = new javax.swing.GroupLayout(panelRound6);
+        panelRound6.setLayout(panelRound6Layout);
+        panelRound6Layout.setHorizontalGroup(
+            panelRound6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelRound6Layout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+        panelRound6Layout.setVerticalGroup(
+            panelRound6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRound6Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+
+        cardTrangChuTongQuan.add(panelRound6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 70, 230, 140));
+
+        panelRound7.setBackground(new java.awt.Color(224, 223, 223));
+        panelRound7.setRoundBottomLeft(30);
+        panelRound7.setRoundBottomRight(30);
+        panelRound7.setRoundTopLeft(30);
+        panelRound7.setRoundTopRight(30);
+        panelRound7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/bell.png"))); // NOI18N
+        panelRound7.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, 40, 40));
+
+        panelRound4.setBackground(new java.awt.Color(204, 153, 255));
+        panelRound4.setRoundBottomLeft(20);
+        panelRound4.setRoundBottomRight(20);
+        panelRound4.setRoundTopLeft(20);
+        panelRound4.setRoundTopRight(20);
+        panelRound4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel8.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 3, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("2 ĐạtVila, 3jack");
+        panelRound4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 50, 190, 50));
+
+        jLabel19.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel19.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel19.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel19.setText("Tổng doanh thu");
+        panelRound4.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 40));
+
+        panelRound7.add(panelRound4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 190, 130));
+        panelRound7.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 42, 230, 30));
+
+        jLabel17.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel17.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel17.setText("Thông báo");
+        panelRound7.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, 140, 40));
+
+        lblNV1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNV1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNV1.setText("jLabel36");
+        panelRound7.add(lblNV1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, 190, 20));
+
+        lblNV2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNV2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNV2.setText("jLabel36");
+        panelRound7.add(lblNV2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 340, 170, 20));
+
+        lblNV3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblNV3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNV3.setText("jLabel36");
+        panelRound7.add(lblNV3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 160, 20));
+
+        lblMessage1.setBackground(new java.awt.Color(255, 255, 255));
+        lblMessage1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblMessage1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMessage1.setOpaque(true);
+        panelRound7.add(lblMessage1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 190, 40));
+
+        lblMessage2.setBackground(new java.awt.Color(255, 255, 255));
+        lblMessage2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblMessage2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMessage2.setOpaque(true);
+        panelRound7.add(lblMessage2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 190, 40));
+
+        lblMessage3.setBackground(new java.awt.Color(255, 255, 255));
+        lblMessage3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        lblMessage3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblMessage3.setOpaque(true);
+        panelRound7.add(lblMessage3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 410, 190, 40));
+
+        jLabel35.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        jLabel35.setText("Top nhân viên xuất xắc");
+        panelRound7.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, -1, -1));
+
+        cardTrangChuTongQuan.add(panelRound7, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 30, 230, 480));
+
+        panelRound2.setBackground(new java.awt.Color(255, 204, 255));
+        panelRound2.setRoundBottomLeft(30);
+        panelRound2.setRoundBottomRight(30);
+        panelRound2.setRoundTopLeft(30);
+        panelRound2.setRoundTopRight(30);
+
+        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
+        panelRound2.setLayout(panelRound2Layout);
+        panelRound2Layout.setHorizontalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 510, Short.MAX_VALUE)
+        );
+        panelRound2Layout.setVerticalGroup(
+            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 240, Short.MAX_VALUE)
+        );
+
+        cardTrangChuTongQuan.add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 510, 240));
+
+        panelRound3.setBackground(new java.awt.Color(204, 255, 204));
+        panelRound3.setRoundBottomLeft(30);
+        panelRound3.setRoundBottomRight(30);
+        panelRound3.setRoundTopLeft(30);
+        panelRound3.setRoundTopRight(30);
+
+        javax.swing.GroupLayout panelRound3Layout = new javax.swing.GroupLayout(panelRound3);
+        panelRound3.setLayout(panelRound3Layout);
+        panelRound3Layout.setHorizontalGroup(
+            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 230, Short.MAX_VALUE)
+        );
+        panelRound3Layout.setVerticalGroup(
+            panelRound3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 240, Short.MAX_VALUE)
+        );
+
+        cardTrangChuTongQuan.add(panelRound3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 270, 230, 240));
+
+        cardTrangChu.add(cardTrangChuTongQuan, "card2");
+
         jplContainer.add(cardTrangChu, "card2");
 
         jPanel1.add(jplContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1220, 590));
@@ -2521,7 +2767,6 @@ public class Home extends javax.swing.JFrame {
     private void TaiKhoantittle3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TaiKhoantittle3MouseClicked
 
     }//GEN-LAST:event_TaiKhoantittle3MouseClicked
-
 
 
     private void GioiThieutittle1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GioiThieutittle1MousePressed
@@ -2779,6 +3024,30 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_button26ActionPerformed
 
+    private void cboDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboDayActionPerformed
+        fillTableSPBanChay();
+    }//GEN-LAST:event_cboDayActionPerformed
+
+    private void cboMonthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMonthActionPerformed
+        fillTableSPBanChay();
+    }//GEN-LAST:event_cboMonthActionPerformed
+
+    private void cboYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYearActionPerformed
+        fillTableSPBanChay();
+    }//GEN-LAST:event_cboYearActionPerformed
+
+    private void cboYear1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboYear1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboYear1ActionPerformed
+
+    private void cboDay1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboDay1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboDay1ActionPerformed
+
+    private void cboMonth1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboMonth1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboMonth1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -2903,6 +3172,12 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel cardTrangChu;
     private com.swing.PanelRound cardTrangChuNoiBat;
     private com.swing.PanelRound cardTrangChuTongQuan;
+    private com.swing.Combobox cboDay;
+    private com.swing.Combobox cboDay1;
+    private com.swing.Combobox cboMonth;
+    private com.swing.Combobox cboMonth1;
+    private com.swing.Combobox cboYear;
+    private com.swing.Combobox cboYear1;
     private com.swing.Combobox combobox1;
     private com.swing.Combobox combobox2;
     private com.swing.Combobox combobox3;
@@ -2928,7 +3203,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
@@ -2936,7 +3210,14 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
@@ -2955,10 +3236,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel57;
     private javax.swing.JLabel jLabel58;
-    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel60;
-    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
@@ -2995,11 +3274,15 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -3011,10 +3294,14 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jplMenubar;
     private javax.swing.JPanel jplState;
     private javax.swing.JPanel jplTitle;
+    private javax.swing.JLabel lblDay;
     private javax.swing.JLabel lblMessage1;
     private javax.swing.JLabel lblMessage2;
     private javax.swing.JLabel lblMessage3;
-    private javax.swing.JLabel lblMessage4;
+    private javax.swing.JLabel lblNV1;
+    private javax.swing.JLabel lblNV2;
+    private javax.swing.JLabel lblNV3;
+    private javax.swing.JLabel lblTime;
     private javax.swing.JLabel opacity;
     private com.swing.PanelRound panelRound1;
     private com.swing.PanelRound panelRound2;
@@ -3028,7 +3315,8 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTable tblKhachHang1;
     private javax.swing.JTable tblKhachHang2;
     private javax.swing.JTable tblKhachHang3;
-    private com.swing.TextField textField1;
+    private javax.swing.JTable tblSPBanChay;
+    private javax.swing.JTable tblSPBanChay1;
     private com.swing.TextField textField12;
     private com.swing.TextField textField13;
     private com.swing.TextField textField14;

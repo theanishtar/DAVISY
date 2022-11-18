@@ -7,7 +7,7 @@ import java.sql.DriverManager;
 
 public class JdbcHelper {
     public static String driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    public static String dburl = "jdbc:sqlserver://localhost:1433;databaseName=Polypro";
+    public static String dburl = "jdbc:sqlserver://localhost:1433;databaseName=DAVISYS";
     public static String user = "sa";
     public static String pass = "songlong";
     
