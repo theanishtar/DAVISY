@@ -184,7 +184,7 @@ public class Home extends javax.swing.JFrame {
         columnModelNhanVien.getColumn(2).setPreferredWidth(50);
         columnModelNhanVien.getColumn(3).setPreferredWidth(200);
         columnModelNhanVien.getColumn(4).setPreferredWidth(50);
-        
+
         tblKhachHang.setRowHeight(30);
         tblKhachHang.getTableHeader().setOpaque(false);
         TableColumnModel columnModelKhachHang = tblKhachHang.getColumnModel();
@@ -215,7 +215,7 @@ public class Home extends javax.swing.JFrame {
         TableColumnModel columnModelDoanhThu = tblDoanhThu.getColumnModel();
         columnModelDoanhThu.getColumn(0).setPreferredWidth(250);
         columnModelDoanhThu.getColumn(1).setPreferredWidth(627 - 250);
-        
+
         tblCart.setRowHeight(30);
         TableColumnModel columnModelGioHang = tblCart.getColumnModel();
         columnModelGioHang.getColumn(0).setPreferredWidth(110);
@@ -813,6 +813,21 @@ public class Home extends javax.swing.JFrame {
         }
     }
 
+    void fillTableSanPham(String tenSP) {
+        DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
+        model.setRowCount(0);
+        try {
+            for (SanPhamEntity sp : list) {
+                if (sp.getTenSP().toLowerCase().contains(tenSP.toLowerCase())) {
+                    Object[] row = {sp.getMaSP(), sp.getTenSP(), sp.getTenL(), sp.getTenH(), sp.getGiaNhap(), sp.getGiaBan(), sp.getNgayNhap(), sp.getMoTa()};
+                    model.addRow(row);
+                }
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
     public void setFormSanPham(SanPhamEntity sp) {
         txtMaSP.setText(sp.getMaSP());
         txtTenSP.setText(sp.getTenSP());
@@ -1314,12 +1329,13 @@ public class Home extends javax.swing.JFrame {
     }
 
     private void timKiemSP() {
-        String keyword = txtTimKiemSP.getText();
-        list = SanPham.selectByKeyword(keyword);
-        this.fillTableSanPham();
-        this.clearFormSanPham();
-        this.row = - 1;
-        updateStatusSanPham();
+//        String keyword = txtTimKiemSP.getText();
+//        list = SanPham.selectByKeyword(keyword);
+//        this.fillTableSanPham();
+//        this.clearFormSanPham();
+//        this.row = - 1;
+//        updateStatusSanPham();
+
     }
 
     private void timKiemLoai() {
@@ -1552,12 +1568,13 @@ public class Home extends javax.swing.JFrame {
         DefaultComboBoxModel modelDT = (DefaultComboBoxModel) cboDayDT.getModel();
         modelSP.removeAllElements();
         modelDT.removeAllElements();
+        modelSP.addElement("Không chọn");
+        modelDT.addElement("Không chọn");
         for (int i = 1; i < 32; i++) {
             modelSP.addElement(String.valueOf(i));
             modelDT.addElement(String.valueOf(i));
         }
-        modelSP.addElement("Không chọn");
-        modelDT.addElement("Không chọn");
+
     }
 
     public void fillCboMonth_ThongKe() {
@@ -1565,12 +1582,13 @@ public class Home extends javax.swing.JFrame {
         DefaultComboBoxModel modelDT = (DefaultComboBoxModel) cboMonthDT.getModel();
         modelSP.removeAllElements();
         modelDT.removeAllElements();
+        modelSP.addElement("Không chọn");
+        modelDT.addElement("Không chọn");
         for (int i = 1; i < 13; i++) {
             modelSP.addElement(String.valueOf(i));
             modelDT.addElement(String.valueOf(i));
         }
-        modelSP.addElement("Không chọn");
-        modelDT.addElement("Không chọn");
+
     }
 
     public void fillCboYear_ThongKe() {
@@ -1691,8 +1709,13 @@ public class Home extends javax.swing.JFrame {
             fc.showOpenDialog(null);
             //fc.setName("Danhsach.xlsx");
             File f = fc.getSelectedFile();
+            String path = f.getAbsoluteFile().toString();
+            String file = f.getAbsolutePath();
+            if (!path.contains(".xlsx")) {
+                file = f.getAbsolutePath() + ".xlsx";
+            }
             try {
-                FileOutputStream fis = new FileOutputStream(f);
+                FileOutputStream fis = new FileOutputStream(file);
                 wb.write(fis);
                 fis.close();
                 MsgBox.alert(this, "Xuất thành công");
@@ -1718,16 +1741,20 @@ public class Home extends javax.swing.JFrame {
             tongsl += (int) row[1];
         }
         for (Object[] row : listTKSP_L) {
-            data.setValue((String) (row[0]), ((int) row[1] / tongsl));
+            data.setValue((String) (row[0]), (((int) row[1] / tongsl) * 100));
         }
-        JFreeChart Chart = ChartFactory.createPieChart("Doanh Thu sản phẩm bán chạy", data, true, true, true);
+        JFreeChart Chart = ChartFactory.createPieChart("Tỷ lệ phần trăm sản phẩm bán được", data, true, true, true);
+        //JFreeChart Chart = ChartFactory.createPieChart3D("Tỷ lệ phần trăm sản phẩm bán được", data, true, true, true);
+        Chart.setBackgroundPaint(Color.WHITE);
         ChartPanel chartPanel = new ChartPanel(Chart);
         chartPanel.setPreferredSize(new Dimension(jpPie.getWidth(), jpPie.getHeight()));
-
+        chartPanel.setBackground(Color.WHITE);
+        
         jpPie.removeAll();
         jpPie.setLayout(new CardLayout());
         jpPie.add(chartPanel);
         jpPie.validate();
+        jpPie.setBackground(Color.WHITE);
         jpPie.repaint();
     }
     boolean threadClock = true;
@@ -1775,11 +1802,11 @@ public class Home extends javax.swing.JFrame {
         model.setRowCount(0);
         try {
             List<TaiKhoanEntity> list = NhanVien.selectAll();
-            
+
             for (TaiKhoanEntity nv : list) {
-                
-                Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(), 
-                    nv.isTrangThai() ? "Đang hoạt động":"Ngưng hoạt động", nv.getMatKhau(), 
+
+                Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
+                    nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
                     nv.getDiaChi(), nv.getDienThoai(), nv.getNgaySinh(), nv.isGioiTInh()};
                 model.addRow(row);
             }
@@ -1838,7 +1865,7 @@ public class Home extends javax.swing.JFrame {
         h.setNgaySinh(XDate.toDate(txtNgaySinhNV.getText(), "yyyy-MM-dd"));
         h.setGioiTInh(rdoNam.isSelected());
         h.setTrangThai(sbtnTrangThaiNV.isSelected());
-        
+
         return h;
 
     }
@@ -3215,7 +3242,7 @@ public class Home extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Ngày", "Doanh Thu"
+                "Thời gian", "Doanh thu"
             }
         ));
         tblDoanhThu.setGridColor(new java.awt.Color(255, 255, 255));
@@ -3224,7 +3251,7 @@ public class Home extends javax.swing.JFrame {
         cardThongKeDoanhThu.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 500, 470));
 
         jLabel43.setText("Năm");
-        cardThongKeDoanhThu.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 30, 40, 40));
+        cardThongKeDoanhThu.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 40, 40));
 
         cboYearDT.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2022" }));
         cboYearDT.setLabeText("");
@@ -3238,7 +3265,7 @@ public class Home extends javax.swing.JFrame {
                 cboYearDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboYearDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 20, 100, 40));
+        cardThongKeDoanhThu.add(cboYearDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 120, 40));
 
         jLabel44.setText("Tháng");
         cardThongKeDoanhThu.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 40, 40));
@@ -3255,7 +3282,7 @@ public class Home extends javax.swing.JFrame {
                 cboDayDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboDayDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 20, 90, 40));
+        cardThongKeDoanhThu.add(cboDayDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 110, 40));
 
         cboMonthDT.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "6" }));
         cboMonthDT.setLabeText("");
@@ -3269,7 +3296,7 @@ public class Home extends javax.swing.JFrame {
                 cboMonthDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboMonthDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 90, 40));
+        cardThongKeDoanhThu.add(cboMonthDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 110, 40));
 
         jLabel45.setText("Ngày");
         cardThongKeDoanhThu.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 40, 30));
@@ -4100,7 +4127,7 @@ public class Home extends javax.swing.JFrame {
 
         lblTimKiemTempSP.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
         lblTimKiemTempSP.setForeground(new java.awt.Color(153, 153, 153));
-        lblTimKiemTempSP.setText("Sạc dự phòng");
+        lblTimKiemTempSP.setText("Tên sản phẩm");
         lblTimKiemTempSP.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblTimKiemTempSPMouseClicked(evt);
@@ -4233,6 +4260,7 @@ public class Home extends javax.swing.JFrame {
         });
 
         cboSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mã sản phẩm", "Tên sản phẩm", "Giá nhập ", "Giá bán", " " }));
+        cboSP.setSelectedIndex(-1);
         cboSP.setLabeText("Sắp xếp theo");
         cboSP.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -4516,7 +4544,7 @@ public class Home extends javax.swing.JFrame {
 
         lblHangemp.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
         lblHangemp.setForeground(new java.awt.Color(153, 153, 153));
-        lblHangemp.setText("Lenovo");
+        lblHangemp.setText("Tên hãng sản xuất");
         lblHangemp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblHangempMouseClicked(evt);
@@ -4611,6 +4639,7 @@ public class Home extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(255, 255, 255));
 
         cboHang.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tên hãng", "Mã hãng" }));
+        cboHang.setSelectedIndex(-1);
         cboHang.setLabeText("Sắp xếp theo");
 
         jLabel102.setText(" Tiến hành sắp xếp");
@@ -4735,25 +4764,25 @@ public class Home extends javax.swing.JFrame {
 
         txtMaHang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaHang.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardLoai1.add(txtMaHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 180, 30));
+        cardLoai1.add(txtMaHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 110, 260, 30));
 
         jLabel110.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel110.setForeground(new java.awt.Color(0, 0, 255));
         jLabel110.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel110.setText("Mã hãng sản xuất:");
         jLabel110.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai1.add(jLabel110, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 130, 30));
+        cardLoai1.add(jLabel110, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 70, 210, 30));
 
         txtTenHang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenHang.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardLoai1.add(txtTenHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, 180, 30));
+        cardLoai1.add(txtTenHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, 260, 30));
 
         jLabel111.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel111.setForeground(new java.awt.Color(0, 0, 255));
         jLabel111.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel111.setText("Tên hãng sản xuất:");
         jLabel111.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai1.add(jLabel111, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 150, 30));
+        cardLoai1.add(jLabel111, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 230, 30));
 
         cardHangSanXuat.add(cardLoai1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -4842,7 +4871,7 @@ public class Home extends javax.swing.JFrame {
 
         lblLoaiTemp.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
         lblLoaiTemp.setForeground(new java.awt.Color(153, 153, 153));
-        lblLoaiTemp.setText("Tai nghe");
+        lblLoaiTemp.setText("Tên loại hàng");
         lblLoaiTemp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblLoaiTempMouseClicked(evt);
@@ -4944,6 +4973,7 @@ public class Home extends javax.swing.JFrame {
         jPanel24.setBackground(new java.awt.Color(255, 255, 255));
 
         cboLoai.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tên loại", "Mã Loại" }));
+        cboLoai.setSelectedIndex(-1);
         cboLoai.setLabeText("Sắp xếp theo");
 
         jLabel91.setText(" Tiến hành sắp xếp");
@@ -5068,25 +5098,25 @@ public class Home extends javax.swing.JFrame {
 
         txtMaLoai.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtMaLoai.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardLoai.add(txtMaLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 180, 30));
+        cardLoai.add(txtMaLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 110, 260, 30));
 
         jLabel112.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel112.setForeground(new java.awt.Color(0, 0, 255));
         jLabel112.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel112.setText("Mã loại hàng:");
         jLabel112.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 130, 30));
+        cardLoai.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 210, 30));
 
         jLabel113.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel113.setForeground(new java.awt.Color(0, 0, 255));
         jLabel113.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel113.setText("Tên loại hàng:");
         jLabel113.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 100, 150, 30));
+        cardLoai.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 230, 30));
 
         txtTenLoai.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenLoai.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardLoai.add(txtTenLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 140, 180, 30));
+        cardLoai.add(txtTenLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 220, 260, 30));
 
         cardTrangChu.add(cardLoai, "card10");
 
@@ -5173,7 +5203,8 @@ public class Home extends javax.swing.JFrame {
         });
         cardGioHang.add(btnxoagiohang, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 540, 150, 30));
 
-        button10.setBackground(new java.awt.Color(0, 255, 51));
+        button10.setBackground(new java.awt.Color(0, 153, 0));
+        button10.setForeground(new java.awt.Color(255, 255, 255));
         button10.setText("Mua hàng");
         button10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         cardGioHang.add(button10, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 540, 150, 30));
@@ -6101,7 +6132,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_tblSanPhamMouseReleased
 
     private void txtTimKiemSPCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTimKiemSPCaretUpdate
-        timKiemSP();
+        fillTableSanPham(txtTimKiemSP.getText());
     }//GEN-LAST:event_txtTimKiemSPCaretUpdate
 
     private void lblTimKiemTempSPMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimKiemTempSPMouseClicked
@@ -6306,19 +6337,19 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_sbtnTrangThaiNVMouseReleased
 
     private void btnLamMoiNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLamMoiNVActionPerformed
-       clearFormNV();
+        clearFormNV();
     }//GEN-LAST:event_btnLamMoiNVActionPerformed
 
     private void btnThemNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemNVActionPerformed
-      if(checkNhanVien() == true){
+        if (checkNhanVien() == true) {
             insertNV();
-      }
+        }
     }//GEN-LAST:event_btnThemNVActionPerformed
 
     private void btnCapNhatNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatNVActionPerformed
-        if(checkNhanVien() == true){
+        if (checkNhanVien() == true) {
             updateNV();
-      }
+        }
     }//GEN-LAST:event_btnCapNhatNVActionPerformed
 
     private void btnXoaNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaNVActionPerformed
@@ -6376,13 +6407,15 @@ public class Home extends javax.swing.JFrame {
         listKhachHang.clear();
         listKhachHang.addAll(listKHTemp);
     }
- public void listNVT() {
+
+    public void listNVT() {
         listNhanVien = NhanVien.selectAll();
         List<TaiKhoanEntity> listNhanVienTemp = new ArrayList<>();
         listNhanVienTemp.addAll(listNhanVien);
         listNhanVien.clear();
         listNhanVien.addAll(listNhanVienTemp);
     }
+
     //San Pham
     /**
      * @param args the command line arguments

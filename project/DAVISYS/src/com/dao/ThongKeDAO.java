@@ -72,7 +72,7 @@ public class ThongKeDAO {
 
     public List<Object[]> getDoanhthu(String year) {
         String sql = "{CALL sp_ThongKeDoanhThu_Y(?)}";
-        String[] cols = {"NGAYLAP", "TONGTIENHOMNAY"};
+        String[] cols = {"NAM", "TONGTIENHOMNAY"};
         return this.getListOfArray(sql, cols, year);
     }
 
