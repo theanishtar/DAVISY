@@ -52,7 +52,6 @@ public class ScanQRProduct extends javax.swing.JFrame implements Runnable, Threa
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jlbUserName = new javax.swing.JLabel();
-        btnClose = new javax.swing.JButton();
         switchButton1 = new com.hicode.switchbutton.SwitchButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -86,17 +85,6 @@ public class ScanQRProduct extends javax.swing.JFrame implements Runnable, Threa
         });
         jPanel1.add(jlbUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 270, 40));
 
-        btnClose.setBackground(new java.awt.Color(0, 204, 204));
-        btnClose.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        btnClose.setText("Thoát");
-        btnClose.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 390, 150, 30));
-
         switchButton1.setBackground(new java.awt.Color(0, 153, 51));
         switchButton1.setSelected(true);
         switchButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -121,18 +109,9 @@ public class ScanQRProduct extends javax.swing.JFrame implements Runnable, Threa
         // TODO add your handling code here:
     }//GEN-LAST:event_jlbUserNameComponentMoved
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-
-    }//GEN-LAST:event_formWindowClosing
-
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-
+        
     }//GEN-LAST:event_formWindowClosed
-
-    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
-        webcam.close();
-        this.dispose();
-    }//GEN-LAST:event_btnCloseActionPerformed
 
     private void switchButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_switchButton1MouseReleased
         if (switchButton1.isSelected()){
@@ -146,6 +125,13 @@ public class ScanQRProduct extends javax.swing.JFrame implements Runnable, Threa
             webcam.close();
         }
     }//GEN-LAST:event_switchButton1MouseReleased
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        webcam.close();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        this.dispose();
+        
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
@@ -180,7 +166,6 @@ public class ScanQRProduct extends javax.swing.JFrame implements Runnable, Threa
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnClose;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

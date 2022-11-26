@@ -12,10 +12,10 @@ import com.utils.JdbcHelper;
 public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
     
     final String INSERT_SQL = "INSERT INTO CHUCVU (MACV, TENCV) values(?, ?)";
-    final String UPDATE_SQL = "UPDATE CHUCVU SET TENCV = ? WHERE MACV = ?";
-    final String DELETE_SQL = "DELETE FROM CHUCVU WHERE MACV = ?";
-    final String SELECT_ALL_SQL = "SELECT * FROM MACV";
-    final String SELECT_BY_ID_SQL = "SELECT * FROM CHUCVU WHERE MACV = ?";
+    final String UPDATE_SQL = "UPDATE CHUCVU SET TENCV = ? WHERE MACV = CONVERT(int , ?)";
+    final String DELETE_SQL = "DELETE FROM CHUCVU WHERE MACV = CONVERT(int , ?)";
+    final String SELECT_ALL_SQL = "SELECT * FROM CHUCVU";
+    final String SELECT_BY_ID_SQL = "SELECT * FROM CHUCVU WHERE MACV = CONVERT(int , ?)";
 
     @Override
     public void insert(ChucVuEntity entity) {
@@ -53,7 +53,7 @@ public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
             ResultSet rs = JdbcHelper.query(sql, args);
             while (rs.next()) {
                 ChucVuEntity entity = new ChucVuEntity();
-                entity.setMaCV(rs.getString("MACV"));
+                entity.setMaCV(rs.getInt("MACV"));
                 entity.setTenCV(rs.getString("TENCV"));
                 list.add(entity);
             }

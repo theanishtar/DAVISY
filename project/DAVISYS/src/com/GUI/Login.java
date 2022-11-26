@@ -6,7 +6,13 @@
 package com.GUI;
 
 import AppPackage.AnimationClass;
+import com.dao.TaiKhoanDAO;
+import com.entity.TaiKhoanEntity;
+import com.utils.MsgBox;
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -21,15 +27,58 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login2
      */
     AnimationClass ac = new AnimationClass();
+    TaiKhoanDAO tk = new TaiKhoanDAO();
+    List<TaiKhoanEntity> listTK = new ArrayList<>();
+    String tenDN = null;
 
     public Login() {
 
         initComponents();
+        listTK = tk.selectAll();
         txtPassword.setEchoChar('●');
         lblHide.setVisible(false);
         loadingLogin1.setVisible(false);
-        lblNextFont.setVisible(false);
         slideShow();
+    }
+    public boolean ktNull() {
+        if (txtUsername.getText().equals("")) {
+            MsgBox.alert(this, "Vui lòng nhập tên đăng nhập!");
+            txtUsername.requestFocus();
+            return false;
+        } else if (txtPassword.getText().equals("")) {
+            MsgBox.alert(this, "Vui lòng nhập mật khẩu!");
+            txtPassword.requestFocus();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public void dangNhap() {
+        if (ktNull()) {
+            for (TaiKhoanEntity tk : listTK) {
+                if (txtUsername.getText().equalsIgnoreCase(tk.getTenDN()) && txtPassword.getText().equalsIgnoreCase(tk.getMatKhau())) {
+                    if (tk.isTrangThai()) {
+                        tenDN = tk.getTenDN();
+                        loadFrame();
+                        return;
+                    } else {
+                        MsgBox.alert(this, "Tài khoản không hoạt động!");
+                        txtUsername.setText("");
+                        txtPassword.setText("");
+                        txtUsername.requestFocus();
+                        return;
+                    }
+
+                }
+
+            }
+            MsgBox.alert(this, "Tên đăng nhập không tồn tại hoặc mật khẩu sai!");
+            txtUsername.setText("");
+            txtPassword.setText("");
+            txtUsername.requestFocus();
+            return;
+        }
     }
 
     public void slideShow() {
@@ -129,7 +178,6 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblNextFont = new javax.swing.JLabel();
         loadingLogin1 = new com.frame.LoadingLogin();
         Main = new com.swing.KGradientPanel();
         jplState = new javax.swing.JPanel();
@@ -155,12 +203,6 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        lblNextFont.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        lblNextFont.setForeground(new java.awt.Color(255, 51, 51));
-        lblNextFont.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblNextFont.setText("Hệ thống đang kết nối ...");
-        getContentPane().add(lblNextFont, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 610, 460, 40));
         getContentPane().add(loadingLogin1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, -1, -1));
 
         Main.setkEndColor(new java.awt.Color(154, 213, 224));
@@ -269,6 +311,11 @@ public class Login extends javax.swing.JFrame {
         txtUsername.setDisabledTextColor(new java.awt.Color(204, 0, 0));
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtUsername.setLabelText("Username");
+        txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsernameKeyPressed(evt);
+            }
+        });
         panelRound1.add(txtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, 330, -1));
 
         lblShow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/show.png"))); // NOI18N
@@ -292,6 +339,11 @@ public class Login extends javax.swing.JFrame {
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
+            }
+        });
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyPressed(evt);
             }
         });
         panelRound1.add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 330, -1));
@@ -414,13 +466,26 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_lblShowMouseClicked
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        loadFrame();
-        //login();
+        dangNhap();
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void txtUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            txtPassword.requestFocus();
+        }
+    }//GEN-LAST:event_txtUsernameKeyPressed
+
+    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            dangNhap();
+        }
+    }//GEN-LAST:event_txtPasswordKeyPressed
 
     public void login() {
         //
         this.dispose();
+        Home home = new Home(tenDN);
+        home.setVisible(true);
     }
 
     public void losePanel() {
@@ -432,7 +497,6 @@ public class Login extends javax.swing.JFrame {
             @Override
             public void run() {
                 losePanel();
-                lblNextFont.setVisible(false);
                 loadingLogin1.setVisible(true);
                 try {
                     Thread.sleep(2000);
@@ -511,7 +575,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPanel jplState;
     private javax.swing.JLabel lblForget;
     private javax.swing.JLabel lblHide;
-    private javax.swing.JLabel lblNextFont;
     private javax.swing.JLabel lblShow;
     private javax.swing.JLabel lblTitleLogin;
     private com.frame.LoadingLogin loadingLogin1;
