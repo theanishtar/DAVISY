@@ -129,11 +129,11 @@ INSERT INTO HANG VALUES
 
 
 INSERT INTO SANPHAM VALUES
-	(N'SP01', N'Tai nghe AirPod pro', N'TN', N'AP', 1000000, 1200000, CAST('7-10-2022' AS DATE), 'TN.PNG', '', ''),
-	(N'SP02', N'Sạc dự phòng Sony', N'SDP', N'SN', 300000, 400000, CAST('7-11-2020' AS DATE), 'TN.PNG', '', ''),
-	(N'SP03', N'Bàn phím RAZER', N'BP', N'RZ', 800000, 1000000, CAST('12-1-2020' AS DATE), 'TN.PNG', '', ''),
-	(N'SP04', N'Lót chuột in hình tùy chọn', N'LC', N'TSB', 30000, 50000, CAST('7-7-2022' AS DATE), 'TN.PNG', '', ''),
-	(N'SP05', N'Giá đỡ laptop bằng nhôm', N'GDLT', N'SN', 500000, 600000, CAST('10-11-2022' AS DATE), 'TN.PNG', '', '')
+	(N'SP01', N'Tai nghe AirPod pro', N'TN', N'AP', 1000000, 1200000, CAST('7-10-2022' AS DATE), 'SP01', '', ''),
+	(N'SP02', N'Sạc dự phòng Sony', N'SDP', N'SN', 300000, 400000, CAST('7-11-2020' AS DATE), 'SP02', '', ''),
+	(N'SP03', N'Bàn phím RAZER', N'BP', N'RZ', 800000, 1000000, CAST('12-1-2020' AS DATE), 'SP03', '', ''),
+	(N'SP04', N'Lót chuột in hình tùy chọn', N'LC', N'TSB', 30000, 50000, CAST('7-7-2022' AS DATE), 'SP04', '', ''),
+	(N'SP05', N'Giá đỡ laptop bằng nhôm', N'GDLT', N'SN', 500000, 600000, CAST('10-11-2022' AS DATE), 'SP05', '', '')
 
 INSERT INTO CHUCVU VALUES 
 	(0, N'Quản lí', ''),
