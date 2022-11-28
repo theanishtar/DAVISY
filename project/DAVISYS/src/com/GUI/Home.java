@@ -58,6 +58,8 @@ import com.cart.FormHome;
 import com.cart.EventItem;
 import com.cart.ModelItem;
 import com.dao.ChucVuDAO;
+import com.dao.HoaDonCTDAO;
+import com.dao.HoaDonDAO;
 import com.dao.ThongKeDAO;
 import com.entity.KhachHangEntity;
 import com.github.sarxos.webcam.Webcam;
@@ -91,6 +93,7 @@ import com.dao.KhachHangDAO;
 import com.dao.TaiKhoanDAO;
 import com.entity.ChucVuEntity;
 import com.entity.GioHangTempEntity;
+import com.entity.HoaDonEntity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,7 +108,7 @@ public class Home extends javax.swing.JFrame {
      */
     int chose = -1;
     int row = -1;
-    int countClick = 0;
+    int countClick = 0,count=0;
     boolean chooserMainPage = true;
     private DrawerController drawer;
     JFileChooser f = new JFileChooser("src\\com\\images");
@@ -122,6 +125,7 @@ public class Home extends javax.swing.JFrame {
     KhachHangDAO KhachHang = new KhachHangDAO();
     TaiKhoanDAO NhanVien = new TaiKhoanDAO();
     ChucVuDAO chucVu = new ChucVuDAO();
+    HoaDonDAO HoaDon = new HoaDonDAO();
     //kiểm tra luồng
     boolean startThread = false;
 
@@ -144,6 +148,7 @@ public class Home extends javax.swing.JFrame {
     List<GioHangTempEntity> listgh = new ArrayList<>();
     List<TaiKhoanEntity> listTK = new ArrayList<>();
     List<ChucVuEntity> listCV = new ArrayList<>();
+    List<HoaDonEntity> listHoaDon = new ArrayList<>();
     //Thong ke
     ThongKeDAO TKdao = new ThongKeDAO();
 
@@ -207,6 +212,8 @@ public class Home extends javax.swing.JFrame {
         initLoai();
         initSanPham();
         initKhachHang();
+        initHoaDon();
+        initChucVu();
         fillComboxLoai();
         fillComboxHang();
         lblrecordHang.setText(recordHang());
@@ -335,7 +342,7 @@ public class Home extends javax.swing.JFrame {
                     hidePage();
                     hideMenu();
                     cardMenubarHoaDon.setVisible(true);
-                    cardGiamGia.setVisible(true);
+                    cardHoaDon.setVisible(true);
                     chose = 4;
                 }
                 break;
@@ -487,7 +494,7 @@ public class Home extends javax.swing.JFrame {
             cardGioiThieuSanPham, cardGioiThieuThanhVien,
             cardTaiKhoanNhanVien, cardTaiKhoanChucVu,
             cardSanPham, cardHangSanXuat, cardLoai,
-            cardGioHang, cardHoaDonCho,
+            cardGioHang, cardHoaDon,
             cardKhachHang
         };
         for (JPanel pn : this.arrPn) {
@@ -860,6 +867,186 @@ public class Home extends javax.swing.JFrame {
         this.row = tblHang.getRowCount() - 1;
         this.editLoai();
     }
+    
+    
+    
+    
+    
+    
+    
+     public String recordChucVu() {
+        List<ChucVuEntity> list = chucVu.selectAll();
+        return (row + 1) + " trên " + list.size();
+    }
+
+    public void initChucVu() {
+        setLocationRelativeTo(null);
+        listCV = chucVu.selectAll();
+        this.fillTableChucVu();
+        this.row = -1;
+        this.updateStatusChucVu();
+    }
+
+    public void fillTableChucVu() {
+        DefaultTableModel model = (DefaultTableModel) tblChucVu.getModel();
+        model.setRowCount(0);
+        try {
+            //String keyword = txtTimKiemLoai.getText();
+            //List<LoaiHangEntity> listLoai = Loai.selectByKeyword(keyword);
+            for (ChucVuEntity cv : listCV) {
+                Object[] row = {cv.getMaCV(), cv.getTenCV(),cv.getMoTa()};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    public void setFormChucVu(ChucVuEntity cv) {
+        txtmaCV.setText(String.valueOf(cv.getMaCV()));
+        txttenCV.setText(cv.getTenCV());
+        txtMoTaCV.setText(cv.getMoTa());
+    }
+
+    public ChucVuEntity getFormChucVu() {
+        ChucVuEntity cv = new ChucVuEntity();
+        cv.setMaCV(Integer.valueOf(txtmaCV.getText()));
+        cv.setTenCV(txttenCV.getText());
+        cv.setMoTa(txtMoTaCV.getText());
+        return cv ;
+
+    }
+
+    public void clearFormChucVu() {
+        ChucVuEntity cv = new ChucVuEntity();
+        this.setFormChucVu(cv);
+        this.row = -1;
+        this.updateStatusChucVu();
+    }
+
+    public void updateStatusChucVu() {
+        boolean edit = (this.row >= 0);
+        boolean first = (this.row == 0);
+        boolean last = (this.row == tblChucVu.getRowCount() - 1);
+        //Trạng thái form
+        btnThemCV.setEnabled(edit);
+        btnCapNhatCV.setEnabled(edit);
+        btnXoaCV.setEnabled(edit);
+        //Trạng thái điều hướng
+        btnFirstCV.setEnabled(edit && !first);
+        btnPrevCV.setEnabled(edit && !first);
+        btnNextCV.setEnabled(edit && !last);
+        btnLastCV.setEnabled(edit && !last);
+    }
+
+    public void editChucVu() {
+        countClick = 0;
+        String maCV = String.valueOf(tblChucVu.getValueAt(this.row, 0)) ;
+        ChucVuEntity cv = chucVu.selectById(maCV);
+        tblChucVu.setRowSelectionInterval(this.row, this.row);
+        this.setFormChucVu(cv);
+        this.updateStatusChucVu();
+        lblrecordCV.setText(recordChucVu());
+    }
+
+    public boolean checkChucVu() {
+        if (txtmaCV.getText().equals(" ")) {
+            MsgBox.alert(this, " Mã chức vụ không được để trống!");
+            txtmaCV.requestFocus();
+            return false;
+        }
+        if (txttenCV.getText().equals(" ")) {
+            MsgBox.alert(this, "Tên chức vụ không được để trống!");
+            txttenCV.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    public void insertChucVu() {
+        ChucVuEntity cv = getFormChucVu();
+        try {
+            chucVu.insert(cv);
+            listChucVu();
+            this.fillTableChucVu();
+            this.clearFormChucVu();
+            MsgBox.alert(this, "Thêm mới thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, e + "Thêm mới thất bại!");
+        }
+    }
+
+    public void updateChucVu() {
+        ChucVuEntity cv = getFormChucVu();
+        try {
+            chucVu.update(cv);
+            listChucVu();
+            this.fillTableChucVu();
+            this.clearFormChucVu();
+            MsgBox.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, e + "Cập nhật thất bại!");
+        }
+    }
+
+    public void deleteChucVu() {
+        String maCV = txtmaCV.getText();
+        try {
+            chucVu.delete(maCV);
+            listChucVu();
+            this.fillTableChucVu();
+            this.clearFormChucVu();
+            MsgBox.alert(this, "Xóa thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, "Xóa thất bại!");
+        }
+
+    }
+
+    public void firsChucVu() {
+        this.row = 0;
+        this.editChucVu();
+
+    }
+
+    public void nextChucVu() {
+        if (this.row < tblChucVu.getRowCount() - 1) {
+            this.row++;
+            this.editChucVu();
+
+        } else {
+            this.firsChucVu();
+        }
+
+    }
+
+    public void prevChucVu() {
+        if (this.row > 0) {
+            this.row--;
+            this.editChucVu();
+
+        } else {
+            this.lastChucVu();
+        }
+
+    }
+
+    public void lastChucVu() {
+        this.row = tblChucVu.getRowCount() - 1;
+        this.editChucVu();
+    }
+     public void listChucVu() {
+        listCV = chucVu.selectAll();
+        List<ChucVuEntity> listChucVuTemp = new ArrayList<>();
+        listChucVuTemp.addAll(listCV);
+        listCV.clear();
+        listCV.addAll(listChucVuTemp);
+    }
+    
+    
+    
+    
+    
 
     // Sản phẩm
     public String recordSanPham() {
@@ -1437,6 +1624,163 @@ public class Home extends javax.swing.JFrame {
         updateStatusKhachHang();
     }
 
+    public void initHoaDon() {
+        setLocationRelativeTo(null);
+        listHoaDon();
+        this.fillTableHoaDon();
+        this.row = -1;
+        this.updateStatusHoaDon();
+    }
+
+    public String recordHoaDon() {
+        List<HoaDonEntity> list = HoaDon.selectAll();
+        return (row + 1) + " trên " + list.size();
+    }
+
+    public void fillTableHoaDon() {
+        DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
+        model.setRowCount(0);
+        try {
+            for (HoaDonEntity hd : listHoaDon) {
+                Object[] row = {hd.getMaHD(), hd.getNgayLap(), hd.getTongTien(), hd.getTichDiem(), hd.getThanhTien()};
+                model.addRow(row);
+            }
+        } catch (Exception e) {
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+        }
+    }
+
+    public void setFormHoaDon(HoaDonEntity hd) {
+        txtMAKH.setText(hd.getMaKH());
+        txtTENKH.setText(hd.getTenKH());
+        txtTENNV.setText(hd.getTenNV());
+
+    }
+
+    public HoaDonEntity getFormHoaDon() {
+        HoaDonEntity hd = new HoaDonEntity();
+        return hd;
+
+    }
+
+    public void clearFormHoaDon() {
+        HoaDonEntity hd = new HoaDonEntity();
+        this.setFormHoaDon(hd);
+//        txtGiaBanSP.setText(" ");
+//        txtNgayNhapSP.setText(" ");
+//        txtGiaNhapSP.setText(" ");
+        this.row = -1;
+        this.updateStatusHoaDon();
+    }
+
+    public void updateStatusHoaDon() {
+        boolean edit = (this.row >= 0);
+        boolean first = (this.row == 0);
+        boolean last = (this.row == tblHoaDon.getRowCount() - 1);
+        //Trạng thái form
+//        btnThemKhachHang.setEnabled(edit);
+//        btncapNhatKhachHang.setEnabled(edit);
+        btnXoahd.setEnabled(edit);
+        //Trạng thái điều hướng
+        btnFirsthd.setEnabled(edit && !first);
+        btnPrevhd.setEnabled(edit && !first);
+        btnNexthd.setEnabled(edit && !last);
+        btnLasthd.setEnabled(edit && !last);
+    }
+
+    public void editHoaDon() {
+        countClick = 0;
+        String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
+        HoaDonEntity hd = HoaDon.selectById(mahd);
+        tblHoaDon.setRowSelectionInterval(this.row, this.row);
+        this.setFormHoaDon(hd);
+        this.updateStatusHoaDon();
+        lblrecordhd.setText(recordHoaDon());
+    }
+
+    public void insertHoaDon() {
+        HoaDonEntity hd = getFormHoaDon();
+        try {
+            HoaDon.insert(hd);
+            listHoaDon();
+            this.fillTableHoaDon();
+            this.clearFormHoaDon();
+            MsgBox.alert(this, "Thêm mới thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, e + "Thêm mới thất bại!");
+        }
+    }
+
+    public void updateHoaDon() {
+        HoaDonEntity hd = getFormHoaDon();
+        try {
+            HoaDon.update(hd);
+            listHoaDon();
+            this.fillTableHoaDon();
+            this.clearFormHoaDon();
+            MsgBox.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, e + "Cập nhật thất bại!");
+        }
+    }
+
+    public void deleteHoaDon() {
+        String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
+//        System.out.println(mahd);
+        try {
+            HoaDon.delete(mahd);
+            listHoaDon();
+            this.fillTableHoaDon();
+            this.clearFormHoaDon();
+            MsgBox.alert(this, "Xóa thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, "Xóa thất bại!");
+        }
+
+    }
+
+    public void firstHoaDon() {
+        this.row = 0;
+        this.editHoaDon();
+
+    }
+
+    public void nextHoaDon() {
+        if (this.row < tblHoaDon.getRowCount() - 1) {
+            this.row++;
+            this.editHoaDon();
+
+        } else {
+            this.firstHoaDon();
+        }
+
+    }
+
+    public void prevHoaDon() {
+        if (this.row > 0) {
+            this.row--;
+            this.editHoaDon();
+
+        } else {
+            this.lastHoaDon();
+        }
+
+    }
+
+    public void lastHoaDon() {
+        this.row = tblHoaDon.getRowCount() - 1;
+        this.editHoaDon();
+    }
+
+    private void timHoaDon() {
+        String keyword = txtTimKiemhd.getText();
+        listHoaDon = (List<HoaDonEntity>) HoaDon.selectById(keyword);
+        this.fillTableHoaDon();
+        this.clearFormHoaDon();
+        this.row = - 1;
+        updateStatusHoaDon();
+    }
+
     private void timKiemSP() {
 //        String keyword = txtTimKiemSP.getText();
 //        list = SanPham.selectByKeyword(keyword);
@@ -1590,6 +1934,54 @@ public class Home extends javax.swing.JFrame {
         }
 
         this.fillTableSanPham();
+    }
+
+    public void SortHoaDon(int i) {
+        String HD = (String) comboboxHD.getSelectedItem();
+        Comparator<HoaDonEntity> azhd = new Comparator<HoaDonEntity>() {
+            @Override
+            public int compare(HoaDonEntity hd1, HoaDonEntity hd2) {
+                if (HD.equalsIgnoreCase("Mã hóa đơn")) {
+                    return hd1.getMaHD().compareTo(hd2.getMaHD());
+                } else if (HD.equalsIgnoreCase("Tổng tiền")) {
+                    if (hd1.getTongTien() > hd2.getTongTien()) {
+                        return 1;
+                    } else if (hd1.getTongTien() < hd2.getTongTien()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    if (hd1.getThanhTien() > hd2.getThanhTien()) {
+                        return 1;
+                    } else if (hd1.getThanhTien() < hd2.getThanhTien()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+
+            }
+        };
+        if (i == 0) {
+            Collections.sort(listHoaDon, azhd);
+        } else {
+            Collections.sort(listHoaDon, azhd.reversed());
+        }
+
+        this.fillTableHoaDon();
+    }
+
+    public void btnHD() {
+        String HD = (String) comboboxHD.getSelectedItem();
+        if (HD.equalsIgnoreCase("Mã hóa đơn")) {
+            btnazhd.setText("A - Z");
+            btnzahd.setText("Z - A");
+        } else {
+            btnazhd.setText("Tăng");
+            btnzahd.setText("Giảm");
+        }
+
     }
 
     public void btnSP() {
@@ -2264,40 +2656,40 @@ public class Home extends javax.swing.JFrame {
         jLabel27 = new javax.swing.JLabel();
         cardTaiKhoanChucVu = new com.swing.PanelRound();
         jLabel90 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
+        txttenCV = new javax.swing.JTextField();
         jLabel92 = new javax.swing.JLabel();
-        jTextField19 = new javax.swing.JTextField();
+        txtmaCV = new javax.swing.JTextField();
         jPanel19 = new javax.swing.JPanel();
-        button39 = new com.swing.Button();
-        button40 = new com.swing.Button();
-        button41 = new com.swing.Button();
+        btnLamMoiCV = new com.swing.Button();
+        btnCapNhatCV = new com.swing.Button();
+        btnXoaCV = new com.swing.Button();
         jPanel20 = new javax.swing.JPanel();
-        combobox9 = new com.swing.Combobox();
+        cboCV = new com.swing.Combobox();
         jLabel93 = new javax.swing.JLabel();
         jPanel21 = new javax.swing.JPanel();
-        editButton16 = new com.swing.EditButton();
-        editButton17 = new com.swing.EditButton();
+        btnazCV = new com.swing.EditButton();
+        btnzaCV = new com.swing.EditButton();
         jLabel94 = new javax.swing.JLabel();
         jSeparator9 = new javax.swing.JSeparator();
         jSeparator10 = new javax.swing.JSeparator();
         jSeparator11 = new javax.swing.JSeparator();
-        button42 = new com.swing.Button();
+        btnThemCV = new com.swing.Button();
         jPanel22 = new javax.swing.JPanel();
-        button43 = new com.swing.Button();
-        button44 = new com.swing.Button();
-        button45 = new com.swing.Button();
-        button46 = new com.swing.Button();
-        jLabel95 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
+        btnNextCV = new com.swing.Button();
+        btnFirstCV = new com.swing.Button();
+        btnPrevCV = new com.swing.Button();
+        btnLastCV = new com.swing.Button();
+        lbltenCV = new javax.swing.JLabel();
+        txtTimCV = new javax.swing.JTextField();
         jLabel96 = new javax.swing.JLabel();
         jLabel97 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tblKhachHang5 = new javax.swing.JTable();
-        jLabel98 = new javax.swing.JLabel();
+        tblChucVu = new javax.swing.JTable();
+        lblrecordCV = new javax.swing.JLabel();
         jLabel99 = new javax.swing.JLabel();
         jLabel100 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtMoTaCV = new javax.swing.JTextArea();
         cardTaiKhoanNhanVien = new com.swing.PanelRound();
         jPanel14 = new javax.swing.JPanel();
         btnNextNV = new com.swing.Button();
@@ -2480,13 +2872,40 @@ public class Home extends javax.swing.JFrame {
         jSeparator19 = new javax.swing.JSeparator();
         jLabel10 = new javax.swing.JLabel();
         button2 = new com.swing.Button();
-        cardHoaDonCho = new com.swing.PanelRound();
+        cardHoaDon = new com.swing.PanelRound();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        tblHoaDon = new javax.swing.JTable();
+        jPanel28 = new javax.swing.JPanel();
+        btnXoahd = new com.swing.Button();
+        jPanel29 = new javax.swing.JPanel();
+        comboboxHD = new com.swing.Combobox();
         jLabel48 = new javax.swing.JLabel();
+        jPanel30 = new javax.swing.JPanel();
+        btnazhd = new com.swing.EditButton();
+        btnzahd = new com.swing.EditButton();
         jLabel49 = new javax.swing.JLabel();
-        jLabel50 = new javax.swing.JLabel();
-        jLabel51 = new javax.swing.JLabel();
-        jLabel52 = new javax.swing.JLabel();
-        cardGiamGia = new com.swing.PanelRound();
+        jSeparator20 = new javax.swing.JSeparator();
+        jSeparator21 = new javax.swing.JSeparator();
+        jSeparator22 = new javax.swing.JSeparator();
+        btnIn = new com.swing.Button();
+        jPanel12 = new javax.swing.JPanel();
+        btnNexthd = new com.swing.Button();
+        btnFirsthd = new com.swing.Button();
+        btnPrevhd = new com.swing.Button();
+        btnLasthd = new com.swing.Button();
+        jLabel81 = new javax.swing.JLabel();
+        lblTimKiemTempSP1 = new javax.swing.JLabel();
+        jLabel86 = new javax.swing.JLabel();
+        txtTimKiemhd = new javax.swing.JTextField();
+        jLabel104 = new javax.swing.JLabel();
+        lblrecordhd = new javax.swing.JLabel();
+        jLabel117 = new javax.swing.JLabel();
+        jLabel118 = new javax.swing.JLabel();
+        jLabel119 = new javax.swing.JLabel();
+        txtTENNV = new javax.swing.JTextField();
+        txtTENKH = new javax.swing.JTextField();
+        txtMAKH = new javax.swing.JTextField();
+        cardChiTietHoaDon = new com.swing.PanelRound();
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
         jLabel55 = new javax.swing.JLabel();
@@ -3539,9 +3958,9 @@ public class Home extends javax.swing.JFrame {
         jLabel90.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTaiKhoanChucVu.add(jLabel90, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 50, 110, 30));
 
-        jTextField17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanChucVu.add(jTextField17, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 180, 30));
+        txttenCV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txttenCV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardTaiKhoanChucVu.add(txttenCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 180, 30));
 
         jLabel92.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel92.setForeground(new java.awt.Color(0, 0, 255));
@@ -3550,30 +3969,30 @@ public class Home extends javax.swing.JFrame {
         jLabel92.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTaiKhoanChucVu.add(jLabel92, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, 110, 30));
 
-        jTextField19.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField19.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanChucVu.add(jTextField19, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 180, 30));
+        txtmaCV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtmaCV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardTaiKhoanChucVu.add(txtmaCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, 180, 30));
 
         jPanel19.setBackground(new java.awt.Color(255, 255, 255));
         jPanel19.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 255)));
 
-        button39.setBackground(new java.awt.Color(204, 204, 255));
-        button39.setText("Làm mới");
+        btnLamMoiCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnLamMoiCV.setText("Làm mới");
 
-        button40.setBackground(new java.awt.Color(204, 204, 255));
-        button40.setText("Cập nhật");
-        button40.setEffectColor(new java.awt.Color(204, 255, 204));
+        btnCapNhatCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnCapNhatCV.setText("Cập nhật");
+        btnCapNhatCV.setEffectColor(new java.awt.Color(204, 255, 204));
 
-        button41.setBackground(new java.awt.Color(255, 51, 102));
-        button41.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 51)));
-        button41.setForeground(new java.awt.Color(255, 255, 255));
-        button41.setText("Xóa");
+        btnXoaCV.setBackground(new java.awt.Color(255, 51, 102));
+        btnXoaCV.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 51)));
+        btnXoaCV.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoaCV.setText("Xóa");
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
 
-        combobox9.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "x", "e", "f", "e", "gd", " " }));
-        combobox9.setSelectedIndex(-1);
-        combobox9.setLabeText("Sắp xếp theo");
+        cboCV.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "x", "e", "f", "e", "gd", " " }));
+        cboCV.setSelectedIndex(-1);
+        cboCV.setLabeText("Sắp xếp theo");
 
         jLabel93.setText(" Tiến hành sắp xếp");
         jLabel93.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -3582,16 +4001,16 @@ public class Home extends javax.swing.JFrame {
         jPanel21.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
         jPanel21.setLayout(null);
 
-        editButton16.setBackground(new java.awt.Color(102, 204, 255));
-        editButton16.setText("Tăng");
-        jPanel21.add(editButton16);
-        editButton16.setBounds(20, 20, 159, 30);
+        btnazCV.setBackground(new java.awt.Color(102, 204, 255));
+        btnazCV.setText("A -Z");
+        jPanel21.add(btnazCV);
+        btnazCV.setBounds(20, 20, 159, 30);
 
-        editButton17.setBackground(new java.awt.Color(204, 153, 255));
-        editButton17.setText("Giảm");
-        editButton17.setMargin(new java.awt.Insets(5, 14, 14, 14));
-        jPanel21.add(editButton17);
-        editButton17.setBounds(20, 90, 159, 30);
+        btnzaCV.setBackground(new java.awt.Color(204, 153, 255));
+        btnzaCV.setText("Z -A");
+        btnzaCV.setMargin(new java.awt.Insets(5, 14, 14, 14));
+        jPanel21.add(btnzaCV);
+        btnzaCV.setBounds(20, 90, 159, 30);
 
         jLabel94.setForeground(new java.awt.Color(153, 153, 153));
         jLabel94.setText("hoặc");
@@ -3617,7 +4036,7 @@ public class Home extends javax.swing.JFrame {
                     .addComponent(jLabel93, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
-                            .addComponent(combobox9, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cboCV, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(17, 17, 17))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
                             .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3626,15 +4045,15 @@ public class Home extends javax.swing.JFrame {
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel20Layout.createSequentialGroup()
-                .addComponent(combobox9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cboCV, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel93, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
                 .addComponent(jPanel21, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        button42.setBackground(new java.awt.Color(204, 204, 255));
-        button42.setText("Thêm");
+        btnThemCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnThemCV.setText("Thêm");
 
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
@@ -3643,10 +4062,10 @@ public class Home extends javax.swing.JFrame {
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(button41, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button39, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button40, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(button42, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnXoaCV, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnLamMoiCV, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCapNhatCV, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnThemCV, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -3657,13 +4076,13 @@ public class Home extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel19Layout.createSequentialGroup()
-                        .addComponent(button39, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLamMoiCV, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(button42, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnThemCV, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(button40, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCapNhatCV, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(button41, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnXoaCV, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -3673,35 +4092,40 @@ public class Home extends javax.swing.JFrame {
         jPanel22.setBackground(new java.awt.Color(204, 204, 255));
         jPanel22.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        button43.setBackground(new java.awt.Color(204, 204, 255));
-        button43.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/arrow-right.png"))); // NOI18N
-        jPanel22.add(button43, new org.netbeans.lib.awtextra.AbsoluteConstraints(169, 11, -1, -1));
+        btnNextCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnNextCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/arrow-right.png"))); // NOI18N
+        jPanel22.add(btnNextCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(169, 11, -1, -1));
 
-        button44.setBackground(new java.awt.Color(204, 204, 255));
-        button44.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/previous.png"))); // NOI18N
-        jPanel22.add(button44, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 11, -1, -1));
-
-        button45.setBackground(new java.awt.Color(204, 204, 255));
-        button45.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/left-arrow.png"))); // NOI18N
-        jPanel22.add(button45, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 11, -1, -1));
-
-        button46.setBackground(new java.awt.Color(204, 204, 255));
-        button46.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/next.png"))); // NOI18N
-        button46.addActionListener(new java.awt.event.ActionListener() {
+        btnFirstCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnFirstCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/previous.png"))); // NOI18N
+        btnFirstCV.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button46ActionPerformed(evt);
+                btnFirstCVActionPerformed(evt);
             }
         });
-        jPanel22.add(button46, new org.netbeans.lib.awtextra.AbsoluteConstraints(237, 11, -1, -1));
+        jPanel22.add(btnFirstCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(34, 11, -1, -1));
 
-        jLabel95.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
-        jLabel95.setForeground(new java.awt.Color(153, 153, 153));
-        jLabel95.setText(" Nguyễn Văn An");
-        jPanel22.add(jLabel95, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 20, 210, 30));
+        btnPrevCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnPrevCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/left-arrow.png"))); // NOI18N
+        jPanel22.add(btnPrevCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 11, -1, -1));
 
-        jTextField20.setBackground(new java.awt.Color(204, 204, 255));
-        jTextField20.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        jPanel22.add(jTextField20, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 10, 210, 40));
+        btnLastCV.setBackground(new java.awt.Color(204, 204, 255));
+        btnLastCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/next.png"))); // NOI18N
+        btnLastCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLastCVActionPerformed(evt);
+            }
+        });
+        jPanel22.add(btnLastCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(237, 11, -1, -1));
+
+        lbltenCV.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
+        lbltenCV.setForeground(new java.awt.Color(153, 153, 153));
+        lbltenCV.setText(" Nguyễn Văn An");
+        jPanel22.add(lbltenCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 20, 210, 30));
+
+        txtTimCV.setBackground(new java.awt.Color(204, 204, 255));
+        txtTimCV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        jPanel22.add(txtTimCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 10, 210, 40));
 
         jLabel96.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel96.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/search.png"))); // NOI18N
@@ -3718,30 +4142,32 @@ public class Home extends javax.swing.JFrame {
 
         jScrollPane6.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        tblKhachHang5.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        tblKhachHang5.setModel(new javax.swing.table.DefaultTableModel(
+        tblChucVu.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        tblChucVu.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"a", "â", "â", "a"},
-                {"d", "c", "c", "a"},
-                {"z", "c", "m", "d"},
-                {"a", "o", "o", "a"}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã chức vụ", "Tên chức vụ", "Mô tả"
             }
         ));
-        tblKhachHang5.setGridColor(new java.awt.Color(255, 255, 255));
-        tblKhachHang5.setIntercellSpacing(new java.awt.Dimension(0, 0));
-        tblKhachHang5.getTableHeader().setResizingAllowed(false);
-        tblKhachHang5.getTableHeader().setReorderingAllowed(false);
-        jScrollPane6.setViewportView(tblKhachHang5);
+        tblChucVu.setGridColor(new java.awt.Color(255, 255, 255));
+        tblChucVu.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        tblChucVu.getTableHeader().setResizingAllowed(false);
+        tblChucVu.getTableHeader().setReorderingAllowed(false);
+        tblChucVu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblChucVuMouseReleased(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblChucVu);
 
         cardTaiKhoanChucVu.add(jScrollPane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 360, 1150, 180));
 
-        jLabel98.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel98.setForeground(new java.awt.Color(204, 0, 51));
-        jLabel98.setText("2 trên 10");
-        cardTaiKhoanChucVu.add(jLabel98, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
+        lblrecordCV.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblrecordCV.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordCV.setText("2 trên 10");
+        cardTaiKhoanChucVu.add(lblrecordCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
 
         jLabel99.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel99.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/visits (1).png"))); // NOI18N
@@ -3755,10 +4181,10 @@ public class Home extends javax.swing.JFrame {
         jLabel100.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTaiKhoanChucVu.add(jLabel100, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 50, 110, 30));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane7.setViewportView(jTextArea1);
+        txtMoTaCV.setColumns(20);
+        txtMoTaCV.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtMoTaCV.setRows(5);
+        jScrollPane7.setViewportView(txtMoTaCV);
 
         cardTaiKhoanChucVu.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(416, 100, 320, 150));
 
@@ -5317,47 +5743,308 @@ public class Home extends javax.swing.JFrame {
 
         cardTrangChu.add(cardGioHang, "card11");
 
-        cardHoaDonCho.setBackground(new java.awt.Color(255, 255, 255));
-        cardHoaDonCho.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        cardHoaDon.setBackground(new java.awt.Color(255, 255, 255));
+        cardHoaDon.setPreferredSize(new java.awt.Dimension(1180, 580));
+        cardHoaDon.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel48.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel48.setText("<html> <h2>Phần mềm được phát triển bởi <a href=\"https://www.facebook.com/davisy.dev\">DAVISY TEAM</a></h2>  <!html>");
-        cardHoaDonCho.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 500, -1));
+        tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Mã hóa đơn", "Ngày lập", "Tổng tiền", "Tích điểm", "Thành tiền"
+            }
+        ));
+        tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseClicked(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblHoaDonMouseReleased(evt);
+            }
+        });
+        jScrollPane12.setViewportView(tblHoaDon);
 
-        jLabel49.setText("<html>  <h3> Phần mềm là dự án trong học kỳ 4 của chúng tôi tại  <a href=\"\">FPT Polytechnic College</a> </h3>  <!html>");
-        cardHoaDonCho.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 380, -1));
+        cardHoaDon.add(jScrollPane12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 411, 1150, 130));
 
-        jLabel50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/businessman.png"))); // NOI18N
-        cardHoaDonCho.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
+        jPanel28.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel28.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 255)));
+        jPanel28.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel51.setText("<html>\n<h3>Các tư liệu tham khảo</h3>  \n<ul>  \n <li> <h4> <a href=\"https://github.com/k33ptoo/\">KeepToo</a></h4></li>  \n<li> <h4><a href=\"https://github.com/DJ-Raven\">DJ-Raven</a></h4>\n</li>\n </ul> \n <!html>");
-        cardHoaDonCho.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 320, 110));
+        btnXoahd.setBackground(new java.awt.Color(255, 51, 102));
+        btnXoahd.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 51)));
+        btnXoahd.setForeground(new java.awt.Color(255, 255, 255));
+        btnXoahd.setText("Xóa");
+        btnXoahd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnXoahdActionPerformed(evt);
+            }
+        });
+        jPanel28.add(btnXoahd, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 116, 39));
 
-        jLabel52.setText("<html>  <h3>Bạn có thể tham khảo giao diện của chúng tôi tại <a href=\"https://www.github.com/theanishtar\"> đây</a> </h3>  <!html>");
-        cardHoaDonCho.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 450, -1));
+        jPanel29.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        cardTrangChu.add(cardHoaDonCho, "card12");
+        comboboxHD.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mã hóa đơn", "Tổng tiền", "Thành tiền" }));
+        comboboxHD.setLabeText("Sắp xếp theo");
+        comboboxHD.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                comboboxHDItemStateChanged(evt);
+            }
+        });
+        jPanel29.add(comboboxHD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 191, 40));
 
-        cardGiamGia.setBackground(new java.awt.Color(255, 255, 255));
-        cardGiamGia.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel48.setText(" Tiến hành sắp xếp");
+        jLabel48.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jPanel29.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 160, 19));
+
+        jPanel30.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel30.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
+        jPanel30.setLayout(null);
+
+        btnazhd.setBackground(new java.awt.Color(102, 204, 255));
+        btnazhd.setText("A - Z");
+        btnazhd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnazhdActionPerformed(evt);
+            }
+        });
+        jPanel30.add(btnazhd);
+        btnazhd.setBounds(20, 20, 159, 30);
+
+        btnzahd.setBackground(new java.awt.Color(204, 153, 255));
+        btnzahd.setText("Z -A");
+        btnzahd.setMargin(new java.awt.Insets(5, 14, 14, 14));
+        btnzahd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnzahdActionPerformed(evt);
+            }
+        });
+        jPanel30.add(btnzahd);
+        btnzahd.setBounds(20, 90, 159, 30);
+
+        jLabel49.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel49.setText("hoặc");
+        jPanel30.add(jLabel49);
+        jLabel49.setBounds(90, 60, 40, 20);
+        jPanel30.add(jSeparator20);
+        jSeparator20.setBounds(120, 70, 60, 20);
+        jPanel30.add(jSeparator21);
+        jSeparator21.setBounds(20, 70, 60, 20);
+
+        jSeparator22.setForeground(new java.awt.Color(255, 255, 255));
+        jSeparator22.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 0, 0, 0, new java.awt.Color(0, 0, 0)));
+        jPanel30.add(jSeparator22);
+        jSeparator22.setBounds(100, 0, 100, 20);
+
+        jPanel29.add(jPanel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 198, 131));
+
+        jPanel28.add(jPanel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, -1, 220));
+
+        btnIn.setBackground(new java.awt.Color(255, 51, 102));
+        btnIn.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 51)));
+        btnIn.setForeground(new java.awt.Color(255, 255, 255));
+        btnIn.setText("In");
+        btnIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInActionPerformed(evt);
+            }
+        });
+        jPanel28.add(btnIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 116, 39));
+
+        cardHoaDon.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 90, -1, 245));
+
+        jPanel12.setBackground(new java.awt.Color(204, 204, 255));
+
+        btnNexthd.setBackground(new java.awt.Color(204, 204, 255));
+        btnNexthd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/arrow-right.png"))); // NOI18N
+        btnNexthd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnNexthdMouseClicked(evt);
+            }
+        });
+
+        btnFirsthd.setBackground(new java.awt.Color(204, 204, 255));
+        btnFirsthd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/previous.png"))); // NOI18N
+        btnFirsthd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFirsthdMouseClicked(evt);
+            }
+        });
+        btnFirsthd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFirsthdActionPerformed(evt);
+            }
+        });
+
+        btnPrevhd.setBackground(new java.awt.Color(204, 204, 255));
+        btnPrevhd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/left-arrow.png"))); // NOI18N
+        btnPrevhd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPrevhdMouseClicked(evt);
+            }
+        });
+        btnPrevhd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevhdActionPerformed(evt);
+            }
+        });
+
+        btnLasthd.setBackground(new java.awt.Color(204, 204, 255));
+        btnLasthd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/next.png"))); // NOI18N
+        btnLasthd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLasthdMouseClicked(evt);
+            }
+        });
+        btnLasthd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLasthdActionPerformed(evt);
+            }
+        });
+
+        jLabel81.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel81.setForeground(new java.awt.Color(204, 0, 51));
+        jLabel81.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel81.setText("BẢNG THÔNG TIN HÓA ĐƠN");
+
+        lblTimKiemTempSP1.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
+        lblTimKiemTempSP1.setForeground(new java.awt.Color(153, 153, 153));
+        lblTimKiemTempSP1.setText("Tên sản phẩm");
+        lblTimKiemTempSP1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblTimKiemTempSP1MouseClicked(evt);
+            }
+        });
+
+        jLabel86.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel86.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/search.png"))); // NOI18N
+        jLabel86.setText("Tìm kiếm:");
+
+        txtTimKiemhd.setBackground(new java.awt.Color(204, 204, 255));
+        txtTimKiemhd.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtTimKiemhd.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtTimKiemhdCaretUpdate(evt);
+            }
+        });
+        txtTimKiemhd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtTimKiemhdMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(btnFirsthd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnPrevhd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(btnNexthd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
+                .addComponent(btnLasthd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
+                .addComponent(jLabel81, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(54, 54, 54)
+                .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblTimKiemTempSP1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTimKiemhd, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37))
+        );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTimKiemTempSP1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTimKiemhd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
+                .addComponent(jLabel81, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addComponent(btnLasthd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnNexthd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnPrevhd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnFirsthd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        cardHoaDon.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, -1, -1));
+
+        jLabel104.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel104.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/visits (1).png"))); // NOI18N
+        jLabel104.setText("Bảng ghi:");
+        cardHoaDon.add(jLabel104, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 549, -1, -1));
+
+        lblrecordhd.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblrecordhd.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordhd.setText("2 trên 10");
+        cardHoaDon.add(lblrecordhd, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 554, -1, -1));
+
+        jLabel117.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel117.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel117.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel117.setText("Tên nhân viên: ");
+        jLabel117.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel117, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 193, -1, -1));
+
+        jLabel118.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel118.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel118.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel118.setText("Tên khách hàng: ");
+        jLabel118.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel118, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 153, -1, -1));
+
+        jLabel119.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel119.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel119.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel119.setText("Mã khách hàng");
+        jLabel119.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel119, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 113, -1, -1));
+
+        txtTENNV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTENNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardHoaDon.add(txtTENNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 195, 217, 20));
+
+        txtTENKH.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTENKH.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardHoaDon.add(txtTENKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 155, 217, 20));
+
+        txtMAKH.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtMAKH.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardHoaDon.add(txtMAKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 115, 217, 20));
+
+        cardTrangChu.add(cardHoaDon, "card12");
+
+        cardChiTietHoaDon.setBackground(new java.awt.Color(255, 255, 255));
+        cardChiTietHoaDon.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel53.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel53.setText("<html> <h2>Phần mềm được phát triển bởi <a href=\"https://www.facebook.com/davisy.dev\">DAVISY TEAM</a></h2>  <!html>");
-        cardGiamGia.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 500, -1));
+        cardChiTietHoaDon.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 500, -1));
 
         jLabel54.setText("<html>  <h3> Phần mềm là dự án trong học kỳ 4 của chúng tôi tại  <a href=\"\">FPT Polytechnic College</a> </h3>  <!html>");
-        cardGiamGia.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 380, -1));
+        cardChiTietHoaDon.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 380, -1));
 
         jLabel55.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/businessman.png"))); // NOI18N
-        cardGiamGia.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
+        cardChiTietHoaDon.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
 
         jLabel56.setText("<html>\n<h3>Các tư liệu tham khảo</h3>  \n<ul>  \n <li> <h4> <a href=\"https://github.com/k33ptoo/\">KeepToo</a></h4></li>  \n<li> <h4><a href=\"https://github.com/DJ-Raven\">DJ-Raven</a></h4>\n</li>\n </ul> \n <!html>");
-        cardGiamGia.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 320, 110));
+        cardChiTietHoaDon.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 320, 110));
 
         jLabel57.setText("<html>  <h3>Bạn có thể tham khảo giao diện của chúng tôi tại <a href=\"https://www.github.com/theanishtar\"> đây</a> </h3>  <!html>");
-        cardGiamGia.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 450, -1));
+        cardChiTietHoaDon.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 450, -1));
 
-        cardTrangChu.add(cardGiamGia, "card13");
+        cardTrangChu.add(cardChiTietHoaDon, "card13");
 
         cardGioiThieuSanPham.setBackground(new java.awt.Color(255, 255, 255));
         cardGioiThieuSanPham.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -5808,7 +6495,7 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_TaiKhoantittle3MousePressed
 
     private void opacityMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_opacityMousePressed
-        if(pnMenu.getWidth()==300){
+        if (pnMenu.getWidth() == 300) {
             closeMenu();
         }
         if (chooserMainPage == true) {
@@ -5847,7 +6534,7 @@ public class Home extends javax.swing.JFrame {
     private void HoaDonTittle2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HoaDonTittle2MousePressed
         HoaDonHr1.setVisible(false);
         HoaDonHr2.setVisible(true);
-        setLocationHr(cardHoaDonCho, HoaDonHr2, HoaDonTittle2);
+        setLocationHr(cardChiTietHoaDon, HoaDonHr2, HoaDonTittle2);
     }//GEN-LAST:event_HoaDonTittle2MousePressed
 
     void hoverMenuItem(Button btn) {
@@ -5992,7 +6679,7 @@ public class Home extends javax.swing.JFrame {
     private void HoaDonTittle1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_HoaDonTittle1MousePressed
         HoaDonHr1.setVisible(true);
         HoaDonHr2.setVisible(false);
-        setLocationHr(cardHoaDonCho, HoaDonHr1, HoaDonTittle1);
+        setLocationHr(cardHoaDon, HoaDonHr1, HoaDonTittle1);
     }//GEN-LAST:event_HoaDonTittle1MousePressed
 
     private void btnTrangChuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTrangChuMouseReleased
@@ -6104,9 +6791,9 @@ public class Home extends javax.swing.JFrame {
         setLocationHr(cardKhachHang, TaiKhoanHr2, TaiKhoantittle2);
     }//GEN-LAST:event_TaiKhoantittle2MousePressed
 
-    private void button46ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button46ActionPerformed
+    private void btnLastCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastCVActionPerformed
         lastNV();
-    }//GEN-LAST:event_button46ActionPerformed
+    }//GEN-LAST:event_btnLastCVActionPerformed
 
     private void tblHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHangMouseClicked
         countClick++;
@@ -6505,6 +7192,96 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_button2ActionPerformed
 
+    private void txtTimKiemhdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTimKiemhdMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimKiemhdMouseClicked
+
+    private void txtTimKiemhdCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTimKiemhdCaretUpdate
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTimKiemhdCaretUpdate
+
+    private void lblTimKiemTempSP1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimKiemTempSP1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lblTimKiemTempSP1MouseClicked
+
+    private void btnLasthdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLasthdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLasthdActionPerformed
+
+    private void btnLasthdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLasthdMouseClicked
+        lastHoaDon();
+    }//GEN-LAST:event_btnLasthdMouseClicked
+
+    private void btnPrevhdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevhdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPrevhdActionPerformed
+
+    private void btnPrevhdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPrevhdMouseClicked
+        prevHoaDon();
+    }//GEN-LAST:event_btnPrevhdMouseClicked
+
+    private void btnFirsthdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirsthdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFirsthdActionPerformed
+
+    private void btnFirsthdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFirsthdMouseClicked
+        firstHoaDon();
+    }//GEN-LAST:event_btnFirsthdMouseClicked
+
+    private void btnNexthdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNexthdMouseClicked
+        nextHoaDon();
+    }//GEN-LAST:event_btnNexthdMouseClicked
+
+    private void btnInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInActionPerformed
+
+    private void btnzahdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnzahdActionPerformed
+        SortHoaDon(1);
+    }//GEN-LAST:event_btnzahdActionPerformed
+
+    private void btnazhdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnazhdActionPerformed
+        SortHoaDon(0);
+    }//GEN-LAST:event_btnazhdActionPerformed
+
+    private void btnXoahdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoahdActionPerformed
+        deleteHoaDon();
+    }//GEN-LAST:event_btnXoahdActionPerformed
+
+    private void tblHoaDonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseReleased
+        countClick++;
+        if (countClick == 1) {
+            this.row = tblHoaDon.getSelectedRow();
+            editHoaDon();
+            count=0;
+        }
+    }//GEN-LAST:event_tblHoaDonMouseReleased
+
+    private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
+        count++;
+        if(count == 2){
+            String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
+            new HoaDon(this, true, mahd).setVisible(true);
+            count=0;
+        }
+    }//GEN-LAST:event_tblHoaDonMouseClicked
+
+    private void comboboxHDItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboboxHDItemStateChanged
+        btnHD();
+    }//GEN-LAST:event_comboboxHDItemStateChanged
+
+    private void btnFirstCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstCVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnFirstCVActionPerformed
+
+    private void tblChucVuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblChucVuMouseReleased
+        countClick++;
+        if (countClick == 1) {
+            this.row = tblChucVu.getSelectedRow();
+            editChucVu();
+        }
+    }//GEN-LAST:event_tblChucVuMouseReleased
+
     public void listSPT() {
         list = SanPham.selectAll();
         List<SanPhamEntity> listSanPhamTemp = new ArrayList<>();
@@ -6535,6 +7312,14 @@ public class Home extends javax.swing.JFrame {
         listKHTemp.addAll(listKhachHang);
         listKhachHang.clear();
         listKhachHang.addAll(listKHTemp);
+    }
+
+    public void listHoaDon() {
+        listHoaDon = HoaDon.selectAll();
+        List<HoaDonEntity> listHDTemp = new ArrayList<>();
+        listHDTemp.addAll(listHoaDon);
+        listHoaDon.clear();
+        listHoaDon.addAll(listHDTemp);
     }
 
     public void listNVT() {
@@ -6637,42 +7422,54 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel ThongKeTittle2;
     private javax.swing.JLabel TrangChuHr;
     private javax.swing.JLabel TrangChuTittle2;
+    private com.swing.Button btnCapNhatCV;
     private com.swing.Button btnCapNhatHang;
     private com.swing.Button btnCapNhatLoai;
     private com.swing.Button btnCapNhatNV;
     private com.swing.Button btnCapNhatSP;
     private com.swing.Button btnDangXuat;
     private com.swing.Button btnExport;
+    private com.swing.Button btnFirstCV;
     private com.swing.Button btnFirstHang;
     private com.swing.Button btnFirstKH;
     private com.swing.Button btnFirstLoai;
     private com.swing.Button btnFirstNV;
     private com.swing.Button btnFirstSP;
+    private com.swing.Button btnFirsthd;
     private com.swing.Button btnGioHang;
     private com.swing.Button btnGioiThieu;
     private com.swing.Button btnHoaDon;
+    private com.swing.Button btnIn;
+    private com.swing.Button btnLamMoiCV;
     private com.swing.Button btnLamMoiHang;
     private com.swing.Button btnLamMoiLoai;
     private com.swing.Button btnLamMoiNV;
     private com.swing.Button btnLamMoiSP;
+    private com.swing.Button btnLastCV;
     private com.swing.Button btnLastHang;
     private com.swing.Button btnLastKH;
     private com.swing.Button btnLastLoai;
     private com.swing.Button btnLastNV;
     private com.swing.Button btnLastSP;
+    private com.swing.Button btnLasthd;
     private com.swing.Button btnMenu;
+    private com.swing.Button btnNextCV;
     private com.swing.Button btnNextHang;
     private com.swing.Button btnNextKH;
     private com.swing.Button btnNextLoai;
     private com.swing.Button btnNextNV;
     private com.swing.Button btnNextSP;
+    private com.swing.Button btnNexthd;
+    private com.swing.Button btnPrevCV;
     private com.swing.Button btnPrevHang;
     private com.swing.Button btnPrevKH;
     private com.swing.Button btnPrevLoai;
     private com.swing.Button btnPrevNV;
     private com.swing.Button btnPrevSP;
+    private com.swing.Button btnPrevhd;
     private com.swing.Button btnSanPham;
     private com.swing.Button btnTaiKhoan;
+    private com.swing.Button btnThemCV;
     private com.swing.Button btnThemHang;
     private com.swing.Button btnThemKhachHang;
     private com.swing.Button btnThemLoai;
@@ -6680,41 +7477,39 @@ public class Home extends javax.swing.JFrame {
     private com.swing.Button btnThemSP;
     private com.swing.Button btnThongKe;
     private com.swing.Button btnTrangChu;
+    private com.swing.Button btnXoaCV;
     private com.swing.Button btnXoaHang;
     private com.swing.Button btnXoaLoai;
     private com.swing.Button btnXoaNV;
     private com.swing.Button btnXoaSP;
+    private com.swing.Button btnXoahd;
     private com.swing.EditButton btnaz;
+    private com.swing.EditButton btnazCV;
     private com.swing.EditButton btnazHang;
     private com.swing.EditButton btnazLoai;
+    private com.swing.EditButton btnazhd;
     private com.swing.EditButton btnazsp;
     private com.swing.Button btncapNhatKhachHang;
     private com.swing.Button btnlamMoiKhachHang;
     private com.swing.Button btnxoaKhachHang;
     private com.swing.Button btnxoagiohang1;
     private com.swing.EditButton btnza;
+    private com.swing.EditButton btnzaCV;
     private com.swing.EditButton btnzaHang;
     private com.swing.EditButton btnzaLoai;
+    private com.swing.EditButton btnzahd;
     private com.swing.EditButton btnzasp;
     private com.swing.Button button1;
     private com.swing.Button button11;
     private com.swing.Button button2;
-    private com.swing.Button button39;
-    private com.swing.Button button40;
-    private com.swing.Button button41;
-    private com.swing.Button button42;
-    private com.swing.Button button43;
-    private com.swing.Button button44;
-    private com.swing.Button button45;
-    private com.swing.Button button46;
     private javax.swing.ButtonGroup buttonGroup1;
-    private com.swing.PanelRound cardGiamGia;
+    private com.swing.PanelRound cardChiTietHoaDon;
     private com.swing.PanelRound cardGioHang;
     private com.swing.PanelRound cardGioiThieuSanPham;
     private com.swing.PanelRound cardGioiThieuThanhVien;
     private com.swing.PanelRound cardHangSanXuat;
     private com.swing.PanelRound cardHangSanXuat1;
-    private com.swing.PanelRound cardHoaDonCho;
+    private com.swing.PanelRound cardHoaDon;
     private javax.swing.JPanel cardHoaDonSanPham;
     private com.swing.PanelRound cardKhachHang;
     private com.swing.PanelRound cardLoai;
@@ -6737,6 +7532,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel cardTrangChu;
     private com.swing.PanelRound cardTrangChuNoiBat;
     private com.swing.PanelRound cardTrangChuTongQuan;
+    private com.swing.Combobox cboCV;
     private com.swing.Combobox cboDayDT;
     private com.swing.Combobox cboDaySP;
     private com.swing.Combobox cboHang;
@@ -6751,12 +7547,10 @@ public class Home extends javax.swing.JFrame {
     private com.swing.Combobox cboYearDT;
     private com.swing.Combobox cboYearSP;
     private com.swing.Combobox combobox6;
-    private com.swing.Combobox combobox9;
+    private com.swing.Combobox comboboxHD;
     private com.swing.datechooser.DateChooser dateChooser1;
     private com.swing.EditButton editButton14;
     private com.swing.EditButton editButton15;
-    private com.swing.EditButton editButton16;
-    private com.swing.EditButton editButton17;
     private com.frame.Header header2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -6764,6 +7558,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel101;
     private javax.swing.JLabel jLabel102;
     private javax.swing.JLabel jLabel103;
+    private javax.swing.JLabel jLabel104;
     private javax.swing.JLabel jLabel105;
     private javax.swing.JLabel jLabel106;
     private javax.swing.JLabel jLabel107;
@@ -6774,6 +7569,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel112;
     private javax.swing.JLabel jLabel113;
     private javax.swing.JLabel jLabel114;
+    private javax.swing.JLabel jLabel117;
+    private javax.swing.JLabel jLabel118;
+    private javax.swing.JLabel jLabel119;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
@@ -6808,9 +7606,6 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel50;
-    private javax.swing.JLabel jLabel51;
-    private javax.swing.JLabel jLabel52;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
@@ -6840,10 +7635,12 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel80;
+    private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel82;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
+    private javax.swing.JLabel jLabel86;
     private javax.swing.JLabel jLabel87;
     private javax.swing.JLabel jLabel88;
     private javax.swing.JLabel jLabel89;
@@ -6853,13 +7650,12 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel92;
     private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
-    private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
     private javax.swing.JLabel jLabel97;
-    private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
@@ -6876,7 +7672,10 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel25;
     private javax.swing.JPanel jPanel26;
     private javax.swing.JPanel jPanel27;
+    private javax.swing.JPanel jPanel28;
+    private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel30;
     private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -6886,6 +7685,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -6906,6 +7706,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator18;
     private javax.swing.JSeparator jSeparator19;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator20;
+    private javax.swing.JSeparator jSeparator21;
+    private javax.swing.JSeparator jSeparator22;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator33;
     private javax.swing.JSeparator jSeparator34;
@@ -6916,11 +7719,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JLabel jlbClose;
     private javax.swing.JLabel jlbState;
@@ -6944,11 +7743,15 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel lblRecordNV;
     private javax.swing.JLabel lblTichDiem;
     private javax.swing.JLabel lblTimKiemTempSP;
+    private javax.swing.JLabel lblTimKiemTempSP1;
     private javax.swing.JLabel lblTime;
+    private javax.swing.JLabel lblrecordCV;
     private javax.swing.JLabel lblrecordHang;
     private javax.swing.JLabel lblrecordKH;
     private javax.swing.JLabel lblrecordLoai;
     private javax.swing.JLabel lblrecordSP;
+    private javax.swing.JLabel lblrecordhd;
+    private javax.swing.JLabel lbltenCV;
     private javax.swing.JLabel lbltenNV;
     private javax.swing.JLabel opacity;
     private com.swing.PanelRound panelRound1;
@@ -6966,10 +7769,11 @@ public class Home extends javax.swing.JFrame {
     private com.hicode.switchbutton.SwitchButton sbtnTrangThaiNV;
     private spinner.Spinner spinner1;
     private javax.swing.JTable tblCart;
+    private javax.swing.JTable tblChucVu;
     private javax.swing.JTable tblDoanhThu;
     private javax.swing.JTable tblHang;
+    private javax.swing.JTable tblHoaDon;
     private javax.swing.JTable tblKhachHang;
-    private javax.swing.JTable tblKhachHang5;
     private javax.swing.JTable tblLoaiHang;
     private javax.swing.JTable tblNhanVien;
     private javax.swing.JTable tblSPBanChay;
@@ -6980,26 +7784,34 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JTextField txtGiaBanSP;
     private javax.swing.JTextField txtGiaNhapSP;
     private javax.swing.JTextField txtHoTenNV;
+    private javax.swing.JTextField txtMAKH;
     private javax.swing.JTextField txtMaHang;
     private javax.swing.JTextField txtMaLoai;
     private javax.swing.JTextField txtMaSP;
     private javax.swing.JTextField txtMatKhauNV;
+    private javax.swing.JTextArea txtMoTaCV;
     private javax.swing.JTextArea txtMoTaSP;
     private javax.swing.JTextField txtNgayNhapSP;
     private javax.swing.JTextField txtNgaySinhNV;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtSDTNV;
+    private javax.swing.JTextField txtTENKH;
+    private javax.swing.JTextField txtTENNV;
     private javax.swing.JTextField txtTenDN;
     private javax.swing.JTextField txtTenHang;
     private javax.swing.JTextField txtTenLoai;
     private javax.swing.JTextField txtTenSP;
+    private javax.swing.JTextField txtTimCV;
     private javax.swing.JTextField txtTimKiemHang;
     private javax.swing.JTextField txtTimKiemKH;
     private javax.swing.JTextField txtTimKiemLoai;
     private javax.swing.JTextField txtTimKiemSP;
+    private javax.swing.JTextField txtTimKiemhd;
     private javax.swing.JLabel txtTrangThaiNV;
     private javax.swing.JTextField txtdiaChi;
     private javax.swing.JTextField txthoTen;
+    private javax.swing.JTextField txtmaCV;
     private javax.swing.JTextField txtmaKH;
+    private javax.swing.JTextField txttenCV;
     // End of variables declaration//GEN-END:variables
 }

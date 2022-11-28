@@ -11,13 +11,15 @@ public class HoaDonCTEntity {
     private Date ngayLap;
     private String tenSP, tenHang, tenLH ;
     private Date ngayNhap;
-    private float giaNhap, giaBan;
+    private float giaNhap, giaBan,tongTien,thanhTien,tienGiam,phanTramGG;
     private int sl;
+    private String tenKH, tenNV;
+    private int tichDiem;
 
     public HoaDonCTEntity() {
     }
 
-    public HoaDonCTEntity(String maCTHD, String maHD, String maSP, String maHang, String maLH, Date ngayLap, String tenSP, String tenHang, String tenLH, Date ngayNhap, float giaNhap, float giaBan, int sl) {
+    public HoaDonCTEntity(String maCTHD, String maHD, String maSP, String maHang, String maLH, Date ngayLap, String tenSP, String tenHang, String tenLH, Date ngayNhap, float giaNhap, float giaBan, float tongTien, float thanhTien, float tienGiam, float phanTramGG, int sl, String tenKH, String tenNV, int tichDiem) {
         this.maCTHD = maCTHD;
         this.maHD = maHD;
         this.maSP = maSP;
@@ -30,8 +32,80 @@ public class HoaDonCTEntity {
         this.ngayNhap = ngayNhap;
         this.giaNhap = giaNhap;
         this.giaBan = giaBan;
+        this.tongTien = tongTien;
+        this.thanhTien = thanhTien;
+        this.tienGiam = tienGiam;
+        this.phanTramGG = phanTramGG;
         this.sl = sl;
+        this.tenKH = tenKH;
+        this.tenNV = tenNV;
+        this.tichDiem = tichDiem;
     }
+
+    public float getPhanTramGG() {
+        return phanTramGG;
+    }
+
+    public void setPhanTramGG(float phanTramGG) {
+        this.phanTramGG = phanTramGG;
+    }
+
+   
+
+    public float getTienGiam() {
+        return this.tienGiam=this.tongTien*(this.phanTramGG+this.tichDiem/100) ;
+    }
+
+    public void setTienGiam(float tienGiam) {
+        this.tienGiam = tienGiam;
+    }
+
+    
+
+    public float getTongTien() {
+        return this.tongTien=this.sl*this.giaBan;
+    }
+
+    public void setTongTien(float tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public float getThanhTien() {
+        return this.thanhTien=this.tongTien - this.tienGiam;
+    }
+
+    public void setThanhTien(float thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+
+   
+    
+
+    public String getTenKH() {
+        return tenKH;
+    }
+
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
+    }
+
+    public String getTenNV() {
+        return tenNV;
+    }
+
+    public void setTenNV(String tenNV) {
+        this.tenNV = tenNV;
+    }
+
+    public int getTichDiem() {
+        return tichDiem;
+    }
+
+    public void setTichDiem(int tichDiem) {
+        this.tichDiem = tichDiem;
+    }
+
+    
 
     public String getMaCTHD() {
         return maCTHD;
@@ -135,6 +209,10 @@ public class HoaDonCTEntity {
 
     public void setSl(int sl) {
         this.sl = sl;
+    }
+
+    public void getPhanTramGG(float aFloat) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 

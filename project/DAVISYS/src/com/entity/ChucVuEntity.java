@@ -6,15 +6,25 @@
 package com.entity;
 
 public class ChucVuEntity {
+
     private int maCV;
-    private String tenCV;
+    private String tenCV, moTa;
 
     public ChucVuEntity() {
     }
 
-    public ChucVuEntity(int maCV, String tenCV) {
+    public ChucVuEntity(int maCV, String tenCV, String moTa) {
         this.maCV = maCV;
         this.tenCV = tenCV;
+        this.moTa = moTa;
+    }
+
+    public String getMoTa() {
+        return moTa;
+    }
+
+    public void setMoTa(String moTa) {
+        this.moTa = moTa;
     }
 
     public int getMaCV() {
@@ -32,5 +42,5 @@ public class ChucVuEntity {
     public void setTenCV(String tenCV) {
         this.tenCV = tenCV;
     }
-    
+
 }

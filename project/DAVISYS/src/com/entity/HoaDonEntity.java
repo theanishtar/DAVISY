@@ -9,17 +9,29 @@ import java.util.Date;
 
 public class HoaDonEntity {
 
-    private String maHD, tenDN, maKH, maGH;
+    private String maHD, maKH, tenDN, maGH, tenKH, tenNV;
     private Date ngayLap;
+    private float phanTramGG, gia, tongTien;
+    private int tichDiem;
+    private float tienGiam, thanhTien;
+
     public HoaDonEntity() {
     }
 
-    public HoaDonEntity(String maHD, String tenDN, String maKH, String maGH, Date ngayLap) {
+    public HoaDonEntity(String maHD, String maKH, String tenDN, String maGH, String tenKH, String tenNV, Date ngayLap, float phanTramGG, float gia, float tongTien, int tichDiem, float tienGiam, float thanhTien) {
         this.maHD = maHD;
-        this.tenDN = tenDN;
         this.maKH = maKH;
+        this.tenDN = tenDN;
         this.maGH = maGH;
+        this.tenKH = tenKH;
+        this.tenNV = tenNV;
         this.ngayLap = ngayLap;
+        this.phanTramGG = phanTramGG;
+        this.gia = gia;
+        this.tongTien = tongTien;
+        this.tichDiem = tichDiem;
+        this.tienGiam = tienGiam;
+        this.thanhTien = thanhTien;
     }
 
     public String getMaHD() {
@@ -30,20 +42,20 @@ public class HoaDonEntity {
         this.maHD = maHD;
     }
 
-    public String getTenDN() {
-        return tenDN;
-    }
-
-    public void setTenDN(String tenDN) {
-        this.tenDN = tenDN;
-    }
-
     public String getMaKH() {
         return maKH;
     }
 
     public void setMaKH(String maKH) {
         this.maKH = maKH;
+    }
+
+    public String getTenDN() {
+        return tenDN;
+    }
+
+    public void setTenDN(String tenDN) {
+        this.tenDN = tenDN;
     }
 
     public String getMaGH() {
@@ -54,6 +66,22 @@ public class HoaDonEntity {
         this.maGH = maGH;
     }
 
+    public String getTenKH() {
+        return tenKH;
+    }
+
+    public void setTenKH(String tenKH) {
+        this.tenKH = tenKH;
+    }
+
+    public String getTenNV() {
+        return tenNV;
+    }
+
+    public void setTenNV(String tenNV) {
+        this.tenNV = tenNV;
+    }
+
     public Date getNgayLap() {
         return ngayLap;
     }
@@ -61,7 +89,54 @@ public class HoaDonEntity {
     public void setNgayLap(Date ngayLap) {
         this.ngayLap = ngayLap;
     }
-    
+
+    public float getPhanTramGG() {
+        return phanTramGG;
+    }
+
+    public void setPhanTramGG(float phanTramGG) {
+        this.phanTramGG = phanTramGG;
+    }
+
+    public float getGia() {
+        return gia;
+    }
+
+    public void setGia(float gia) {
+        this.gia = gia;
+    }
+
+    public float getTongTien() {
+        return tongTien;
+    }
+
+    public void setTongTien(float tongTien) {
+        this.tongTien = tongTien;
+    }
+
+    public int getTichDiem() {
+        return tichDiem;
+    }
+
+    public void setTichDiem(int tichDiem) {
+        this.tichDiem = tichDiem;
+    }
+
+    public float getTienGiam() {
+        return tienGiam;
+    }
+
+    public void setTienGiam(float tienGiam) {
+        this.tienGiam = tienGiam;
+    }
+
+    public float getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(float thanhTien) {
+        this.thanhTien = thanhTien;
+    }
 
 
 

@@ -13,20 +13,22 @@ import com.utils.JdbcHelper;
 
 public class HoaDonDAO extends DAVISY<HoaDonEntity, String> {
 
-    final String INSERT_SQL = "INSERT INTO HOADON (MAHD, TENDN, MAKH, MAGH,NGAYLAP) values(?, ?, ?, ?, ?)";
-    final String UPDATE_SQL = "UPDATE HOADON SET TENDN = ?, MAKH = ?, MAGH = ?,NGAYLAP = ? WHERE MAHD = ?";
+    final String INSERT_SQL = "INSERT INTO HOADON (MAHD, TENDN, MAKH, MAGH,NGAYLAP,TONGTIEN,PHANTRAMGG,TRUTIENTICHDIEM,THANHTIEN) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    final String UPDATE_SQL = "UPDATE HOADON SET TENDN = ?, MAKH = ?, MAGH = ?,NGAYLAP = ?,TONGTIEN= ?,PHANTRAMGG= ?,TRUTIENTICHDIEM= ?,THANHTIEN= ? WHERE MAHD = ?";
     final String DELETE_SQL = "DELETE FROM HOADON WHERE MAHD = ?";
-    final String SELECT_ALL_SQL = "SELECT *FROM HOADON";
-    final String SELECT_BY_ID_SQL = "SELECT *FROM HOADON WHERE MAHD = ?";
+    final String SELECT_ALL_SQL = "SELECT a.*,b.HOTEN,b.MAKH,c.TENNV  FROM HOADON a,KHACHHANG b ,TAIKHOAN c WHERE a.MAKH =b.MAKH AND a.TENDN =c.TENDN";
+    final String SELECT_BY_ID_SQL = "SELECT a.*,b.HOTEN,b.MAKH,c.TENNV  FROM HOADON a,KHACHHANG b ,TAIKHOAN c WHERE a.MAKH =b.MAKH AND a.TENDN =c.TENDN AND a.MAHD = ?";
 
     @Override
     public void insert(HoaDonEntity entity) {
-        JdbcHelper.update(INSERT_SQL, entity.getMaHD(), entity.getTenDN(), entity.getMaKH(), entity.getMaGH(), entity.getNgayLap());
+        JdbcHelper.update(INSERT_SQL, entity.getMaHD(),entity.getTenDN(), entity.getMaKH(), entity.getMaGH(), entity.getNgayLap(), entity.getTongTien(), entity.getPhanTramGG(),
+                 entity.getTichDiem(), entity.getThanhTien());
     }
 
     @Override
     public void update(HoaDonEntity entity) {
-        JdbcHelper.update(UPDATE_SQL, entity.getTenDN(), entity.getMaKH(), entity.getMaGH(), entity.getNgayLap(), entity.getMaHD());
+        JdbcHelper.update(UPDATE_SQL, entity.getTenDN(), entity.getMaKH(), entity.getMaGH(), entity.getNgayLap(), entity.getTongTien(), entity.getPhanTramGG(),
+                 entity.getTichDiem(), entity.getThanhTien(), entity.getMaHD());
     }
 
     @Override
@@ -56,10 +58,14 @@ public class HoaDonDAO extends DAVISY<HoaDonEntity, String> {
             while (rs.next()) {
                 HoaDonEntity entity = new HoaDonEntity();
                 entity.setMaHD(rs.getString("MAHD"));
-                entity.setTenDN(rs.getString("TENDN"));
                 entity.setMaKH(rs.getString("MAKH"));
-                entity.setMaGH(rs.getString("MAGH"));
+                entity.setTenKH(rs.getString("HOTEN"));
+                entity.setTenNV(rs.getString("TENNV"));
                 entity.setNgayLap(rs.getDate("NGAYLAP"));
+                entity.setPhanTramGG(rs.getFloat("PHANTRAMGG"));
+                entity.setTongTien(rs.getFloat("TONGTIEN"));
+                entity.setTichDiem(rs.getInt("TRUTIENTICHDIEM"));
+                entity.setThanhTien(rs.getFloat("THANHTIEN"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

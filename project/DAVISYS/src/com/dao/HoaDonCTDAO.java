@@ -16,8 +16,8 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
     final String INSERT_SQL = "INSERT INTO CHITIETHOADON (MACTHD,MAHD, MASP, MAHANG, MALH, NGAYLAP,TENSP,TENHANG,TENLH,NGAYNHAP,GIANHAP,GIABAN,SOLUONG) values(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?)";
     final String UPDATE_SQL = "UPDATE CHITIETHOADON SET MAHD = ?, MASP = ?, MAHANG = ?, MALH = ?, NGAYLAP = ?,TENSP = ?,TENHANG = ?,TENLH = ?,NGAYNHAP = ?,GIANHAP = ?,GIABAN = ?,SOLUONG = ? WHERE MACTHD = ?";
     final String DELETE_SQL = "DELETE FROM CHITIETHOADON WHERE MACTHD = ?";
-    final String SELECT_ALL_SQL = "SELECT * FROM CHITIETHOADON";
-    final String SELECT_BY_ID_SQL = "SELECT * FROM CHITIETHOADON WHERE MACTHD = ?";
+    final String SELECT_ALL_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN";
+    final String SELECT_BY_ID_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN AND a.MAHD = ?";
 
     @Override
     public void insert(HoaDonCTEntity entity) {
@@ -70,6 +70,11 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
                 entity.setGiaNhap(rs.getFloat("GIANHAP"));
                 entity.setGiaBan(rs.getFloat("GIABAN"));
                 entity.setSl(rs.getInt("SOLUONG"));
+//                entity.getPhanTramGG(rs.getFloat("PHANTRAMGG"));
+                entity.setTenKH(rs.getString("HOTEN"));
+                entity.setTenNV(rs.getString("TENNV"));
+                entity.setTichDiem(rs.getInt("TICHDIEM"));
+                entity.setPhanTramGG(rs.getFloat("PHANTRAMGG"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();

@@ -11,20 +11,20 @@ import java.util.ArrayList;
 import com.utils.JdbcHelper;
 public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
     
-    final String INSERT_SQL = "INSERT INTO CHUCVU (MACV, TENCV) values(?, ?)";
-    final String UPDATE_SQL = "UPDATE CHUCVU SET TENCV = ? WHERE MACV = CONVERT(int , ?)";
+    final String INSERT_SQL = "INSERT INTO CHUCVU (MACV, TENCV,MOTA) values(?, ?,?)";
+    final String UPDATE_SQL = "UPDATE CHUCVU SET TENCV = ?,MOTA = ? WHERE MACV = CONVERT(int , ?)";
     final String DELETE_SQL = "DELETE FROM CHUCVU WHERE MACV = CONVERT(int , ?)";
     final String SELECT_ALL_SQL = "SELECT * FROM CHUCVU";
     final String SELECT_BY_ID_SQL = "SELECT * FROM CHUCVU WHERE MACV = CONVERT(int , ?)";
 
     @Override
     public void insert(ChucVuEntity entity) {
-        JdbcHelper.update(INSERT_SQL, entity.getMaCV(), entity.getTenCV());
+        JdbcHelper.update(INSERT_SQL, entity.getMaCV(), entity.getTenCV(),entity.getMoTa());
     }
 
     @Override
     public void update(ChucVuEntity entity) {
-        JdbcHelper.update(UPDATE_SQL, entity.getTenCV(), entity.getMaCV());
+        JdbcHelper.update(UPDATE_SQL, entity.getTenCV(),entity.getMoTa(), entity.getMaCV());
     }
 
     @Override
@@ -55,6 +55,7 @@ public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
                 ChucVuEntity entity = new ChucVuEntity();
                 entity.setMaCV(rs.getInt("MACV"));
                 entity.setTenCV(rs.getString("TENCV"));
+                entity.setMoTa(rs.getString("MOTA"));
                 list.add(entity);
             }
             rs.getStatement().getConnection().close();
