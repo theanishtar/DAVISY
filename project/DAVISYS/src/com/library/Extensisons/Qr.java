@@ -135,9 +135,9 @@ public class Qr {
 
     public static void main(String[] args) {
         Qr qr = new Qr();
-
+        qr.createQR("SP01");
         //System.out.println(qr.createQR("QRCode"));
-        System.out.println(qr.createMailQR());
+        //System.out.println(qr.createMailQR());
         // TODO code application logic here
     }
 

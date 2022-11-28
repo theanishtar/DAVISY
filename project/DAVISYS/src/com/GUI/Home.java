@@ -101,14 +101,14 @@ import java.util.regex.Pattern;
  *
  * @author Tran Huu Dang from DAVISY
  */
-public class Home extends javax.swing.JFrame {
+public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory {
 
     /**
      * Creates new form Home
      */
     int chose = -1;
     int row = -1;
-    int countClick = 0,count=0;
+    int countClick = 0, count = 0;
     boolean chooserMainPage = true;
     private DrawerController drawer;
     JFileChooser f = new JFileChooser("src\\com\\images");
@@ -159,7 +159,13 @@ public class Home extends javax.swing.JFrame {
 
     List<Object[]> listTKSP = null;
     List<Object[]> listTKDT = null;
-    //
+
+    //Quét mã QR sản phẩm
+    private WebcamPanel panel = null;
+    public Webcam webcam = null;
+
+    private static final long serialVersionUID = 6441489157408381878L;
+    private Executor executor = Executors.newSingleThreadExecutor(this);
 
     public Home(String tenDN) {
         listCV = chucVu.selectAll();
@@ -223,6 +229,65 @@ public class Home extends javax.swing.JFrame {
         SanPhamHr1.setVisible(false);
         cartShoping();
 
+    }
+
+    public void initWebcam() {
+        Dimension size = WebcamResolution.QVGA.getSize();
+        webcam = Webcam.getWebcams().get(0); //0 is default webcam
+        webcam.setViewSize(size);
+
+        panel = new WebcamPanel(webcam);
+        panel.setPreferredSize(size);
+        //panel.setFPSDisplayed(true);
+
+        pnQR.add(panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 300));
+
+        executor.execute(this);
+    }
+
+    @Override
+    public void run() {
+        do {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Result result = null;
+            BufferedImage image = null;
+            if (!webcam.isOpen()) {
+                return;
+            }
+            if (webcam.isOpen()) {
+                if ((image = webcam.getImage()) == null) {
+                    continue;
+                }
+            }
+
+            LuminanceSource source = new BufferedImageLuminanceSource(image);
+            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+            try {
+                result = new MultiFormatReader().decode(bitmap);
+            } catch (NotFoundException e) {
+                //System.out.println("");
+            }
+
+            if (result != null) {
+                /*
+                quét hết list sản phẩm
+                add sản phẩm với mã sản phẩm = result vào giỏ hàng
+                */
+            }
+        } while (true);
+    }
+
+    @Override
+    public Thread newThread(Runnable r) {
+        Thread t = new Thread(r, "My Thread");
+        t.setDaemon(true);
+        return t;
     }
 
     public void getTenNhanVien(String tenNV) {
@@ -867,14 +932,8 @@ public class Home extends javax.swing.JFrame {
         this.row = tblHang.getRowCount() - 1;
         this.editLoai();
     }
-    
-    
-    
-    
-    
-    
-    
-     public String recordChucVu() {
+
+    public String recordChucVu() {
         List<ChucVuEntity> list = chucVu.selectAll();
         return (row + 1) + " trên " + list.size();
     }
@@ -894,7 +953,7 @@ public class Home extends javax.swing.JFrame {
             //String keyword = txtTimKiemLoai.getText();
             //List<LoaiHangEntity> listLoai = Loai.selectByKeyword(keyword);
             for (ChucVuEntity cv : listCV) {
-                Object[] row = {cv.getMaCV(), cv.getTenCV(),cv.getMoTa()};
+                Object[] row = {cv.getMaCV(), cv.getTenCV(), cv.getMoTa()};
                 model.addRow(row);
             }
         } catch (Exception e) {
@@ -913,7 +972,7 @@ public class Home extends javax.swing.JFrame {
         cv.setMaCV(Integer.valueOf(txtmaCV.getText()));
         cv.setTenCV(txttenCV.getText());
         cv.setMoTa(txtMoTaCV.getText());
-        return cv ;
+        return cv;
 
     }
 
@@ -941,7 +1000,7 @@ public class Home extends javax.swing.JFrame {
 
     public void editChucVu() {
         countClick = 0;
-        String maCV = String.valueOf(tblChucVu.getValueAt(this.row, 0)) ;
+        String maCV = String.valueOf(tblChucVu.getValueAt(this.row, 0));
         ChucVuEntity cv = chucVu.selectById(maCV);
         tblChucVu.setRowSelectionInterval(this.row, this.row);
         this.setFormChucVu(cv);
@@ -1035,18 +1094,14 @@ public class Home extends javax.swing.JFrame {
         this.row = tblChucVu.getRowCount() - 1;
         this.editChucVu();
     }
-     public void listChucVu() {
+
+    public void listChucVu() {
         listCV = chucVu.selectAll();
         List<ChucVuEntity> listChucVuTemp = new ArrayList<>();
         listChucVuTemp.addAll(listCV);
         listCV.clear();
         listCV.addAll(listChucVuTemp);
     }
-    
-    
-    
-    
-    
 
     // Sản phẩm
     public String recordSanPham() {
@@ -2858,7 +2913,10 @@ public class Home extends javax.swing.JFrame {
         jLabel113 = new javax.swing.JLabel();
         txtTenLoai = new javax.swing.JTextField();
         cardGioHang = new com.swing.PanelRound();
+        pnGioHangSanPham = new javax.swing.JPanel();
         cardHoaDonSanPham = new javax.swing.JPanel();
+        cardHoaDonQR = new javax.swing.JPanel();
+        pnQR = new javax.swing.JPanel();
         textField5 = new com.swing.TextField();
         jLabel77 = new javax.swing.JLabel();
         button1 = new com.swing.Button();
@@ -2871,7 +2929,8 @@ public class Home extends javax.swing.JFrame {
         btnxoagiohang1 = new com.swing.Button();
         jSeparator19 = new javax.swing.JSeparator();
         jLabel10 = new javax.swing.JLabel();
-        button2 = new com.swing.Button();
+        jLabel11 = new javax.swing.JLabel();
+        switchButton1 = new com.hicode.switchbutton.SwitchButton();
         cardHoaDon = new com.swing.PanelRound();
         jScrollPane12 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
@@ -5634,6 +5693,8 @@ public class Home extends javax.swing.JFrame {
         cardGioHang.setBackground(new java.awt.Color(255, 255, 255));
         cardGioHang.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        pnGioHangSanPham.setLayout(new java.awt.CardLayout());
+
         cardHoaDonSanPham.setBackground(new java.awt.Color(255, 255, 255));
         cardHoaDonSanPham.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(0, 0, 0)));
 
@@ -5648,7 +5709,35 @@ public class Home extends javax.swing.JFrame {
             .addGap(0, 490, Short.MAX_VALUE)
         );
 
-        cardGioHang.add(cardHoaDonSanPham, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 640, 490));
+        pnGioHangSanPham.add(cardHoaDonSanPham, "card2");
+
+        cardHoaDonQR.setBackground(new java.awt.Color(255, 255, 255));
+        cardHoaDonQR.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 0, 1, new java.awt.Color(0, 0, 0)));
+
+        pnQR.setBackground(new java.awt.Color(250, 250, 250));
+        pnQR.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        pnQR.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        javax.swing.GroupLayout cardHoaDonQRLayout = new javax.swing.GroupLayout(cardHoaDonQR);
+        cardHoaDonQR.setLayout(cardHoaDonQRLayout);
+        cardHoaDonQRLayout.setHorizontalGroup(
+            cardHoaDonQRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardHoaDonQRLayout.createSequentialGroup()
+                .addGap(62, 62, 62)
+                .addComponent(pnQR, javax.swing.GroupLayout.PREFERRED_SIZE, 470, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(107, Short.MAX_VALUE))
+        );
+        cardHoaDonQRLayout.setVerticalGroup(
+            cardHoaDonQRLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cardHoaDonQRLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(pnQR, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(155, Short.MAX_VALUE))
+        );
+
+        pnGioHangSanPham.add(cardHoaDonQR, "card3");
+
+        cardGioHang.add(pnGioHangSanPham, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 640, 490));
 
         textField5.setToolTipText("");
         textField5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -5729,17 +5818,18 @@ public class Home extends javax.swing.JFrame {
         jLabel10.setText("Số điện thoại:");
         cardGioHang.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 30, 110, 30));
 
-        button2.setBackground(new java.awt.Color(153, 204, 255));
-        button2.setActionCommand("Quét mã QR");
-        button2.setEffectColor(new java.awt.Color(255, 204, 204));
-        button2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        button2.setLabel("Quét mã QR");
-        button2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                button2ActionPerformed(evt);
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel11.setText("Quét bằng mã:");
+        cardGioHang.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 30, 110, 30));
+
+        switchButton1.setBackground(new java.awt.Color(0, 153, 51));
+        switchButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                switchButton1MousePressed(evt);
             }
         });
-        cardGioHang.add(button2, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 30, 120, 30));
+        cardGioHang.add(switchButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 30, -1, -1));
 
         cardTrangChu.add(cardGioHang, "card11");
 
@@ -7188,10 +7278,6 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnxoagiohang1ActionPerformed
 
-    private void button2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_button2ActionPerformed
-
     private void txtTimKiemhdMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtTimKiemhdMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTimKiemhdMouseClicked
@@ -7253,16 +7339,16 @@ public class Home extends javax.swing.JFrame {
         if (countClick == 1) {
             this.row = tblHoaDon.getSelectedRow();
             editHoaDon();
-            count=0;
+            count = 0;
         }
     }//GEN-LAST:event_tblHoaDonMouseReleased
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
         count++;
-        if(count == 2){
+        if (count == 2) {
             String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
             new HoaDon(this, true, mahd).setVisible(true);
-            count=0;
+            count = 0;
         }
     }//GEN-LAST:event_tblHoaDonMouseClicked
 
@@ -7281,6 +7367,32 @@ public class Home extends javax.swing.JFrame {
             editChucVu();
         }
     }//GEN-LAST:event_tblChucVuMouseReleased
+
+    private void switchButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_switchButton1MousePressed
+        if (!switchButton1.isSelected()) {
+            initWebcam();
+            cardHoaDonQR.setVisible(true);
+            cardHoaDonSanPham.setVisible(false);
+        } else {
+            openWebCame();
+        }
+
+    }//GEN-LAST:event_switchButton1MousePressed
+
+    public void openWebCame() {
+        if (webcam.isOpen()) {
+            webcam.close();
+            cardHoaDonQR.setVisible(false);
+            cardHoaDonSanPham.setVisible(true);
+        } else {
+            cardHoaDonQR.setVisible(true);
+            cardHoaDonSanPham.setVisible(false);
+            if (webcam.isOpen()) {
+                webcam.close();
+            }
+            initWebcam();
+        }
+    }
 
     public void listSPT() {
         list = SanPham.selectAll();
@@ -7501,7 +7613,6 @@ public class Home extends javax.swing.JFrame {
     private com.swing.EditButton btnzasp;
     private com.swing.Button button1;
     private com.swing.Button button11;
-    private com.swing.Button button2;
     private javax.swing.ButtonGroup buttonGroup1;
     private com.swing.PanelRound cardChiTietHoaDon;
     private com.swing.PanelRound cardGioHang;
@@ -7510,6 +7621,7 @@ public class Home extends javax.swing.JFrame {
     private com.swing.PanelRound cardHangSanXuat;
     private com.swing.PanelRound cardHangSanXuat1;
     private com.swing.PanelRound cardHoaDon;
+    private javax.swing.JPanel cardHoaDonQR;
     private javax.swing.JPanel cardHoaDonSanPham;
     private com.swing.PanelRound cardKhachHang;
     private com.swing.PanelRound cardLoai;
@@ -7564,6 +7676,7 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel107;
     private javax.swing.JLabel jLabel108;
     private javax.swing.JLabel jLabel109;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel110;
     private javax.swing.JLabel jLabel111;
     private javax.swing.JLabel jLabel112;
@@ -7762,12 +7875,15 @@ public class Home extends javax.swing.JFrame {
     private com.swing.PanelRound panelRound6;
     private com.swing.PanelRound panelRound7;
     private com.swing.PanelRound panelRound8;
+    private javax.swing.JPanel pnGioHangSanPham;
     private javax.swing.JPanel pnMenu;
+    private javax.swing.JPanel pnQR;
     private javax.swing.JPanel pnlView;
     private javax.swing.JRadioButton rdoNam;
     private javax.swing.JRadioButton rdoNu;
     private com.hicode.switchbutton.SwitchButton sbtnTrangThaiNV;
     private spinner.Spinner spinner1;
+    private com.hicode.switchbutton.SwitchButton switchButton1;
     private javax.swing.JTable tblCart;
     private javax.swing.JTable tblChucVu;
     private javax.swing.JTable tblDoanhThu;
