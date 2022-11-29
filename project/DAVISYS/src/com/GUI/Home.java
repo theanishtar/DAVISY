@@ -2039,8 +2039,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         this.fillTableKhachHang();
     }
-
-    public void SortSP(int i) {
+     public void SortSP(int i) {
         String SP = (String) cboSP.getSelectedItem();
         Comparator<SanPhamEntity> azsp = new Comparator<SanPhamEntity>() {
             @Override
@@ -2076,6 +2075,29 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
         this.fillTableSanPham();
+    }
+
+    public void SortNV(int i) {
+        String NV = (String) cboSortNV.getSelectedItem();
+        System.out.println(NV);
+        Comparator<TaiKhoanEntity> aznv = new Comparator<TaiKhoanEntity>() {
+            @Override
+            public int compare(TaiKhoanEntity nv1, TaiKhoanEntity nv2) {
+                if (NV.equalsIgnoreCase("Tên đăng nhập")) {
+                    return nv1.getTenDN().compareTo(nv2.getTenDN());
+                } else  {
+                    return nv1.getTenNV().compareTo(nv2.getTenNV());
+                }
+
+            }
+        };
+        if (i == 0) {
+            Collections.sort(listNhanVien, aznv);
+        } else {
+            Collections.sort(listNhanVien, aznv.reversed());
+        }
+
+        this.fillTableNhanVien();
     }
 
     public void SortHoaDon(int i) {
@@ -2468,9 +2490,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
         model.setRowCount(0);
         try {
-            List<TaiKhoanEntity> list = NhanVien.selectAll();
+//            List<TaiKhoanEntity> list = NhanVien.selectAll();
 
-            for (TaiKhoanEntity nv : list) {
+            for (TaiKhoanEntity nv : listNhanVien) {
 
                 Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
                     nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
@@ -2900,11 +2922,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnCapNhatNV = new com.swing.Button();
         btnXoaNV = new com.swing.Button();
         jPanel16 = new javax.swing.JPanel();
-        combobox6 = new com.swing.Combobox();
+        cboSortNV = new com.swing.Combobox();
         jLabel30 = new javax.swing.JLabel();
         jPanel17 = new javax.swing.JPanel();
-        editButton14 = new com.swing.EditButton();
-        editButton15 = new com.swing.EditButton();
+        btnazNV = new com.swing.EditButton();
+        btnzanv = new com.swing.EditButton();
         jLabel32 = new javax.swing.JLabel();
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator7 = new javax.swing.JSeparator();
@@ -4545,10 +4567,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel16.setBackground(new java.awt.Color(255, 255, 255));
         jPanel16.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        combobox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "x", "e", "f", "e", "gd", " " }));
-        combobox6.setSelectedIndex(-1);
-        combobox6.setLabeText("Sắp xếp theo");
-        jPanel16.add(combobox6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 191, 40));
+        cboSortNV.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Tên đăng nhập", "Tên nhân viên", " " }));
+        cboSortNV.setLabeText("Sắp xếp theo");
+        jPanel16.add(cboSortNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 13, 191, 40));
 
         jLabel30.setText(" Tiến hành sắp xếp");
         jLabel30.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -4558,16 +4579,26 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel17.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 1, 1, 1, new java.awt.Color(0, 0, 0)));
         jPanel17.setLayout(null);
 
-        editButton14.setBackground(new java.awt.Color(102, 204, 255));
-        editButton14.setText("Tăng");
-        jPanel17.add(editButton14);
-        editButton14.setBounds(20, 20, 159, 30);
+        btnazNV.setBackground(new java.awt.Color(102, 204, 255));
+        btnazNV.setText("A -Z");
+        btnazNV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnazNVActionPerformed(evt);
+            }
+        });
+        jPanel17.add(btnazNV);
+        btnazNV.setBounds(20, 20, 159, 30);
 
-        editButton15.setBackground(new java.awt.Color(204, 153, 255));
-        editButton15.setText("Giảm");
-        editButton15.setMargin(new java.awt.Insets(5, 14, 14, 14));
-        jPanel17.add(editButton15);
-        editButton15.setBounds(20, 90, 159, 30);
+        btnzanv.setBackground(new java.awt.Color(204, 153, 255));
+        btnzanv.setText("Z - A");
+        btnzanv.setMargin(new java.awt.Insets(5, 14, 14, 14));
+        btnzanv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnzanvActionPerformed(evt);
+            }
+        });
+        jPanel17.add(btnzanv);
+        btnzanv.setBounds(20, 90, 159, 30);
 
         jLabel32.setForeground(new java.awt.Color(153, 153, 153));
         jLabel32.setText("hoặc");
@@ -7651,6 +7682,14 @@ txtTimCV.requestFocus();
     private void txtTimCVCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTimCVCaretUpdate
         timKiemCV();
     }//GEN-LAST:event_txtTimCVCaretUpdate
+
+    private void btnazNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnazNVActionPerformed
+        SortNV(0);
+    }//GEN-LAST:event_btnazNVActionPerformed
+
+    private void btnzanvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnzanvActionPerformed
+        SortNV(1);
+    }//GEN-LAST:event_btnzanvActionPerformed
     public GioHangTamEntity getFormGH(int sl) {
         GioHangTamEntity gh = new GioHangTamEntity();
         gh.setMaGH(txtSdtKH.getText());
@@ -8009,6 +8048,7 @@ txtTimCV.requestFocus();
     private com.swing.EditButton btnazCV;
     private com.swing.EditButton btnazHang;
     private com.swing.EditButton btnazLoai;
+    private com.swing.EditButton btnazNV;
     private com.swing.EditButton btnazhd;
     private com.swing.EditButton btnazsp;
     private com.swing.Button btncapNhatKhachHang;
@@ -8020,6 +8060,7 @@ txtTimCV.requestFocus();
     private com.swing.EditButton btnzaHang;
     private com.swing.EditButton btnzaLoai;
     private com.swing.EditButton btnzahd;
+    private com.swing.EditButton btnzanv;
     private com.swing.EditButton btnzasp;
     private javax.swing.ButtonGroup buttonGroup1;
     private com.swing.PanelRound cardChiTietHoaDon;
@@ -8063,14 +8104,12 @@ txtTimCV.requestFocus();
     private com.swing.Combobox cboMonthDT;
     private com.swing.Combobox cboMonthSP;
     private com.swing.Combobox cboSP;
+    private com.swing.Combobox cboSortNV;
     private com.swing.Combobox cboVaiTro;
     private com.swing.Combobox cboYearDT;
     private com.swing.Combobox cboYearSP;
-    private com.swing.Combobox combobox6;
     private com.swing.Combobox comboboxHD;
     private com.swing.datechooser.DateChooser dateChooser1;
-    private com.swing.EditButton editButton14;
-    private com.swing.EditButton editButton15;
     private com.frame.Header header2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

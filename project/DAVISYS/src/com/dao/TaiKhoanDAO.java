@@ -49,10 +49,10 @@ public class TaiKhoanDAO extends DAVISY<TaiKhoanEntity, String> {
     }
 
     public List<TaiKhoanEntity> selectByKeyword(String keyword) {
-        String sql = "SELECT * FROM TAIKHOAN WHERE TENDN LIKE ?";
+        String sql = "SELECT TENDN,TENNV,TAIKHOAN.MACV,CHUCVU.TENCV,EMAIL,MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI FROM TAIKHOAN ,CHUCVU WHERE TAIKHOAN.MACV = CHUCVU.MACV AND TENDN LIKE ?";
         return this.selectBySql(sql, '%' + keyword + "%");
     }
-    
+
     @Override
     protected List<TaiKhoanEntity> selectBySql(String sql, Object... args) {
         List<TaiKhoanEntity> list = new ArrayList<TaiKhoanEntity>();
