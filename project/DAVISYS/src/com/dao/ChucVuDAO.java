@@ -9,7 +9,7 @@ import java.util.List;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import com.utils.JdbcHelper;
-public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
+ public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
     
     final String INSERT_SQL = "INSERT INTO CHUCVU (MACV, TENCV,MOTA) values(?, ?,?)";
     final String UPDATE_SQL = "UPDATE CHUCVU SET TENCV = ?,MOTA = ? WHERE MACV = CONVERT(int , ?)";
@@ -46,6 +46,11 @@ public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
         return list.get(0);
     }
 
+    public List<ChucVuEntity> selectByKeyword(String keyword) {
+        String sql = "SELECT * FROM CHUCVU WHERE TENCV LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
+    
     @Override
     protected List<ChucVuEntity> selectBySql(String sql, Object... args) {
         List<ChucVuEntity> list = new ArrayList<ChucVuEntity>();
@@ -63,6 +68,11 @@ public class ChucVuDAO extends DAVISY<ChucVuEntity, String > {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete2(String key1, String key2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

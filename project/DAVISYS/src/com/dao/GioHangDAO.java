@@ -21,12 +21,12 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
 
     @Override
     public void insert(GioHangEntity entity) {
-        JdbcHelper.update(INSERT_SQL, entity.getMaGH(),entity.getMaKH(), entity.getTenDN());
+        JdbcHelper.update(INSERT_SQL, entity.getMaGH(), entity.getMaKH(), entity.getTenDN());
     }
 
     @Override
     public void update(GioHangEntity entity) {
-        JdbcHelper.update(UPDATE_SQL,entity.getMaKH(), entity.getTenDN(), entity.getMaGH());
+        JdbcHelper.update(UPDATE_SQL, entity.getMaKH(), entity.getTenDN(), entity.getMaGH());
     }
 
     @Override
@@ -65,5 +65,9 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete2(String key1, String key2) {
     }
 }

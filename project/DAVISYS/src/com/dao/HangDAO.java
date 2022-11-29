@@ -68,4 +68,9 @@ public List<HangEntity> selectByKeyword(String keyword){
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void delete2(String key1, String key2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

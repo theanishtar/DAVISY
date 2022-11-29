@@ -29,7 +29,7 @@ public class Login extends javax.swing.JFrame {
     AnimationClass ac = new AnimationClass();
     TaiKhoanDAO tk = new TaiKhoanDAO();
     List<TaiKhoanEntity> listTK = new ArrayList<>();
-    String tenDN = null;
+    public String tenDN ;
 
     public Login() {
 
@@ -294,12 +294,12 @@ public class Login extends javax.swing.JFrame {
         lblTitleLogin.setForeground(new java.awt.Color(71, 163, 255));
         lblTitleLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblTitleLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/businessman.png"))); // NOI18N
-        lblTitleLogin.setText("LOGIN");
+        lblTitleLogin.setText("ĐĂNG NHẬP");
         panelRound1.add(lblTitleLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 430, -1));
 
         btnLogin.setBackground(new java.awt.Color(71, 163, 255));
         btnLogin.setForeground(new java.awt.Color(161, 30, 145));
-        btnLogin.setText("LOGIN");
+        btnLogin.setText("Đăng nhập");
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,7 +310,7 @@ public class Login extends javax.swing.JFrame {
 
         txtUsername.setDisabledTextColor(new java.awt.Color(204, 0, 0));
         txtUsername.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtUsername.setLabelText("Username");
+        txtUsername.setLabelText("Tên đăng nhập");
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtUsernameKeyPressed(evt);
@@ -335,7 +335,7 @@ public class Login extends javax.swing.JFrame {
         panelRound1.add(lblHide, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 270, -1, -1));
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtPassword.setLabelText("Password");
+        txtPassword.setLabelText("Mật khẩu");
         txtPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPasswordActionPerformed(evt);
@@ -351,7 +351,7 @@ public class Login extends javax.swing.JFrame {
         lblForget.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblForget.setForeground(new java.awt.Color(153, 0, 153));
         lblForget.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lblForget.setText("Forget password?");
+        lblForget.setText("Quên mật khẩu?");
         panelRound1.add(lblForget, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 330, -1));
 
         Main.add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 120, 430, 500));
@@ -483,9 +483,9 @@ public class Login extends javax.swing.JFrame {
 
     public void login() {
         //
-        this.dispose();
-        Home home = new Home(tenDN);
-        home.setVisible(true);
+//        this.dispose();
+//        Home frhome = new Home(tenDN);
+//        frhome.setVisible(true);
     }
 
     public void losePanel() {

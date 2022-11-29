@@ -570,6 +570,7 @@ public class HoaDon extends javax.swing.JDialog {
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
         int i = tblHoaDon.getSelectedRow();
         HoaDonCTEntity hd =listHD.get(i);
+        System.out.println(i);
         txtTenKH.setText(hd.getTenKH());
         txtTenNV.setText(hd.getTenNV());
         txtMaCTHDX.setText(hd.getMaCTHD());

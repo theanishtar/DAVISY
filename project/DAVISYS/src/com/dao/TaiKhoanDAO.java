@@ -16,8 +16,8 @@ public class TaiKhoanDAO extends DAVISY<TaiKhoanEntity, String> {
     final String INSERT_SQL = "INSERT INTO TAIKHOAN (TENDN, MACV, TENNV, EMAIL, MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI) values(?, ?, ?, ?, ?,?, ?, ?, ?, ?)";
     final String UPDATE_SQL = "UPDATE TAIKHOAN SET MACV = ?, TENNV = ?, EMAIL = ?, MATKHAU = ?,DIACHI = ? ,DIENTHOAI= ?,NGAYSINH = ?,GIOITINH = ? ,TRANGTHAI= ? WHERE TENDN = ?";
     final String DELETE_SQL = "DELETE FROM TAIKHOAN WHERE TENDN = ?";
-    final String SELECT_ALL_SQL = "SELECT TENDN,TENNV,CHUCVU.TENCV,EMAIL,MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI FROM TAIKHOAN ,CHUCVU WHERE TAIKHOAN.MACV = CHUCVU.MACV";
-    final String SELECT_BY_ID_SQL = "SELECT TENDN,CHUCVU.TENCV,TENNV,EMAIL,MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI FROM TAIKHOAN ,CHUCVU WHERE TAIKHOAN.MACV = CHUCVU.MACV AND TENDN = ?";
+    final String SELECT_ALL_SQL = "SELECT TENDN,TENNV,TAIKHOAN.MACV,CHUCVU.TENCV,EMAIL,MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI FROM TAIKHOAN ,CHUCVU WHERE TAIKHOAN.MACV = CHUCVU.MACV";
+    final String SELECT_BY_ID_SQL = "SELECT TENDN,TENNV,TAIKHOAN.MACV,CHUCVU.TENCV,EMAIL,MATKHAU,DIACHI,DIENTHOAI,NGAYSINH,GIOITINH,TRANGTHAI FROM TAIKHOAN ,CHUCVU WHERE TAIKHOAN.MACV = CHUCVU.MACV AND TENDN = ?";
 
     @Override
     public void insert(TaiKhoanEntity entity) {
@@ -48,6 +48,11 @@ public class TaiKhoanDAO extends DAVISY<TaiKhoanEntity, String> {
         return list.get(0);
     }
 
+    public List<TaiKhoanEntity> selectByKeyword(String keyword) {
+        String sql = "SELECT * FROM TAIKHOAN WHERE TENDN LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
+    
     @Override
     protected List<TaiKhoanEntity> selectBySql(String sql, Object... args) {
         List<TaiKhoanEntity> list = new ArrayList<TaiKhoanEntity>();
@@ -56,8 +61,8 @@ public class TaiKhoanDAO extends DAVISY<TaiKhoanEntity, String> {
             while (rs.next()) {
                 TaiKhoanEntity entity = new TaiKhoanEntity();
                 entity.setTenDN(rs.getString("TENDN"));
-//                entity.setMaCV(rs.getInt("MACV"));
                 entity.setTenNV(rs.getString("TENNV"));
+                entity.setMaCV(rs.getInt("MACV"));
                 entity.setTenCV(rs.getString("TENCV"));
                 entity.setEmail(rs.getString("EMAIL"));
                 entity.setMatKhau(rs.getString("MATKHAU"));
@@ -73,5 +78,10 @@ public class TaiKhoanDAO extends DAVISY<TaiKhoanEntity, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete2(String key1, String key2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

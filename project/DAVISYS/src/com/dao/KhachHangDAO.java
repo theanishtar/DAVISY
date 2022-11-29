@@ -43,6 +43,11 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
         return list.get(0);
     }
 
+    public List<KhachHangEntity> selectByKeyword(String keyword) {
+        String sql = "SELECT * FROM KHACHHANG WHERE HOTEN LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
+    
     @Override
     protected List<KhachHangEntity> selectBySql(String sql, Object... args) {
         List<KhachHangEntity> list = new ArrayList<KhachHangEntity>();
@@ -62,6 +67,11 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete2(String key1, String key2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

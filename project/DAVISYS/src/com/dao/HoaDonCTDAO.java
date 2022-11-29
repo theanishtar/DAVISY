@@ -15,7 +15,7 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
 
     final String INSERT_SQL = "INSERT INTO CHITIETHOADON (MACTHD,MAHD, MASP, MAHANG, MALH, NGAYLAP,TENSP,TENHANG,TENLH,NGAYNHAP,GIANHAP,GIABAN,SOLUONG) values(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?)";
     final String UPDATE_SQL = "UPDATE CHITIETHOADON SET MAHD = ?, MASP = ?, MAHANG = ?, MALH = ?, NGAYLAP = ?,TENSP = ?,TENHANG = ?,TENLH = ?,NGAYNHAP = ?,GIANHAP = ?,GIABAN = ?,SOLUONG = ? WHERE MACTHD = ?";
-    final String DELETE_SQL = "DELETE FROM CHITIETHOADON WHERE MACTHD = ?";
+    final String DELETE_SQL = "DELETE FROM CHITIETHOADON WHERE MAHD = ?";
     final String SELECT_ALL_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN";
     final String SELECT_BY_ID_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN AND a.MAHD = ?";
 
@@ -82,5 +82,10 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void delete2(String key1, String key2) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
