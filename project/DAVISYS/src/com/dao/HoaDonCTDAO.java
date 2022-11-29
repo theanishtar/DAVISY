@@ -14,7 +14,7 @@ import com.utils.JdbcHelper;
 public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
 
     final String INSERT_SQL = "INSERT INTO CHITIETHOADON (MACTHD,MAHD, MASP, MAHANG, MALH, NGAYLAP,TENSP,TENHANG,TENLH,NGAYNHAP,GIANHAP,GIABAN,SOLUONG) values(?, ?, ?, ?, ?,?, ?, ?, ?, ?,?, ?, ?)";
-    final String UPDATE_SQL = "UPDATE CHITIETHOADON SET MAHD = ?, MASP = ?, MAHANG = ?, MALH = ?, NGAYLAP = ?,TENSP = ?,TENHANG = ?,TENLH = ?,NGAYNHAP = ?,GIANHAP = ?,GIABAN = ?,SOLUONG = ? WHERE MACTHD = ?";
+    final String UPDATE_SQL = "UPDATE CHITIETHOADON SET  MASP = ?, MAHANG = ?, MALH = ?,TENSP = ?,TENHANG = ?,TENLH = ?,SOLUONG = CONVERT(int, ?) WHERE MACTHD = ?";
     final String DELETE_SQL = "DELETE FROM CHITIETHOADON WHERE MAHD = ?";
     final String SELECT_ALL_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN";
     final String SELECT_BY_ID_SQL = "SELECT a.*,c.HOTEN,d.TENNV,c.TICHDIEM,b.PHANTRAMGG FROM CHITIETHOADON a,HOADON b ,KHACHHANG c ,TAIKHOAN d WHERE a.MAHD= b.MAHD AND b.MAKH=c.MAKH AND b.TENDN =d.TENDN AND a.MAHD = ?";
@@ -27,8 +27,7 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
 
     @Override
     public void update(HoaDonCTEntity entity) {
-        JdbcHelper.update(UPDATE_SQL,entity.getMaHD(), entity.getMaSP(), entity.getMaHang(), entity.getMaLH(), entity.getNgayLap(), entity.getTenSP(),
-                entity.getTenHang(), entity.getTenLH(), entity.getNgayNhap(), entity.getGiaNhap(), entity.getGiaBan(), entity.getSl(),entity.getMaCTHD());
+        JdbcHelper.update(UPDATE_SQL, entity.getMaSP(), entity.getMaHang(), entity.getMaLH(), entity.getTenSP(),entity.getTenHang(), entity.getTenLH(), entity.getSl(),entity.getMaCTHD());
     }
 
     @Override
@@ -70,7 +69,6 @@ public class HoaDonCTDAO extends DAVISY<HoaDonCTEntity, String> {
                 entity.setGiaNhap(rs.getFloat("GIANHAP"));
                 entity.setGiaBan(rs.getFloat("GIABAN"));
                 entity.setSl(rs.getInt("SOLUONG"));
-//                entity.getPhanTramGG(rs.getFloat("PHANTRAMGG"));
                 entity.setTenKH(rs.getString("HOTEN"));
                 entity.setTenNV(rs.getString("TENNV"));
                 entity.setTichDiem(rs.getInt("TICHDIEM"));
