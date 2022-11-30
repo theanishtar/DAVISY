@@ -8,6 +8,7 @@ package com.GUI;
 import AppPackage.AnimationClass;
 import com.dao.TaiKhoanDAO;
 import com.entity.TaiKhoanEntity;
+import com.library.Extensisons.ScanQR;
 import com.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -169,6 +170,19 @@ public class Login extends javax.swing.JFrame {
         }).start();
     }
 
+    String emailGetTxt = null;
+
+    public boolean checkEntityEmail() {
+        TaiKhoanEntity tklist = tk.selectById(txtUsername.getText());
+        if (tklist != null) {
+            emailGetTxt = tklist.getEmail();
+            return true;
+        } else {
+            MsgBox.alert(this, "Tài khoản không tồn tại!");
+        }
+        return false;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -352,6 +366,11 @@ public class Login extends javax.swing.JFrame {
         lblForget.setForeground(new java.awt.Color(153, 0, 153));
         lblForget.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         lblForget.setText("Quên mật khẩu?");
+        lblForget.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblForgetMouseClicked(evt);
+            }
+        });
         panelRound1.add(lblForget, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 330, 330, -1));
 
         Main.add(panelRound1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 120, 430, 500));
@@ -481,11 +500,28 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
 
+    private void lblForgetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblForgetMouseClicked
+        // getEmail
+        txtPassword.setText("");
+        if (checkEntityEmail()) {
+            boolean kq = MsgBox.confirm(this, "Email " + emailGetTxt + " có phải của bạn không?");
+            if (kq) {
+                // gửi mã
+                try {
+                    ScanQR readQR = new ScanQR(emailGetTxt);
+                    readQR.setVisible(true);
+                    this.dispose();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        }
+    }//GEN-LAST:event_lblForgetMouseClicked
+
     public void login() {
-        //
-//        this.dispose();
-//        Home frhome = new Home(tenDN);
-//        frhome.setVisible(true);
+        this.dispose();
+        Home frhome = new Home(tenDN);
+        frhome.setVisible(true);
     }
 
     public void losePanel() {

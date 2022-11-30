@@ -99,6 +99,7 @@ import com.entity.GioHangTamEntity;
 import com.entity.GioHangTempEntity;
 import com.entity.HoaDonCTEntity;
 import com.entity.HoaDonEntity;
+import com.library.Extensisons.Qr;
 import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -164,7 +165,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     List<GioHangTamEntity> listGHT = new ArrayList<>();
     List<HoaDonCTEntity> listCtHD = new ArrayList<>();
     List<GioHangEntity> listGiohang = new ArrayList<>();
-    List<GioHangTamEntity>listGioHangHienTai=new ArrayList<>();
+    List<GioHangTamEntity> listGioHangHienTai = new ArrayList<>();
     //Thong ke
     ThongKeDAO TKdao = new ThongKeDAO();
 
@@ -662,6 +663,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -691,7 +693,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         boolean last = (this.row == tblHang.getRowCount() - 1);
         //Trạng thái form
 
-        btnThemHang.setEnabled(edit);
+        //btnThemHang.setEnabled(edit);
         btnCapNhatHang.setEnabled(edit);
         btnXoaHang.setEnabled(edit);
         //Trạng thái điều hướng
@@ -735,7 +737,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormHang();
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -748,7 +751,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormHang();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -762,6 +766,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -825,6 +830,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -853,7 +859,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         boolean first = (this.row == 0);
         boolean last = (this.row == tblLoaiHang.getRowCount() - 1);
         //Trạng thái form
-        btnThemLoai.setEnabled(edit);
+        //btnThemLoai.setEnabled(edit);
         btnCapNhatLoai.setEnabled(edit);
         btnXoaLoai.setEnabled(edit);
         //Trạng thái điều hướng
@@ -896,7 +902,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormLoai();
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -909,7 +916,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormLoai();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -923,6 +931,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -985,6 +994,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -1015,7 +1025,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         boolean first = (this.row == 0);
         boolean last = (this.row == tblChucVu.getRowCount() - 1);
         //Trạng thái form
-        btnThemCV.setEnabled(edit);
+        //btnThemCV.setEnabled(!edit);
         btnCapNhatCV.setEnabled(edit);
         btnXoaCV.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1058,7 +1068,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormChucVu();
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1071,7 +1082,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormChucVu();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1085,6 +1097,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -1156,6 +1169,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -1173,6 +1187,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -1250,7 +1265,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         boolean first = (this.row == 0);
         boolean last = (this.row == tblSanPham.getRowCount() - 1);
         //Trạng thái form
-        btnThemSP.setEnabled(edit);
+//        btnThemSP.setEnabled(!edit);
         btnCapNhatSP.setEnabled(edit);
         btnXoaSP.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1272,6 +1287,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void insertSanPham() {
         List<SanPhamEntity> listsp = SanPham.selectAll();
+        Qr qr = new Qr();
         for (SanPhamEntity sp1 : listsp) {
             if (txtMaSP.getText().equals(sp1.getMaSP())) {
                 int choice = (JOptionPane.showConfirmDialog(this, "Bạn có muốn cập nhật sản phẩm mã: " + txtMaSP.getText() + "?", "Xác nhận", JOptionPane.YES_NO_OPTION));
@@ -1289,35 +1305,43 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             listSPT();
             this.fillTableSanPham();
             this.clearFormSanPham();
+            qr.createQRProduct(sp.getMaSP());
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
     public void updateSanPham() {
         SanPhamEntity sp = getFormSanPham();
+        Qr qr = new Qr();
         try {
             SanPham.update(sp);
             listSPT();
             this.fillTableSanPham();
             this.clearFormSanPham();
+            qr.createQRProduct(sp.getMaSP());
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this,"Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
     public void deleteSanPham() {
         String masp = txtMaSP.getText();
+        Qr qr = new Qr();
         try {
             SanPham.delete(masp);
             listSPT();
             this.fillTableSanPham();
             this.clearFormSanPham();
+            qr.deleteQROProduct("src\\com\\images\\product\\" + masp + ".png");
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -1567,6 +1591,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -1601,10 +1626,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void updateStatusKhachHang() {
         boolean edit = (this.row >= 0);
+        System.out.println(edit);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblKhachHang.getRowCount() - 1);
         //Trạng thái form
-        btnThemKhachHang.setEnabled(edit);
+//        btnThemKhachHang.setEnabled(!edit);
         btncapNhatKhachHang.setEnabled(edit);
         btnxoaKhachHang.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1634,7 +1660,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormKhachHang();
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1648,6 +1675,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             listGioHang();
         } catch (Exception e) {
             MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1667,7 +1695,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormKhachHang();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1681,6 +1710,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -1741,6 +1771,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -1763,7 +1794,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         hd.setTenDN(ktTenDN);
         hd.setMaKH(gh.getMaKH());
-        hd.setMaGH(gh.getMaGH());
+        hd.setMaGH(txtSdtKH.getText());
         hd.setNgayLap(dayNow);
         hd.setTongTien(Float.valueOf(txtTongtiensp.getText().substring(0, txtTongtiensp.getText().length() - 3)));
         hd.setPhanTramGG(0);
@@ -1818,6 +1849,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             insertCTHD();
         } catch (Exception e) {
             MsgBox.alert(this, e + "Thêm mới thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -1831,7 +1863,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormHoaDon();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -1846,6 +1879,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -1856,6 +1890,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             listHoaDonCT();
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -2176,51 +2211,58 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void insertGH(String ma, int sl) {
         listGHT();
-        
-        GioHangTamEntity gh = new GioHangTamEntity();
-        for (GioHangTamEntity ght : listGHT) {
-            if (ma.equalsIgnoreCase(ght.getMaSP())) {
+        //System.out.println(ma);
+        List<GioHangTamEntity> listgh = GioHangtam.selectByIdlist(txtSdtKH.getText());
+        for (GioHangTamEntity gh : listgh) {
+            System.out.println(gh.getMaSP());
+            if (ma.equalsIgnoreCase(gh.getMaSP())) {
                 int choice = (JOptionPane.showConfirmDialog(this, "Sản phẩm đã tồn tại \n Bạn có muốn tăng số lượng không?", "Xác nhận", JOptionPane.YES_NO_OPTION));
                 if (choice == JOptionPane.YES_OPTION) {
                     try {
                         gh.setMaGH(txtSdtKH.getText());
                         gh.setMaSP(ma);
-                        gh.setSoLuong(ght.getSoLuong() + 1);
+                        gh.setSoLuong(gh.getSoLuong() + 1);
                         GioHangtam.update(gh);
-                        listGHT();
+                        //listGHT();
                         filltableGioHang();
                     } catch (Exception e) {
                         MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+                        System.out.println(e);
                     }
+                    return;
+                } else {
                     return;
                 }
             }
         }
         try {
+            GioHangTamEntity gh = GioHangtam.selectById(txtSdtKH.getText());
             gh.setMaGH(txtSdtKH.getText());
             gh.setMaSP(ma);
             gh.setSoLuong(sl);
             GioHangtam.insert(gh);
-            listGHT();
+            //listGHT();
             filltableGioHang();
         } catch (Exception e) {
             MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+            System.out.println(e);
         }
-        return;
+        //return;
     }
 
     private void SANPHAM() {
         home.setEvent(new EventItem() {
             @Override
             public void itemClick(Component com, ModelItem item) {
-                String ma = item.getDescription();
-                String tensp = item.getItemName();
-                float gia = (float) item.getPrice();
-                int sl = 1;
                 if (txtSdtKH.getText().equals("")) {
                     MsgBox.alert(com, "Vui lòng nhập số điện thoại!");
                     return;
                 } else {
+                    String ma = item.getDescription();
+                    System.out.println(ma);
+                    String tensp = item.getItemName();
+                    float gia = (float) item.getPrice();
+                    int sl = 1;
                     insertGH(ma, sl);
                 }
 
@@ -2266,6 +2308,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -2437,6 +2480,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 MsgBox.alert(this, "Xuất thành công");
             } catch (Exception ex) {
                 System.out.println("lỗi xuất file " + ex);
+                System.out.println(ex);
             }
 
         } catch (Exception ex) {
@@ -2530,6 +2574,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         } catch (Exception e) {
             System.out.println(e);
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
         }
     }
 
@@ -2538,7 +2583,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         boolean first = (this.row == 0);
         boolean last = (this.row == tblNhanVien.getRowCount() - 1);
         //Trạng thái form
-        btnThemNV.setEnabled(edit);
+        //btnThemNV.setEnabled(edit);
         btnCapNhatNV.setEnabled(edit);
         btnXoaNV.setEnabled(edit);
         //Trạng thái điều hướng
@@ -2668,7 +2713,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormNV();
             MsgBox.alert(this, "Thêm mới thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Thêm mới thất bại!");
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -2681,7 +2727,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.clearFormNV();
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -2695,6 +2742,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
 
     }
@@ -7380,7 +7428,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 ////        }
 //        
 //    }
-    
+
     private void btnXNKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXNKHActionPerformed
 //        if (!txtSdtKH.getText().equals("")) {
         filltableGioHang();
@@ -7749,7 +7797,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             listGHT();
             this.filltableGioHang();
         } catch (Exception e) {
-            MsgBox.alert(this, e + "Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -7763,6 +7812,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
         }
     }
 
@@ -7817,6 +7867,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         listGHT.clear();
         listGHT.addAll(listgiohangtam);
+
+        System.out.println("Gio Hang hien co:");
+        for (GioHangTamEntity gh : listGHT) {
+            //System.out.println(gh.getMaSP());
+        }
+        System.out.println("-------------");
         System.out.println(listGHT.size());
         for (GioHangTamEntity gh : listGHT) {
             System.out.println(gh.getMaSP());
@@ -7830,13 +7886,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //                    listGHT();
                     this.filltableGioHang();
                 } catch (Exception e) {
-                    MsgBox.alert(this, e + "Thêm mới thất bại!");
+                    MsgBox.alert(this, "Thêm mới thất bại!");
+                    System.out.println(e);
                 }
             }
             i++;
         }
     }
-
 
     public void sdtKH(String sdt) {
         JPopupMenu popupMenu = new JPopupMenu("Title");

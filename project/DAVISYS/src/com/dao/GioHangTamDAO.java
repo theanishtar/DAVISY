@@ -10,6 +10,9 @@ import java.util.List;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import com.utils.JdbcHelper;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class GioHangTamDAO extends DAVISY<GioHangTamEntity, String> {
 
@@ -50,6 +53,14 @@ public class GioHangTamDAO extends DAVISY<GioHangTamEntity, String> {
         return list.get(0);
     }
 
+    public List<GioHangTamEntity> selectByIdlist(String key) {
+        List<GioHangTamEntity> list = this.selectBySql(SELECT_BY_ID_SQL, key);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+
     @Override
     protected List<GioHangTamEntity> selectBySql(String sql, Object... args) {
         List<GioHangTamEntity> list = new ArrayList<GioHangTamEntity>();
@@ -83,6 +94,47 @@ public class GioHangTamDAO extends DAVISY<GioHangTamEntity, String> {
     @Override
     public void delete2(String key1, String key2) {
         JdbcHelper.update(DELETE_SQL, key1, key2);
+    }
+
+    public List<GioHangTamEntity> getAll(String sdt) {
+        List<GioHangTamEntity> list = new ArrayList<>();        //tạo list chứa đối tượng tài khoản
+        String userName = "sa";
+        String password = "songlong";
+        //String url = "jdbc:sqlserver://localhost:1433;databaseName=QLSINHVIEN";
+        String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=DAVISYS;encrypt=false;";
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection con = DriverManager.getConnection(url, userName, password);
+            Statement st = con.createStatement();
+            String sql = "SELECT a.MAKH,a.HOTEN,a.DIENTHOAI,b.MAGH,f.MAHANG,g.MALH,f.TENHANG,g.TENLH,e.TENNV, d.MASP,d.TENSP,d.GIABAN,d.GIANHAP, c.SOLUONG\n"
+                    + "            FROM KHACHHANG a ,GIOHANG b ,GIOHANGTAM c,SANPHAM d, TAIKHOAN e, HANG f,LOAIHANG g WHERE a.MAKH =b.MAKH AND b.MAGH=c.MAGH AND c.MASP =d.MASP AND b.TENDN =e.TENDN  AND d.MAHANG=f.MAHANG AND d.MALH=g.MALH AND a.DIENTHOAI = " + sdt;
+            ResultSet rs = st.executeQuery(sql);
+            list.clear();
+            while (rs.next()) {
+                String maKH = rs.getString(1);
+                String hoTen = rs.getString(2);
+                String dienThoai = rs.getString(3);
+                String maGioHang = rs.getString(4);
+                String maHang = rs.getString(5);
+                String maLoaiHang = rs.getString(6);
+                String tenHang = rs.getString(7);
+                String tenLoaiHang = rs.getString(8);
+                String tenNhanVien = rs.getString(9);
+
+                String maSanPham = rs.getString(10);
+                String tenSanPham = rs.getString(11);
+                float giaBan = rs.getFloat(12);
+                float giaNhap = rs.getFloat(13);
+                int soLuong = rs.getInt(14);
+
+                list.add(new GioHangTamEntity(maKH, hoTen, dienThoai, maGioHang, maHang, maLoaiHang,
+                         tenHang, tenLoaiHang, tenNhanVien, maSanPham, tenSanPham, giaBan, giaNhap, soLuong * giaBan, giaBan, soLuong));//add vào list
+            }
+            con.close();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        return list;
     }
 
 }

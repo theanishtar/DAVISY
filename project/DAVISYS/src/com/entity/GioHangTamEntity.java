@@ -13,6 +13,8 @@ public class GioHangTamEntity {
 
     public GioHangTamEntity() {
     }
+    
+    
 
     public GioHangTamEntity(String maKH, String tenKH, String dienThoai, String maGH, String tenNV, String maSP, String tenSP, String maHang, String maLoai, String tenHang, String tenLoai, float giaNhap, float giaBan, float tongTien, float thanhTien, int soLuong) {
         this.maKH = maKH;
