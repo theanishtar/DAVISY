@@ -207,6 +207,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         initLoai();
         initSanPham();
         initKhachHang();
+        initgioHang();
         fillComboxCV();
         fillComboxLoai();
         fillComboxHang();
@@ -242,6 +243,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         initKhachHang();
         initHoaDon();
         initChucVu();
+        initgioHang();
         fillComboxCV();
         fillComboxLoai();
         fillComboxHang();
@@ -1324,7 +1326,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             qr.createQRProduct(sp.getMaSP());
             MsgBox.alert(this, "Cập nhật thành công!");
         } catch (Exception e) {
-            MsgBox.alert(this,"Cập nhật thất bại!");
+            MsgBox.alert(this, "Cập nhật thất bại!");
             System.out.println(e);
         }
     }
@@ -2209,45 +2211,62 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         SANPHAM();
     }
 
+    public void initgioHang() {
+        btnxoaGioHang.setEnabled(false);
+        btnXacNhanDonHang.setEnabled(false);
+        spnSL.setEnabled(false);
+    }
+
     public void insertGH(String ma, int sl) {
-        listGHT();
-        //System.out.println(ma);
-        List<GioHangTamEntity> listgh = GioHangtam.selectByIdlist(txtSdtKH.getText());
-        for (GioHangTamEntity gh : listgh) {
-            System.out.println(gh.getMaSP());
-            if (ma.equalsIgnoreCase(gh.getMaSP())) {
-                int choice = (JOptionPane.showConfirmDialog(this, "Sản phẩm đã tồn tại \n Bạn có muốn tăng số lượng không?", "Xác nhận", JOptionPane.YES_NO_OPTION));
-                if (choice == JOptionPane.YES_OPTION) {
-                    try {
-                        gh.setMaGH(txtSdtKH.getText());
-                        gh.setMaSP(ma);
-                        gh.setSoLuong(gh.getSoLuong() + 1);
-                        GioHangtam.update(gh);
-                        //listGHT();
-                        filltableGioHang();
-                    } catch (Exception e) {
-                        MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
-                        System.out.println(e);
+        listGHT.clear();
+        listGHT = GioHangtam.selectByIdlist(txtSdtKH.getText());
+        if (listGHT == null || listGHT.isEmpty()) {
+            try {
+                GioHangTamEntity gh = new GioHangTamEntity();
+                gh.setMaGH(txtSdtKH.getText());
+                gh.setMaSP(ma);
+                gh.setSoLuong(sl);
+                GioHangtam.insert(gh);
+                filltableGioHang();
+            } catch (Exception e) {
+                MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!a");
+                System.out.println(e);
+            }
+        } else {
+            for (GioHangTamEntity gh : listGHT) {
+                if (ma.equalsIgnoreCase(gh.getMaSP())) {
+
+                    int choice = (JOptionPane.showConfirmDialog(this, "Sản phẩm đã tồn tại \n Bạn có muốn tăng số lượng không?", "Xác nhận", JOptionPane.YES_NO_OPTION));
+                    if (choice == JOptionPane.YES_OPTION) {
+                        try {
+                            gh.setMaGH(txtSdtKH.getText());
+                            gh.setMaSP(ma);
+                            gh.setSoLuong(gh.getSoLuong() + 1);
+                            GioHangtam.update(gh);
+                            filltableGioHang();
+                        } catch (Exception e) {
+                            MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+                            System.out.println(e);
+                        }
+                        return;
+                    } else {
+                        return;
                     }
-                    return;
-                } else {
-                    return;
                 }
             }
+            try {
+                GioHangTamEntity gh = new GioHangTamEntity();
+                gh.setMaGH(txtSdtKH.getText());
+                gh.setMaSP(ma);
+                gh.setSoLuong(sl);
+                GioHangtam.insert(gh);
+                filltableGioHang();
+            } catch (Exception e) {
+                MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+                System.out.println(e);
+            }
         }
-        try {
-            GioHangTamEntity gh = GioHangtam.selectById(txtSdtKH.getText());
-            gh.setMaGH(txtSdtKH.getText());
-            gh.setMaSP(ma);
-            gh.setSoLuong(sl);
-            GioHangtam.insert(gh);
-            //listGHT();
-            filltableGioHang();
-        } catch (Exception e) {
-            MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
-            System.out.println(e);
-        }
-        //return;
+
     }
 
     private void SANPHAM() {
@@ -2289,22 +2308,27 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public void filltableGioHang() {
+
         DefaultTableModel model = (DefaultTableModel) tblCart.getModel();
         model.setRowCount(0);
         int thanhTien = 0;
+        int check = 0;
         String sdt = txtSdtKH.getText();
-//        GioHang.selectById(sdt);
         listGHT();
         try {
             for (GioHangTamEntity gh : listGHT) {
                 if (sdt.equals(gh.getMaGH())) {
+                    check++;
                     thanhTien += gh.getTongTien();
-
                     Object[] row = {gh.getMaSP(), gh.getTenSP(), gh.getGiaBan(), gh.getSoLuong()};
                     model.addRow(row);
                 }
                 txtTongtiensp.setText(String.valueOf(thanhTien) + "VND");
-
+            }
+            if (check > 0) {
+                btnXacNhanDonHang.setEnabled(true);
+            } else {
+                btnXacNhanDonHang.setEnabled(false);
             }
         } catch (Exception e) {
             MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
@@ -7431,6 +7455,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void btnXNKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXNKHActionPerformed
 //        if (!txtSdtKH.getText().equals("")) {
+        listGHT = GioHangtam.selectAll();
         filltableGioHang();
 //        }
 
@@ -7720,9 +7745,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void spnSLStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnSLStateChanged
         String masp = (String) tblCart.getValueAt(this.row, 0);
         if (!masp.equals("")) {
-//            System.out.println(masp);
-            updategh((int) spnSL.getValue());
-            return;
+            if ((int) spnSL.getValue() == 0) {
+                deleteGH();
+                spnSL.setEnabled(false);
+                return;
+            } else {
+                updategh((int) spnSL.getValue());
+                return;
+            }
         } else {
             MsgBox.alert(this, "Vui lòng chọn sản phẩm!");
         }
@@ -7732,7 +7762,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         countClick++;
         if (countClick == 1) {
             this.row = tblCart.getSelectedRow();
+            spnSL.setValue((int) tblCart.getValueAt(this.row, 3));
             editGH();
+            btnxoaGioHang.setEnabled(true);
+            spnSL.setEnabled(true);
         }
     }//GEN-LAST:event_tblCartMouseClicked
 
@@ -7788,6 +7821,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         String magh = (String) tblCart.getValueAt(this.row, 0);
         GioHangTamEntity gh = GioHangtam.selectById(magh);
         tblCart.setRowSelectionInterval(this.row, this.row);
+//        spnSL.setValue((int) gh.getSoLuong());
     }
 
     public void updategh(int sl) {
@@ -7809,7 +7843,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             GioHangtam.delete2(magh, masp);
             listGHT();
             this.filltableGioHang();
-            MsgBox.alert(this, "Xóa thành công!");
+            btnxoaGioHang.setEnabled(false);
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
             System.out.println(e);
@@ -7818,7 +7852,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void updateSl() {
         int sl = (Integer) tblCart.getValueAt(this.row, 3);
-        updategh(sl);
+        if (sl == 0) {
+            deleteGH();
+            spnSL.setEnabled(false);
+            return;
+        } else {
+            updategh(sl);
+        }
         MsgBox.alert(this, "Cập nhật điểm thành công!");
     }
 
@@ -7828,9 +7868,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public HoaDonCTEntity getFormHDCT(int i) {
         if (i >= 0) {
-            listHoaDonCT();
+            listCtHD = HDCT.selectAll();
             HoaDonCTEntity hd = new HoaDonCTEntity();
             GioHangTamEntity gh = listGHT.get(i);
+            System.out.println(listCtHD.size());
             System.out.println(gh.getMaSP());
             if (listCtHD.size() < 10) {
                 hd.setMaCTHD("CTHD0" + (listCtHD.size() + 1));
@@ -7855,43 +7896,23 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public void insertCTHD() {
-        int i = -1;
-        List<GioHangTamEntity> listgiohangtam = new ArrayList<>();
-        for (GioHangTamEntity ght : listGHT) {
-            if (txtSdtKH.getText().equalsIgnoreCase(ght.getMaGH())) {
-                ght.getMaGH();
-                ght.getMaSP();
-                ght.getSoLuong();
-                listgiohangtam.add(ght);
-            }
-        }
-        listGHT.clear();
-        listGHT.addAll(listgiohangtam);
+        int i = 0;
+        listGHT = GioHangtam.selectByIdlist(txtSdtKH.getText());
+        for (GioHangTamEntity gh : listGHT) {
+            HoaDonCTEntity hd = getFormHDCT(i);
+            try {
 
-        System.out.println("Gio Hang hien co:");
-        for (GioHangTamEntity gh : listGHT) {
-            //System.out.println(gh.getMaSP());
-        }
-        System.out.println("-------------");
-        System.out.println(listGHT.size());
-        for (GioHangTamEntity gh : listGHT) {
-            System.out.println(gh.getMaSP());
-            if (txtSdtKH.getText().equalsIgnoreCase(gh.getMaGH()) && i >= 0) {
-                HoaDonCTEntity hd = getFormHDCT(i);
-//                System.out.println(i);
-                try {
-                    HDCT.insert(hd);
-//                    GioHangtam.delete2(gh.getMaGH(), gh.getMaSP());
-                    listHoaDonCT();
-//                    listGHT();
-                    this.filltableGioHang();
-                } catch (Exception e) {
-                    MsgBox.alert(this, "Thêm mới thất bại!");
-                    System.out.println(e);
-                }
+                HDCT.insert(hd);
+                GioHangtam.delete2(gh.getMaGH(), gh.getMaSP());
+                listHoaDonCT();
+                listGHT();
+                this.filltableGioHang();
+            } catch (Exception e) {
+                MsgBox.alert(this, "Thêm mới thất bại!");
+                System.out.println(e);
             }
-            i++;
         }
+        i++;
     }
 
     public void sdtKH(String sdt) {
