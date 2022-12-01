@@ -10,6 +10,7 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
 
     final String INSERT_SQL = "INSERT INTO KHACHHANG (MAKH, HOTEN, DIENTHOAI, DIACHI, TICHDIEM) values(?, ?, ?, ?, ?)";
     final String UPDATE_SQL = "UPDATE KHACHHANG SET HOTEN = ?, DIENTHOAI = ?, DIACHI = ?, TICHDIEM = ? WHERE MAKH = ?";
+    final String UPDATETD_SQL = "UPDATE KHACHHANG SET TICHDIEM = ? WHERE MAKH = ?";
     final String DELETE_SQL = "DELETE FROM KHACHHANG WHERE MAKH = ?";
     final String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG";
     final String SELECT_BY_ID_SQL = "SELECT * FROM KHACHHANG WHERE MAKH = ?";
@@ -46,6 +47,9 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
     public List<KhachHangEntity> selectByKeyword(String keyword) {
         String sql = "SELECT * FROM KHACHHANG WHERE HOTEN LIKE ?";
         return this.selectBySql(sql, '%' + keyword + "%");
+    }
+    public void updateTd(KhachHangEntity entity) {
+        JdbcHelper.update(UPDATETD_SQL,  entity.getTichDiem(), entity.getMaKH());
     }
     
     @Override
