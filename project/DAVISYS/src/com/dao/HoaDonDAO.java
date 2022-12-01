@@ -50,6 +50,11 @@ public class HoaDonDAO extends DAVISY<HoaDonEntity, String> {
         return list.get(0);
     }
 
+    public List<HoaDonEntity> selectByKeyword(String keyword) {
+        String sql = "SELECT a.*,b.HOTEN,b.MAKH,c.TENNV  FROM HOADON a,KHACHHANG b ,TAIKHOAN c WHERE a.MAKH =b.MAKH AND a.TENDN =c.TENDN AND b.HOTEN LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
+    
     @Override
     protected List<HoaDonEntity> selectBySql(String sql, Object... args) {
         List<HoaDonEntity> list = new ArrayList<HoaDonEntity>();

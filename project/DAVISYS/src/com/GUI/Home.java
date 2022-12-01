@@ -105,6 +105,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import static java.awt.print.Printable.NO_SUCH_PAGE;
+import static java.awt.print.Printable.PAGE_EXISTS;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -185,6 +199,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     java.sql.Date dayNow = new java.sql.Date(millis);
     private static final long serialVersionUID = 6441489157408381878L;
     private Executor executor = Executors.newSingleThreadExecutor(this);
+
+    //In hóa đơn
+    String billNo = "";
+    Double totalAmount = 0.0;
+    Double cash = 0.0;
+    Double balance = 0.0;
+    Double bHeight = 0.0;
+    String maHDIn = null;
+    float tienGiam = 0;
+
+    ArrayList<String> tenSP = new ArrayList<>();
+    ArrayList<String> giaSP = new ArrayList<>();
+    ArrayList<String> SL = new ArrayList<>();
+    ArrayList<String> thanhTien = new ArrayList<>();
 
     public Home(String tenDN) {
         listCV = chucVu.selectAll();
@@ -1751,6 +1779,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public void initHoaDon() {
+        btnIn.setEnabled(false);
+        //btnXoahd.setEnabled(false);
         setLocationRelativeTo(null);
         listHoaDon();
         this.fillTableHoaDon();
@@ -1768,7 +1798,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         model.setRowCount(0);
         try {
             for (HoaDonEntity hd : listHoaDon) {
-                Object[] row = {hd.getMaHD(), hd.getNgayLap(), hd.getTongTien(), hd.getTichDiem(), hd.getThanhTien()};
+                Object[] row = {hd.getMaHD(), hd.getNgayLap(), hd.getTongTien(), hd.getTichDiem(), hd.getPhanTramGG(), hd.getTienGiam(), hd.getThanhTien()};
                 model.addRow(row);
             }
         } catch (Exception e) {
@@ -1781,6 +1811,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtMAKH.setText(hd.getMaKH());
         txtTENKH.setText(hd.getTenKH());
         txtTENNV.setText(hd.getTenNV());
+        txtPhanTramGG.setText(String.valueOf(hd.getPhanTramGG()));
 
     }
 
@@ -1834,6 +1865,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         countClick = 0;
         String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
         HoaDonEntity hd = HoaDon.selectById(mahd);
+        maHDIn = mahd;
         tblHoaDon.setRowSelectionInterval(this.row, this.row);
         this.setFormHoaDon(hd);
         this.updateStatusHoaDon();
@@ -1994,6 +2026,15 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         updateStatusChucVu();
     }
 
+    private void timKiemHD() {
+        String keyword = txtTimKiemhd.getText();
+        listHoaDon = HoaDon.selectByKeyword(keyword);
+        this.fillTableHoaDon();
+        this.clearFormHoaDon();
+        this.row = - 1;
+        updateStatusHoaDon();
+    }
+    
     public void sortLoai(int i) {
 
         String Loai = (String) cboLoai.getSelectedItem();
@@ -3207,13 +3248,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jSeparator21 = new javax.swing.JSeparator();
         jSeparator22 = new javax.swing.JSeparator();
         btnIn = new com.swing.Button();
+        btnIn1 = new com.swing.Button();
         jPanel12 = new javax.swing.JPanel();
         btnNexthd = new com.swing.Button();
         btnFirsthd = new com.swing.Button();
         btnPrevhd = new com.swing.Button();
         btnLasthd = new com.swing.Button();
         jLabel81 = new javax.swing.JLabel();
-        lblTimKiemTempSP1 = new javax.swing.JLabel();
+        lblTimKiemHD = new javax.swing.JLabel();
         jLabel86 = new javax.swing.JLabel();
         txtTimKiemhd = new javax.swing.JTextField();
         jLabel104 = new javax.swing.JLabel();
@@ -3224,6 +3266,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtTENNV = new javax.swing.JTextField();
         txtTENKH = new javax.swing.JTextField();
         txtMAKH = new javax.swing.JTextField();
+        jLabel120 = new javax.swing.JLabel();
+        txtTienNhan = new javax.swing.JTextField();
+        jLabel135 = new javax.swing.JLabel();
+        txtPhanTramGG = new javax.swing.JTextField();
+        jLabel129 = new javax.swing.JLabel();
+        jLabel121 = new javax.swing.JLabel();
+        txtTichDiem = new javax.swing.JTextField();
         cardChiTietHoaDon = new com.swing.PanelRound();
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
@@ -6171,13 +6220,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hóa đơn", "Ngày lập", "Tổng tiền", "Tích điểm", "Thành tiền"
+                "Mã hóa đơn", "Ngày lập", "Tổng tiền", "Tích điểm", "Phần trăm giảm giá", "Tiền giảm", "Thành tiền"
             }
         ));
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -6210,7 +6259,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel29.setBackground(new java.awt.Color(255, 255, 255));
         jPanel29.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        comboboxHD.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mã hóa đơn", "Tổng tiền", "Thành tiền" }));
+        comboboxHD.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Mã hóa đơn", "Tổng tiền", "Thành tiền" }));
         comboboxHD.setLabeText("Sắp xếp theo");
         comboboxHD.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -6277,6 +6326,17 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         });
         jPanel28.add(btnIn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 116, 39));
 
+        btnIn1.setBackground(new java.awt.Color(255, 51, 102));
+        btnIn1.setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(255, 0, 51)));
+        btnIn1.setForeground(new java.awt.Color(255, 255, 255));
+        btnIn1.setText("In");
+        btnIn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIn1ActionPerformed(evt);
+            }
+        });
+        jPanel28.add(btnIn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 116, 39));
+
         cardHoaDon.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 90, -1, 245));
 
         jPanel12.setBackground(new java.awt.Color(204, 204, 255));
@@ -6333,12 +6393,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel81.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel81.setText("BẢNG THÔNG TIN HÓA ĐƠN");
 
-        lblTimKiemTempSP1.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
-        lblTimKiemTempSP1.setForeground(new java.awt.Color(153, 153, 153));
-        lblTimKiemTempSP1.setText("Tên sản phẩm");
-        lblTimKiemTempSP1.addMouseListener(new java.awt.event.MouseAdapter() {
+        lblTimKiemHD.setFont(new java.awt.Font("Times New Roman", 2, 16)); // NOI18N
+        lblTimKiemHD.setForeground(new java.awt.Color(153, 153, 153));
+        lblTimKiemHD.setText("Tên khách hàng");
+        lblTimKiemHD.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblTimKiemTempSP1MouseClicked(evt);
+                lblTimKiemHDMouseClicked(evt);
             }
         });
 
@@ -6378,7 +6438,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(10, 10, 10)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTimKiemTempSP1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTimKiemHD, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiemhd, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(37, 37, 37))
         );
@@ -6388,7 +6448,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel86, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTimKiemTempSP1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTimKiemHD, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiemhd, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
@@ -6417,33 +6477,86 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel117.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel117.setText("Tên nhân viên: ");
         jLabel117.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardHoaDon.add(jLabel117, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 193, -1, -1));
+        cardHoaDon.add(jLabel117, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, 130, -1));
 
         jLabel118.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel118.setForeground(new java.awt.Color(0, 0, 255));
         jLabel118.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel118.setText("Tên khách hàng: ");
         jLabel118.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardHoaDon.add(jLabel118, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 153, -1, -1));
+        cardHoaDon.add(jLabel118, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, -1));
 
         jLabel119.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel119.setForeground(new java.awt.Color(0, 0, 255));
         jLabel119.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel119.setText("Mã khách hàng");
+        jLabel119.setText("Mã khách hàng:");
         jLabel119.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardHoaDon.add(jLabel119, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 113, -1, -1));
+        cardHoaDon.add(jLabel119, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, -1, -1));
 
         txtTENNV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTENNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardHoaDon.add(txtTENNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 195, 217, 20));
+        cardHoaDon.add(txtTENNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 217, 20));
 
         txtTENKH.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTENKH.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardHoaDon.add(txtTENKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 155, 217, 20));
+        cardHoaDon.add(txtTENKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 120, 217, 20));
 
         txtMAKH.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtMAKH.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardHoaDon.add(txtMAKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 115, 217, 20));
+        cardHoaDon.add(txtMAKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 80, 217, 20));
+
+        jLabel120.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel120.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel120.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel120.setText("Tiền nhận:");
+        jLabel120.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel120, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, -1, -1));
+
+        txtTienNhan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTienNhan.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtTienNhan.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                txtTienNhanCaretUpdate(evt);
+            }
+        });
+        cardHoaDon.add(txtTienNhan, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, 217, 20));
+
+        jLabel135.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel135.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel135.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel135.setText("Phần trăm giảm giá:");
+        jLabel135.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel135, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, -1, 30));
+
+        txtPhanTramGG.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtPhanTramGG.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        txtPhanTramGG.setText("50");
+        txtPhanTramGG.setToolTipText("");
+        txtPhanTramGG.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        txtPhanTramGG.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtPhanTramGG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPhanTramGGActionPerformed(evt);
+            }
+        });
+        cardHoaDon.add(txtPhanTramGG, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 70, 30));
+
+        jLabel129.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        jLabel129.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel129.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel129.setText("%");
+        cardHoaDon.add(jLabel129, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, 120, 30));
+
+        jLabel121.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jLabel121.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel121.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel121.setText("Tích điểm:");
+        jLabel121.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardHoaDon.add(jLabel121, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, -1, -1));
+
+        txtTichDiem.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtTichDiem.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
+        cardHoaDon.add(txtTichDiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 160, 217, 20));
 
         cardTrangChu.add(cardHoaDon, "card12");
 
@@ -6655,7 +6768,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        cboKh.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mã khách hàng", "Tên khách hàng" }));
+        cboKh.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Mã khách hàng", "Tên khách hàng" }));
         cboKh.setLabeText("Sắp xếp theo");
 
         jLabel29.setText(" Tiến hành sắp xếp");
@@ -7639,12 +7752,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_txtTimKiemhdMouseClicked
 
     private void txtTimKiemhdCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTimKiemhdCaretUpdate
-        // TODO add your handling code here:
+        timKiemHD();
     }//GEN-LAST:event_txtTimKiemhdCaretUpdate
 
-    private void lblTimKiemTempSP1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimKiemTempSP1MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_lblTimKiemTempSP1MouseClicked
+    private void lblTimKiemHDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblTimKiemHDMouseClicked
+        lblTimKiemHD.setVisible(false);
+        txtTimKiemhd.requestFocus();
+    }//GEN-LAST:event_lblTimKiemHDMouseClicked
 
     private void btnLasthdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLasthdActionPerformed
         // TODO add your handling code here:
@@ -7675,7 +7789,47 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_btnNexthdMouseClicked
 
     private void btnInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInActionPerformed
-        // TODO add your handling code here:
+        listCtHD = HDCT.selectAll();
+        String hoadon = String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0));
+        HoaDonEntity hdct = HoaDon.selectById(hoadon);
+        float tien = hdct.getThanhTien();
+        if (Float.valueOf(txtTienNhan.getText()) > tien) {
+
+//            tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0);
+            String mahd = null;
+            for (HoaDonCTEntity hd : listCtHD) {
+                if (String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0)).equalsIgnoreCase(hd.getMaHD())) {
+                    tenSP.add(hd.getTenSP());
+                    giaSP.add(String.valueOf(hd.getGiaBan()));
+                    SL.add(String.valueOf(hd.getSl()));
+                    thanhTien.add(String.valueOf(hd.getTongTien()));
+                    mahd = hd.getMaHD();
+                }
+            }
+            HoaDonEntity hd = HoaDon.selectById(mahd);
+            tienGiam = hd.getTienGiam();
+            System.out.println(tienGiam);
+
+            bHeight = Double.valueOf(tenSP.size());
+            //JOptionPane.showMessageDialog(rootPane, bHeight);
+
+            PrinterJob pj = PrinterJob.getPrinterJob();
+            pj.setPrintable(new BillPrintable(), getPageFormat(pj));
+            try {
+                pj.print();
+                MsgBox.alert(this, "In hóa đơn thành công!");
+                listCtHD.clear();
+                tenSP.clear();
+                giaSP.clear();
+                SL.clear();
+                thanhTien.clear();
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            MsgBox.alert(this, "Tiền nhận phải lớn hơn tiền thanh toán!");
+            txtTienNhan.requestFocus();
+        }
     }//GEN-LAST:event_btnInActionPerformed
 
     private void btnzahdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnzahdActionPerformed
@@ -7807,6 +7961,23 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void btnzanvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnzanvActionPerformed
         SortNV(1);
     }//GEN-LAST:event_btnzanvActionPerformed
+
+    private void btnIn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIn1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIn1ActionPerformed
+
+    private void txtTienNhanCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTienNhanCaretUpdate
+        if (txtTienNhan.getText().equals(null) || txtTENKH.getText().equals("")) {
+            btnIn.setEnabled(false);
+        } else {
+            btnIn.setEnabled(true);
+
+        }
+    }//GEN-LAST:event_txtTienNhanCaretUpdate
+
+    private void txtPhanTramGGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhanTramGGActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPhanTramGGActionPerformed
     public GioHangTamEntity getFormGH(int sl) {
         GioHangTamEntity gh = new GioHangTamEntity();
         gh.setMaGH(txtSdtKH.getText());
@@ -8014,6 +8185,127 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         listGiohang.addAll(listGioHang);
     }
 
+    /*----------------------------------------------------------*/
+    public PageFormat getPageFormat(PrinterJob pj) {
+
+        PageFormat pf = pj.defaultPage();
+        Paper paper = pf.getPaper();
+
+        double bodyHeight = bHeight;
+        double headerHeight = 10.0;
+        double footerHeight = 10.0;
+        double width = cm_to_pp(15);
+        double height = cm_to_pp(headerHeight + bodyHeight + footerHeight);
+        paper.setSize(width, height);
+        paper.setImageableArea(0, 10, width, height - cm_to_pp(1));
+
+        pf.setOrientation(PageFormat.PORTRAIT);
+        pf.setPaper(paper);
+
+        return pf;
+    }
+
+    protected static double cm_to_pp(double cm) {
+        return toPPI(cm * 0.393600787);
+    }
+
+    protected static double toPPI(double inch) {
+        return inch * 72d;
+    }
+
+    public class BillPrintable implements Printable {
+
+        public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
+                throws PrinterException {
+            int r = tenSP.size();
+            ImageIcon icon = new ImageIcon("src\\com\\asset\\header\\logokhongvien-01.png");
+            int result = NO_SUCH_PAGE;
+            if (pageIndex == 0) {
+
+                Graphics2D g2d = (Graphics2D) graphics;
+                double width = pageFormat.getImageableWidth();
+                g2d.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+                //  FontMetrics metrics=g2d.getFontMetrics(new Font("Arial",Font.BOLD,7));
+                try {
+                    int y = 20;
+                    int yShift = 10;
+                    int headerRectHeight = 15;
+                    // int headerRectHeighta=40;
+
+                    g2d.setFont(new Font("Monospaced", Font.PLAIN, 9));
+                    g2d.drawImage(icon.getImage(), 160, 80, 90, 110, rootPane);
+                    y += yShift + 135;
+                    g2d.drawString("------------------------------------------------------------------------", 12, y);
+                    y += yShift;
+                    g2d.drawString("                                  DAVISY                              ", 12, y);
+                    y += yShift;
+                    g2d.drawString("                        Địa chỉ: 288 Nguyen Van Linh                     ", 12, y);
+                    y += yShift;
+                    g2d.drawString("                    https://www.facebook.com/davisy.dev                      ", 12, y);
+                    y += yShift;
+                    g2d.drawString("                             HÓA ĐƠN THANH TOÁN                            ", 12, y);
+                    y += yShift;
+                    g2d.drawString("------------------------------------------------------------------------", 12, y);
+                    y += headerRectHeight;
+
+                    g2d.drawString("STT       Tên sản phẩm        Số lượng        Đơn giá         Thành tiền   ", 10, y);
+                    y += yShift;
+                    g2d.drawString("------------------------------------------------------------------------", 10, y);
+                    y += headerRectHeight;
+                    int i = 1;
+                    float tongThanhTien = 0;
+                    for (int s = 0; s < r; s++) {
+                        g2d.drawString(String.valueOf(i), 15, y);
+                        g2d.drawString(tenSP.get(s), 65, y);
+                        g2d.drawString(SL.get(s), 185, y);
+                        g2d.drawString(giaSP.get(s), 265, y);
+                        g2d.drawString(thanhTien.get(s), 355, y);
+                        tongThanhTien += Float.valueOf(thanhTien.get(s));//tienGiam = hd.getTienGiam();
+                        y += yShift + 15;
+                        i++;
+
+                    }
+
+                    g2d.drawString("------------------------------------------------------------------------", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString(" Tiền giảm :                                                    " + tienGiam + "   ", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString("------------------------------------------------------------------------", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString(" Thành tiền:                                                    " + tongThanhTien + "   ", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString("------------------------------------------------------------------------", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString(" Tiền nhận :                                                    " + txtTienNhan.getText() + "   ", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString("------------------------------------------------------------------------", 10, y);
+                    y += yShift + 5;
+                    g2d.drawString(" Tiền thừa :                                                    " + (Float.valueOf(txtTienNhan.getText()) - tongThanhTien - tienGiam) + "   ", 10, y);
+                    y += yShift + 5;
+
+                    g2d.drawString("************************************************************************", 10, y);
+                    y += yShift + 3;
+                    g2d.drawString("                             Trân trọng cảm ơn!                          ", 10, y);
+                    y += yShift + 3;
+                    g2d.drawString("************************************************************************", 10, y);
+                    y += yShift;
+                    g2d.drawString("                          Một sản phẩm của DAVISY                      ", 10, y);
+                    y += yShift;
+                    g2d.drawString("                        Email: davisy.dev@gmail.com                ", 10, y);
+                    y += yShift;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                result = PAGE_EXISTS;
+            }
+            return result;
+        }
+    }
+
+    /*----------------------------------------------------------*/
     //San Pham
     /**
      * @param args the command line arguments
@@ -8124,6 +8416,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private com.swing.Button btnGioiThieu;
     private com.swing.Button btnHoaDon;
     private com.swing.Button btnIn;
+    private com.swing.Button btnIn1;
     private com.swing.Button btnLamMoiCV;
     private com.swing.Button btnLamMoiHang;
     private com.swing.Button btnLamMoiLoai;
@@ -8258,7 +8551,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel118;
     private javax.swing.JLabel jLabel119;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel120;
+    private javax.swing.JLabel jLabel121;
+    private javax.swing.JLabel jLabel129;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel135;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel21;
@@ -8425,10 +8722,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel lblRecordNV;
     private javax.swing.JLabel lblTichDiem;
     private javax.swing.JLabel lblTimKiemCV;
+    private javax.swing.JLabel lblTimKiemHD;
     private javax.swing.JLabel lblTimKiemKH;
     private javax.swing.JLabel lblTimKiemNV;
     private javax.swing.JLabel lblTimKiemTempSP;
-    private javax.swing.JLabel lblTimKiemTempSP1;
     private javax.swing.JLabel lblTime;
     private javax.swing.JLabel lblrecordCV;
     private javax.swing.JLabel lblrecordHang;
@@ -8480,6 +8777,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JTextArea txtMoTaSP;
     private javax.swing.JTextField txtNgayNhapSP;
     private javax.swing.JTextField txtNgaySinhNV;
+    private javax.swing.JTextField txtPhanTramGG;
     private javax.swing.JTextField txtSDT;
     private javax.swing.JTextField txtSDTNV;
     private javax.swing.JTextField txtSdtKH;
@@ -8489,6 +8787,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JTextField txtTenHang;
     private javax.swing.JTextField txtTenLoai;
     private javax.swing.JTextField txtTenSP;
+    private javax.swing.JTextField txtTichDiem;
+    private javax.swing.JTextField txtTienNhan;
     private javax.swing.JTextField txtTimCV;
     private javax.swing.JTextField txtTimKiemHang;
     private javax.swing.JTextField txtTimKiemKH;
