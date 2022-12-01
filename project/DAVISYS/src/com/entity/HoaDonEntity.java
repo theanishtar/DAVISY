@@ -11,14 +11,15 @@ public class HoaDonEntity {
 
     private String maHD, maKH, tenDN, maGH, tenKH, tenNV;
     private Date ngayLap;
-    private float phanTramGG, gia, tongTien;
+    private int phanTramGG;
+    private float gia, tongTien;
     private int tichDiem;
     private float tienGiam, thanhTien;
 
     public HoaDonEntity() {
     }
 
-    public HoaDonEntity(String maHD, String maKH, String tenDN, String maGH, String tenKH, String tenNV, Date ngayLap, float phanTramGG, float gia, float tongTien, int tichDiem, float tienGiam, float thanhTien) {
+    public HoaDonEntity(String maHD, String maKH, String tenDN, String maGH, String tenKH, String tenNV, Date ngayLap, int phanTramGG, float gia, float tongTien, int tichDiem, float tienGiam, float thanhTien) {
         this.maHD = maHD;
         this.maKH = maKH;
         this.tenDN = tenDN;
@@ -33,6 +34,8 @@ public class HoaDonEntity {
         this.tienGiam = tienGiam;
         this.thanhTien = thanhTien;
     }
+
+    
 
     public String getMaHD() {
         return maHD;
@@ -90,11 +93,11 @@ public class HoaDonEntity {
         this.ngayLap = ngayLap;
     }
 
-    public float getPhanTramGG() {
+    public int getPhanTramGG() {
         return phanTramGG;
     }
 
-    public void setPhanTramGG(float phanTramGG) {
+    public void setPhanTramGG(int phanTramGG) {
         this.phanTramGG = phanTramGG;
     }
 
