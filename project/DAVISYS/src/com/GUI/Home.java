@@ -2845,44 +2845,90 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                                     sp.setTenSP(String.valueOf(cell));
                                     break;
                                 case 2:
-                                    System.out.print(cell + " ");
                                     String loaihang = String.valueOf(cell);
                                     List<LoaiHangEntity> listlh = Loai.selectAll();
+                                    String malhMoi = loaihang.substring(0, 2).toUpperCase();
+                                    char kyTu;
+                                    int countSpace = 0;
+                                    for (int j = 0; j < loaihang.length(); j++) {
+                                        kyTu = loaihang.charAt(j);
+                                        if (Character.isWhitespace(kyTu)) {
+                                            countSpace++;
+                                            char kyTu2 = loaihang.charAt(j + 1);
+                                            if (countSpace == 1) {
+                                                malhMoi = loaihang.substring(0, 1).toUpperCase();
+                                                malhMoi = malhMoi + String.valueOf(kyTu2).toUpperCase();
+                                            }
+                                            if (countSpace == 2) {
+                                                malhMoi = malhMoi + String.valueOf(kyTu2).toUpperCase();
+                                                countSpace = 0;
+                                            }
+                                        }
+                                    }
+                                    System.out.println(malhMoi + " final");
+                                    LoaiHangEntity lhn = new LoaiHangEntity();
+                                    String checkMalh = "Exist";
                                     for (LoaiHangEntity lh : listlh) {
                                         if (lh.getTenLH().equalsIgnoreCase(loaihang)) {
+                                            checkMalh = "Exist";
                                             sp.setMaLH(lh.getMaLH());
+                                            break;
+                                        } else {
+                                            checkMalh = "Not Exist";
                                         }
                                     }
-                                    LoaiHangEntity lh = new LoaiHangEntity();
-                                    String malhMoi = loaihang.substring(0, 2).toUpperCase();
-                                    System.out.print(" " + malhMoi);
-                                    lh.setMaLH(malhMoi);
-                                    lh.setTenLH(loaihang.substring(0, 1).toUpperCase() + loaihang.substring(1).toLowerCase());
-                                    Loai.insert(lh);
-                                    listLoai();
-                                    this.fillTableLoai();
-                                    this.clearFormLoai();
-                                    sp.setMaLH(malhMoi);
+                                    if (checkMalh.equals("Not Exist")) {
+                                        lhn.setMaLH(malhMoi);
+                                        lhn.setTenLH(loaihang.substring(0, 1).toUpperCase() + loaihang.substring(1).toLowerCase());
+                                        Loai.insert(lhn);
+                                        sp.setMaLH(malhMoi);
+                                        listLoai();
+                                        this.fillTableLoai();
+                                        this.clearFormLoai();
+                                    }
                                     break;
                                 case 3:
-                                    System.out.print(cell + " ");
                                     String hang = String.valueOf(cell);
                                     List<HangEntity> listh = Hang.selectAll();
-                                    for (HangEntity h : listh) {
-                                        if (h.getTenHang().equalsIgnoreCase(hang)) {
-                                            sp.setMaHang(h.getMaHang());
+                                    String mahangMoi = hang.substring(0, 2).toUpperCase();
+                                    char kyTuHang;
+                                    countSpace = 0;
+                                    for (int j = 0; j < hang.length(); j++) {
+                                        kyTuHang = hang.charAt(j);
+                                        if (Character.isWhitespace(kyTuHang)) {
+                                            countSpace++;
+                                            char kyTuHang2 = hang.charAt(j + 1);
+                                            if (countSpace == 1) {
+                                                mahangMoi = hang.substring(0, 1).toUpperCase();
+                                                mahangMoi = mahangMoi + String.valueOf(kyTuHang2).toUpperCase();
+                                            }
+                                            if (countSpace == 2) {
+                                                mahangMoi = mahangMoi + String.valueOf(kyTuHang2).toUpperCase();
+                                                countSpace = 0;
+                                            }
                                         }
                                     }
-                                    HangEntity h = new HangEntity();
-                                    String mahangMoi = hang.substring(0, 2).toUpperCase();
-                                    System.out.print(" " + mahangMoi);
-                                    h.setMaHang(mahangMoi);
-                                    h.setTenHang(hang.toUpperCase());
-                                    Hang.insert(h);
-                                    listHang();
-                                    this.fillTableHang();
-                                    this.clearFormHang();
-                                    sp.setMaHang(mahangMoi);
+                                    System.out.println(mahangMoi + " final");
+                                    HangEntity hn = new HangEntity();
+                                    String checkMah = "Exist";
+                                    for (HangEntity h : listh) {
+                                        if (h.getTenHang().equalsIgnoreCase(hang)) {
+                                            checkMah = "Exist";
+                                            sp.setMaHang(h.getMaHang());
+                                            break;
+                                        } else {
+                                            checkMah = "Not Exist";
+                                        }
+                                    }
+                                    if (checkMah.equals("Not Exist")) {
+                                        hn.setMaHang(mahangMoi);
+                                        hn.setTenHang(hang.substring(0, 1).toUpperCase() + hang.substring(1).toLowerCase());
+                                        Hang.insert(hn);
+                                        sp.setMaHang(mahangMoi);
+                                        listHang();
+                                        this.fillTableHang();
+                                        this.clearFormHang();
+                                    }
                                     break;
                                 case 4:
                                     System.out.print(cell + " ");
@@ -2915,8 +2961,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 fis.close();
                 MsgBox.alert(this, "Đọc thành công");
             } catch (Exception ex) {
-                System.out.println("lỗi đọc file " + ex);
-                System.out.println(ex);
+                System.out.println("lỗi đọc file ");
+                //System.out.println(ex);
             }
         } catch (Exception ex) {
             System.out.println(ex);
