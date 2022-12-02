@@ -83,7 +83,7 @@ public class Item extends javax.swing.JPanel {
         lbBrand.setForeground(new java.awt.Color(76, 76, 76));
         lbBrand.setText("Brand");
 
-        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/com/cart/img1.png"))); // NOI18N
+        pic.setImage(new javax.swing.ImageIcon(getClass().getResource("/com/cart/product.png"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);

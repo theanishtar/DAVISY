@@ -53,7 +53,7 @@ public class HoaDonCTEntity {
    
 
     public float getTienGiam() {
-        return this.tienGiam=this.tongTien*(this.phanTramGG+this.tichDiem/100) ;
+        return tienGiam ;
     }
 
     public void setTienGiam(float tienGiam) {
@@ -71,7 +71,7 @@ public class HoaDonCTEntity {
     }
 
     public float getThanhTien() {
-        return this.thanhTien=this.tongTien - this.tienGiam;
+        return thanhTien;
     }
 
     public void setThanhTien(float thanhTien) {

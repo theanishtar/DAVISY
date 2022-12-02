@@ -103,7 +103,7 @@
     <Container class="com.cart.PictureBox" name="pic">
       <Properties>
         <Property name="image" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/com/cart/img1.png"/>
+          <Image iconType="3" name="/com/cart/product.png"/>
         </Property>
       </Properties>
 

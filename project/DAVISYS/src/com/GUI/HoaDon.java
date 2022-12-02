@@ -70,7 +70,7 @@ public class HoaDon extends javax.swing.JDialog {
         try {
             for (HoaDonCTEntity hd : listHD) {
                 if (maHD.equalsIgnoreCase(hd.getMaHD())) {               
-                    Object[] row = {hd.getMaHD(), hd.getTenSP(), hd.getNgayLap(), hd.getNgayNhap(), hd.getTichDiem(), hd.getSl(), hd.getGiaBan(), hd.getTongTien(), hd.getTienGiam(), hd.getThanhTien()};
+                    Object[] row = {hd.getMaHD(), hd.getTenSP(), hd.getNgayLap(), hd.getNgayNhap(), hd.getTichDiem(), hd.getSl(), hd.getGiaBan(), hd.getTongTien()};
                     model.addRow(row);
                     listHDT.add(hd);
                 }
@@ -103,7 +103,6 @@ public class HoaDon extends javax.swing.JDialog {
         lblNgayNhap = new javax.swing.JLabel();
         txtMaSP = new javax.swing.JTextField();
         lblMacthd = new javax.swing.JLabel();
-        lblThanhTienX = new javax.swing.JLabel();
         jLabel125 = new javax.swing.JLabel();
         txtTongTienX = new javax.swing.JTextField();
         jLabel128 = new javax.swing.JLabel();
@@ -116,8 +115,6 @@ public class HoaDon extends javax.swing.JDialog {
         lblTenHang = new javax.swing.JLabel();
         lblTenLoai = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jLabel136 = new javax.swing.JLabel();
-        jLabel131 = new javax.swing.JLabel();
         jLabel132 = new javax.swing.JLabel();
         jLabel137 = new javax.swing.JLabel();
         lbltenkh = new javax.swing.JLabel();
@@ -165,13 +162,6 @@ public class HoaDon extends javax.swing.JDialog {
         lblMacthd.setText("01");
         lblMacthd.setToolTipText("");
         jPanel1.add(lblMacthd, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 60, 230, 30));
-
-        lblThanhTienX.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        lblThanhTienX.setForeground(new java.awt.Color(204, 0, 0));
-        lblThanhTienX.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        lblThanhTienX.setText("0");
-        lblThanhTienX.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jPanel1.add(lblThanhTienX, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 330, 110, 30));
 
         jLabel125.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel125.setForeground(new java.awt.Color(0, 0, 255));
@@ -231,13 +221,13 @@ public class HoaDon extends javax.swing.JDialog {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hóa đơn", "Tên sản phẩm", "Ngày lập", "Ngày nhập", "Tích điểm", "Số lượng", "Giá bán", "Tổng tiền", "Tiền giảm", "Thành tiền"
+                "Mã hóa đơn", "Tên sản phẩm", "Ngày lập", "Ngày nhập", "Tích điểm", "Số lượng", "Giá bán", "Tổng tiền"
             }
         ));
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -264,20 +254,6 @@ public class HoaDon extends javax.swing.JDialog {
         lblTenLoai.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lblTenLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 200, 30));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(477, 54, 290, 10));
-
-        jLabel136.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel136.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel136.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel136.setText("Thành tiền:");
-        jLabel136.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jPanel1.add(jLabel136, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, -1, 30));
-
-        jLabel131.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jLabel131.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel131.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel131.setText("VNĐ");
-        jLabel131.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jPanel1.add(jLabel131, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 330, 50, 30));
 
         jLabel132.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel132.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -386,7 +362,6 @@ public class HoaDon extends javax.swing.JDialog {
         txtTongTienX.setText(String.valueOf(hd.getTongTien()));
         lblTenHang.setText(hd.getTenHang());
         lblTenLoai.setText(hd.getTenLH());
-        lblThanhTienX.setText(String.valueOf(hd.getThanhTien()));
         txtMaSP.setText(hd.getMaSP());
 
         if (sp.getHinh() != null) {
@@ -458,7 +433,6 @@ public class HoaDon extends javax.swing.JDialog {
         txtTongTienX.setText("");
         lblTenHang.setText("");
         lblTenLoai.setText("");
-        lblThanhTienX.setText("");
         txtMaSP.setText("");
         lblImageHDCT.setIcon(null);
     }
@@ -513,9 +487,7 @@ public class HoaDon extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel124;
     private javax.swing.JLabel jLabel125;
     private javax.swing.JLabel jLabel128;
-    private javax.swing.JLabel jLabel131;
     private javax.swing.JLabel jLabel132;
-    private javax.swing.JLabel jLabel136;
     private javax.swing.JLabel jLabel137;
     private javax.swing.JLabel jLabel139;
     private javax.swing.JLabel jLabel140;
@@ -530,7 +502,6 @@ public class HoaDon extends javax.swing.JDialog {
     private javax.swing.JLabel lblNgayNhap;
     private javax.swing.JLabel lblTenHang;
     private javax.swing.JLabel lblTenLoai;
-    private javax.swing.JLabel lblThanhTienX;
     private javax.swing.JLabel lbltenNV;
     private javax.swing.JLabel lbltenSP;
     private javax.swing.JLabel lbltenkh;

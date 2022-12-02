@@ -38,7 +38,6 @@ public class Login extends javax.swing.JFrame {
         listTK = tk.selectAll();
         txtPassword.setEchoChar('●');
         lblHide.setVisible(false);
-        loadingLogin1.setVisible(false);
         slideShow();
     }
     public boolean ktNull() {
@@ -61,7 +60,7 @@ public class Login extends javax.swing.JFrame {
                 if (txtUsername.getText().equalsIgnoreCase(tk.getTenDN()) && txtPassword.getText().equalsIgnoreCase(tk.getMatKhau())) {
                     if (tk.isTrangThai()) {
                         tenDN = tk.getTenDN();
-                        loadFrame();
+                        login(tenDN);
                         return;
                     } else {
                         MsgBox.alert(this, "Tài khoản không hoạt động!");
@@ -192,7 +191,6 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        loadingLogin1 = new com.frame.LoadingLogin();
         Main = new com.swing.KGradientPanel();
         jplState = new javax.swing.JPanel();
         jlbState = new javax.swing.JLabel();
@@ -217,7 +215,6 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(loadingLogin1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, -1, -1));
 
         Main.setkEndColor(new java.awt.Color(154, 213, 224));
         Main.setkStartColor(new java.awt.Color(224, 154, 214));
@@ -518,10 +515,10 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lblForgetMouseClicked
 
-    public void login() {
-        this.dispose();
+    public void login(String tenDN) {
         Home frhome = new Home(tenDN);
         frhome.setVisible(true);
+        this.dispose();
     }
 
     public void losePanel() {
@@ -533,10 +530,8 @@ public class Login extends javax.swing.JFrame {
             @Override
             public void run() {
                 losePanel();
-                loadingLogin1.setVisible(true);
                 try {
                     Thread.sleep(2000);
-                    login();
                     //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -613,7 +608,6 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel lblHide;
     private javax.swing.JLabel lblShow;
     private javax.swing.JLabel lblTitleLogin;
-    private com.frame.LoadingLogin loadingLogin1;
     private com.swing.PanelRound panelRound1;
     private com.swing.PasswordField txtPassword;
     private com.swing.TextField txtUsername;

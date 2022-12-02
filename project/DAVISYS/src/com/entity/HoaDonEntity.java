@@ -35,8 +35,6 @@ public class HoaDonEntity {
         this.thanhTien = thanhTien;
     }
 
-    
-
     public String getMaHD() {
         return maHD;
     }
@@ -125,22 +123,31 @@ public class HoaDonEntity {
         this.tichDiem = tichDiem;
     }
 
-    public float getTienGiam() {
-        return tienGiam;
-    }
-
-    public void setTienGiam(float tienGiam) {
-        this.tienGiam = tienGiam;
-    }
-
     public float getThanhTien() {
-        return thanhTien;
+        return thanhTien = this.tongTien - this.tienGiam;
     }
 
     public void setThanhTien(float thanhTien) {
         this.thanhTien = thanhTien;
     }
 
+    public float getTienGiam() {
+        if (this.phanTramGG == 0 && this.tichDiem == 0) {
+            return tienGiam;
+        } else {
+            if (this.tichDiem > 0 && this.phanTramGG > 0) {
+                tienGiam =  this.tongTien - this.tongTien * this.phanTramGG / 100 +  this.tichDiem * 1000;
+            } else if (this.tichDiem > 0) {
+                tienGiam = this.tichDiem * 1000;
+            } else if (this.phanTramGG > 0) {
+                tienGiam = this.tongTien - this.tongTien * this.phanTramGG / 100;
+            }
+            return tienGiam;
+        }
+    }
 
+    public void setTienGiam(float tienGiam) {
+        this.tienGiam = tienGiam;
+    }
 
 }

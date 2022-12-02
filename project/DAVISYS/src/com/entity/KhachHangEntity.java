@@ -60,8 +60,6 @@ public class KhachHangEntity {
         this.tichDiem = tichDiem;
     }
 
-    public void getTichDiem(Integer valueOf) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+
     
 }

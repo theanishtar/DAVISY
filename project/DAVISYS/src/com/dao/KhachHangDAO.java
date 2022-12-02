@@ -14,6 +14,7 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
     final String DELETE_SQL = "DELETE FROM KHACHHANG WHERE MAKH = ?";
     final String SELECT_ALL_SQL = "SELECT * FROM KHACHHANG";
     final String SELECT_BY_ID_SQL = "SELECT * FROM KHACHHANG WHERE MAKH = ?";
+    final String SELECT_BY_sdt_SQL = "SELECT * FROM KHACHHANG WHERE DIENTHOAI = ?";
 
     @Override
     public void insert(KhachHangEntity entity) {
@@ -38,6 +39,13 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
     @Override
     public KhachHangEntity selectById(String key) {
         List<KhachHangEntity> list = this.selectBySql(SELECT_BY_ID_SQL, key);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+    public KhachHangEntity selectBySDT(String key) {
+        List<KhachHangEntity> list = this.selectBySql(SELECT_BY_sdt_SQL, key);
         if (list.isEmpty()) {
             return null;
         }
