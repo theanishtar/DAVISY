@@ -179,7 +179,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     List<LoaiHangEntity> listLoai = new ArrayList<>();
     List<KhachHangEntity> listKhachHang = new ArrayList<>();
     List<TaiKhoanEntity> listNhanVien = new ArrayList<>();
-//    List<GioHangTempEntity> listgh = new ArrayList<>();
     List<TaiKhoanEntity> listTK = new ArrayList<>();
     List<ChucVuEntity> listCV = new ArrayList<>();
     List<HoaDonEntity> listHoaDon = new ArrayList<>();
@@ -224,54 +223,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     //Menu chương trình
     private DrawerController drawer;
 
-    /*
-    
-    
-    public Home(String tenDN) {
-        initComponents();
-        listCV = chucVu.selectAll();
-        listTK = NhanVien.selectAll();
-        
-        getTenNhanVien(tenDN);
-        System.out.println(tenDN);
-//        ktTenDN = tenDN;
-        initThongKe();
-        initNhanVien();
-        hideCardMenubar();
-        hideMenu();
-        hidePage();
-        cardMenubarTrangChu.setVisible(true);
-        cardTrangChuTongQuan.setVisible(true);
-        pnMenu.setSize(0, 670);
-        //runFont();
-        this.btnItemMenu = btnTrangChu;
-        settingTable();
-        initHang();
-        initLoai();
-        initSanPham();
-        initKhachHang();
-        initgioHang();
-        fillComboxCV();
-        fillComboxLoai();
-        fillComboxHang();
-        lblrecordHang.setText(recordHang());
-        lblrecordLoai.setText(recordLoai());
-        lblrecordSP.setText(recordSanPham());
-
-        SanPhamHr1.setVisible(false);
-        cartShoping();
-
-    }
-     */
     public Home() {
         initComponents();
 
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
         initMenu(); //gọi lại phương thức khởi tạo MENU
-
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
-
         getTenNhanVien("NhuomTV");
         ktTenDN = "NhuomTV";
         initThongKe();
@@ -282,7 +240,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         cardMenubarTrangChu.setVisible(true);
         cardTrangChuTongQuan.setVisible(true);
         pnMenu.setSize(0, 670);
-        //runFont();
         this.btnItemMenu = btnTrangChu;
         settingTable();
         initHang();
@@ -298,9 +255,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordHang.setText(recordHang());
         lblrecordLoai.setText(recordLoai());
         lblrecordSP.setText(recordSanPham());
-
         SanPhamHr1.setVisible(false);
-
         loadMainDone = true;
     }
 
@@ -311,9 +266,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         initMenu(); //gọi lại phương thức khởi tạo MENU
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
-
         getTenNhanVien(tenDN);
-//        ktTenDN = tenDN;
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -322,7 +275,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         cardMenubarTrangChu.setVisible(true);
         cardTrangChuTongQuan.setVisible(true);
         pnMenu.setSize(0, 670);
-        //runFont();
         this.btnItemMenu = btnTrangChu;
         settingTable();
         initHang();
@@ -338,9 +290,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordHang.setText(recordHang());
         lblrecordLoai.setText(recordLoai());
         lblrecordSP.setText(recordSanPham());
-
         SanPhamHr1.setVisible(false);
-
         loadMainDone = true;
     }
     boolean loadMainDone = false;
@@ -374,10 +324,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     void showLoadBar() {
-        /*
-            W:1220
-            H: 671
-         */
     }
 
     void initMenu() {
@@ -511,10 +457,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     int chooserMenuIndex = 1;
+//dang xuat
 
     void signOut() {
-        //dang xuat
-        //hỏi các kiểu
         boolean chon = MsgBox.confirm(this, "Bạn có chắc chắn đăng xuất không?");
         if (chon) {
             Login login = new Login();
@@ -523,6 +468,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Phương thức gọi lại menu
 
     public void chooserMenu(int index) {
         switch (index) {
@@ -630,18 +576,15 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Quét camera
 
     public void initWebcam() {
         Dimension size = WebcamResolution.QVGA.getSize();
         webcam = Webcam.getWebcams().get(0); //0 is default webcam
         webcam.setViewSize(size);
-
         panel = new WebcamPanel(webcam);
         panel.setPreferredSize(size);
-        //panel.setFPSDisplayed(true);
-
         pnQR.add(panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 470, 300));
-
         executor.execute(this);
     }
 
@@ -664,16 +607,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     continue;
                 }
             }
-
             LuminanceSource source = new BufferedImageLuminanceSource(image);
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
             try {
                 result = new MultiFormatReader().decode(bitmap);
             } catch (NotFoundException e) {
-                //System.out.println("");
             }
-
             if (result != null) {
                 if (txtSdtKH.getText().equalsIgnoreCase("")) {
                     MsgBox.alert(this, "Vui lòng nhập số điện thoai!");
@@ -692,6 +631,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         t.setDaemon(true);
         return t;
     }
+//Hiển thị tên nhân viên trên cửa sổ chính
 
     public void getTenNhanVien(String tenNV) {
         for (TaiKhoanEntity tk : listTK) {
@@ -707,6 +647,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }
     }
+//Định dạng các dòng và các cột trong bảng
 
     public void settingTable() {
         tblNhanVien.setRowHeight(30);
@@ -754,8 +695,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         columnModelGioHang.getColumn(1).setPreferredWidth(315);
         columnModelGioHang.getColumn(2).setPreferredWidth(120);
     }
-
+//Phương thức làm mờ nền của phần mềm
     //mở opacity 
+
     void showOpacity() {
         opacity.setSize(1220, 670);
     }
@@ -765,10 +707,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         opacity.setSize(0, 0);
     }
 
-    /*
-        w 300
-        h 670
-     */
     //mở menu
     void openMenu() {
         if (pnMenu.getWidth() < 300) {
@@ -817,17 +755,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         cardMenubarTaiKhoan.setVisible(false);
     }
 
-    /*
-        w:1220, h:60
-    
-    void hideMenuItem(){
-        lblHideMenuItem.setSize(1220, 60);
-    }
-    
-    void showMenuItem(){
-        lblHideMenuItem.setSize(0, 0);
-    }
-     */
     void setAnimationHr(JPanel pn, JLabel hr, JLabel item) {
         Thread t1 = new Thread() {
             public void run() {
@@ -911,12 +838,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         return true;
     }
+//--------------------------------------------HÃNG---------------------------------------------------------------------------    
 
+//Lấy vị trí của dòng trong bảng
     public String recordHang() {
         List<HangEntity> list = Hang.selectAll();
         return (row + 1) + " trên " + list.size();
     }
-// Hang
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút
 
     public void initHang() {
         setLocationRelativeTo(null);
@@ -925,6 +854,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.row = -1;
         this.updateStatusHang();
     }
+//Hiển thị dữ liệu lên bảng
 
     public void fillTableHang() {
         DefaultTableModel model = (DefaultTableModel) tblHang.getModel();
@@ -939,11 +869,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(e);
         }
     }
+//Lấy dữ liệu trên database    
 
     public void setFormHang(HangEntity h) {
         txtMaHang.setText(h.getMaHang());
         txtTenHang.setText(h.getTenHang());
     }
+//Đẩy dữ liệu lên database
 
     public HangEntity getFormHang() {
         HangEntity h = new HangEntity();
@@ -952,6 +884,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return h;
 
     }
+//Xóa trắng form
 
     public void clearFormHang() {
         HangEntity h = new HangEntity();
@@ -959,14 +892,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.row = -1;
         this.updateStatusHang();
     }
+//Trạng thái ban đầu của các nút
 
     public void updateStatusHang() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblHang.getRowCount() - 1);
         //Trạng thái form
-
-        //btnThemHang.setEnabled(edit);
         btnCapNhatHang.setEnabled(edit);
         btnXoaHang.setEnabled(edit);
         //Trạng thái điều hướng
@@ -975,6 +907,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnNextHang.setEnabled(edit && !last);
         btnLastHang.setEnabled(edit && !last);
     }
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
 
     public void editHang() {
         countClick = 0;
@@ -986,6 +919,17 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordHang.setText(recordHang());
         lblrecordLoai.setText(recordLoai());
     }
+
+    //Tìm kiếm theo tên hãng
+    private void timKiemhang() {
+        String keyword = txtTimKiemHang.getText();
+        listHang = Hang.selectByKeyword(keyword);
+        this.fillTableHang();
+        this.clearFormHang();
+        this.row = - 1;
+        updateStatusHang();
+    }
+//Kiểm tra lỗi của hãng
 
     public boolean checkHang() {
         if (txtMaHang.getText().equals(" ")) {
@@ -1001,8 +945,17 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return true;
     }
 
-    public void insertHang() {
+    //Add dữ liệu vào list tạm
+    public void listHang() {
+        listHang = Hang.selectAll();
+        List<HangEntity> listHangTemp = new ArrayList<>();
+        listHangTemp.addAll(listHang);
+        listHang.clear();
+        listHang.addAll(listHangTemp);
+    }
+//Thêm dữ liệu
 
+    public void insertHang() {
         List<HangEntity> listh = Hang.selectAll();
         for (HangEntity sp1 : listh) {
             if (txtMaHang.getText().equals(sp1.getMaHang())) {
@@ -1013,7 +966,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     return;
                 }
             }
-
         }
         HangEntity h = getFormHang();
         try {
@@ -1028,6 +980,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Cập nhật dữ liệu
 
     public void updateHang() {
         HangEntity h = getFormHang();
@@ -1042,6 +995,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(e);
         }
     }
+//Xóa dữ liệu
 
     public void deleteHang() {
         String mah = txtMaHang.getText();
@@ -1057,45 +1011,46 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Trở về dòng đầu tiên trên bảng
 
     public void firstHang() {
         this.row = 0;
         this.editHang();
-
     }
+//Chạy tới dòng tiếp theo trên bảng
 
     public void nextHang() {
         if (this.row < tblHang.getRowCount() - 1) {
             this.row++;
             this.editHang();
-
         } else {
             this.firstHang();
         }
-
     }
+//Trở về dòng trước trên bảng
 
     public void prevHang() {
         if (this.row > 0) {
             this.row--;
             this.editHang();
-
         } else {
             this.lastHang();
         }
-
     }
+//Đi tới dòng cuối cùng trong bảng
 
     public void lastHang() {
         this.row = tblHang.getRowCount() - 1;
         this.editHang();
     }
-//Loại
+//-------------------------------------------LOẠI-------------------------------------------------------------------------
 
+//Lấy vị trí của dòng trong bảng
     public String recordLoai() {
         List<LoaiHangEntity> list = Loai.selectAll();
         return (row + 1) + " trên " + list.size();
     }
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
 
     public void initLoai() {
         setLocationRelativeTo(null);
@@ -1104,13 +1059,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.row = -1;
         this.updateStatusLoai();
     }
+//Hiển thị dữ liệu lên bảng
 
     public void fillTableLoai() {
         DefaultTableModel model = (DefaultTableModel) tblLoaiHang.getModel();
         model.setRowCount(0);
         try {
-            //String keyword = txtTimKiemLoai.getText();
-            //List<LoaiHangEntity> listLoai = Loai.selectByKeyword(keyword);
             for (LoaiHangEntity l : listLoai) {
                 Object[] row = {l.getMaLH(), l.getTenLH()};
                 model.addRow(row);
@@ -1120,19 +1074,21 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(e);
         }
     }
+//Lấy dữ liệu trên database    
 
     public void setFormLoai(LoaiHangEntity l) {
         txtMaLoai.setText(l.getMaLH());
         txtTenLoai.setText(l.getTenLH());
     }
+//Đẩy dữ liệu lên database
 
     public LoaiHangEntity getFormLoai() {
         LoaiHangEntity l = new LoaiHangEntity();
         l.setMaLH(txtMaLoai.getText());
         l.setTenLH(txtTenLoai.getText());
         return l;
-
     }
+//Xóa trống form
 
     public void clearFormLoai() {
         LoaiHangEntity l = new LoaiHangEntity();
@@ -1140,13 +1096,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.row = -1;
         this.updateStatusLoai();
     }
+//Trạng thái ban đầu của các nút
 
     public void updateStatusLoai() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblLoaiHang.getRowCount() - 1);
         //Trạng thái form
-        //btnThemLoai.setEnabled(edit);
         btnCapNhatLoai.setEnabled(edit);
         btnXoaLoai.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1155,6 +1111,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnNextLoai.setEnabled(edit && !last);
         btnLastLoai.setEnabled(edit && !last);
     }
+    //Add dữ liệu vào list tạm
+
+    public void listLoai() {
+        listLoai = Loai.selectAll();
+        List<LoaiHangEntity> listLoaiTemp = new ArrayList<>();
+        listLoaiTemp.addAll(listLoai);
+        listLoai.clear();
+        listLoai.addAll(listLoaiTemp);
+    }
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
 
     public void editLoai() {
         countClick = 0;
@@ -1166,6 +1132,17 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordLoai.setText(recordLoai());
     }
 
+    //Tìm kiếm theo tên loại
+    private void timKiemLoai() {
+        String keyword = txtTimKiemLoai.getText();
+        listLoai = Loai.selectByKeyword(keyword);
+        this.fillTableLoai();
+        this.clearFormLoai();
+        this.row = - 1;
+        updateStatusLoai();
+    }
+
+//Kiểm tra lỗi của loại
     public boolean checkLoai() {
         if (txtMaLoai.getText().equals(" ")) {
             MsgBox.alert(this, " Mã loại không được để trống!");
@@ -1180,6 +1157,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return true;
     }
 
+//Thêm dữ liệu
     public void insertLoai() {
         List<LoaiHangEntity> listl = Loai.selectAll();
         for (LoaiHangEntity sp1 : listl) {
@@ -1191,7 +1169,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     return;
                 }
             }
-
         }
         LoaiHangEntity l = getFormLoai();
         try {
@@ -1206,6 +1183,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Cập nhật dữ liệu
     public void updateLoai() {
         LoaiHangEntity l = getFormLoai();
         try {
@@ -1220,6 +1198,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Xóa dữ liệu
     public void deleteLoai() {
         String mal = txtMaLoai.getText();
         try {
@@ -1235,44 +1214,46 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     }
 
+//Trở về dòng đầu tiên trên bảng
     public void firstLoai() {
         this.row = 0;
         this.editLoai();
-
     }
 
+//Chạy tới dòng tiếp theo trên bảng
     public void nextLoai() {
         if (this.row < tblHang.getRowCount() - 1) {
             this.row++;
             this.editLoai();
-
         } else {
             this.firstLoai();
         }
-
     }
 
+//Trở về dòng trước trên bảng
     public void prevLoai() {
         if (this.row > 0) {
             this.row--;
             this.editLoai();
-
         } else {
             this.lastLoai();
         }
-
     }
 
+//Đi tới dòng cuối cùng trong bảng
     public void lastLoai() {
         this.row = tblHang.getRowCount() - 1;
         this.editLoai();
     }
+//--------------------------------------------CHỨC VỤ-----------------------------------------------------------------------
 
+//Lấy vị trí của dòng trong bảng
     public String recordChucVu() {
         List<ChucVuEntity> list = chucVu.selectAll();
         return (row + 1) + " trên " + list.size();
     }
 
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initChucVu() {
         setLocationRelativeTo(null);
         listCV = chucVu.selectAll();
@@ -1281,12 +1262,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusChucVu();
     }
 
+//Hiển thị dữ liệu lên bảng
     public void fillTableChucVu() {
         DefaultTableModel model = (DefaultTableModel) tblChucVu.getModel();
         model.setRowCount(0);
         try {
-            //String keyword = txtTimKiemLoai.getText();
-            //List<LoaiHangEntity> listLoai = Loai.selectByKeyword(keyword);
             for (ChucVuEntity cv : listCV) {
                 Object[] row = {cv.getMaCV(), cv.getTenCV(), cv.getMoTa()};
                 model.addRow(row);
@@ -1297,6 +1277,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Lấy dữ liệu trên database
     public void setFormChucVu(ChucVuEntity cv) {
         txtmaCV.setText(String.valueOf(cv.getMaCV()));
         txttenCV.setText(cv.getTenCV());
@@ -1304,15 +1285,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         System.out.println(cv.getMoTa());
     }
 
+//Đẩy dữ liệu lên database
     public ChucVuEntity getFormChucVu() {
         ChucVuEntity cv = new ChucVuEntity();
         cv.setMaCV(Integer.valueOf(txtmaCV.getText()));
         cv.setTenCV(txttenCV.getText());
         cv.setMoTa(txtMoTaCV.getText());
         return cv;
-
     }
 
+//Xóa trống form
     public void clearFormChucVu() {
         ChucVuEntity cv = new ChucVuEntity();
         this.setFormChucVu(cv);
@@ -1320,12 +1302,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusChucVu();
     }
 
+//Trạng thái ban đầu của các nút
     public void updateStatusChucVu() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblChucVu.getRowCount() - 1);
         //Trạng thái form
-        //btnThemCV.setEnabled(!edit);
         btnCapNhatCV.setEnabled(edit);
         btnXoaCV.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1335,6 +1317,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLastCV.setEnabled(edit && !last);
     }
 
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
     public void editChucVu() {
         countClick = 0;
         String maCV = String.valueOf(tblChucVu.getValueAt(this.row, 0));
@@ -1345,6 +1328,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordCV.setText(recordChucVu());
     }
 
+//Kiểm tra lỗi của loại
     public boolean checkChucVu() {
         if (txtmaCV.getText().equals(" ")) {
             MsgBox.alert(this, " Mã chức vụ không được để trống!");
@@ -1359,6 +1343,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return true;
     }
 
+//Thêm dữ liệu
     public void insertChucVu() {
         ChucVuEntity cv = getFormChucVu();
         try {
@@ -1374,6 +1359,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Cập nhật dữ liệu
     public void updateChucVu() {
         ChucVuEntity cv = getFormChucVu();
         try {
@@ -1388,6 +1374,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Xóa dữ liệu
     public void deleteChucVu() {
         String maCV = txtmaCV.getText();
         if (maCV.equalsIgnoreCase("admin") || maCV.equalsIgnoreCase("Quản lí") || maCV.equalsIgnoreCase("Nhân viên")) {
@@ -1404,42 +1391,41 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 System.out.println(e);
             }
         }
-
     }
 
+//Trở về dòng đầu tiên trên bảng
     public void firsChucVu() {
         this.row = 0;
         this.editChucVu();
-
     }
 
+//Chạy tới dòng tiếp theo trên bảng
     public void nextChucVu() {
         if (this.row < tblChucVu.getRowCount() - 1) {
             this.row++;
             this.editChucVu();
-
         } else {
             this.firsChucVu();
         }
-
     }
 
+//Trở về dòng trước trên bảng
     public void prevChucVu() {
         if (this.row > 0) {
             this.row--;
             this.editChucVu();
-
         } else {
             this.lastChucVu();
         }
-
     }
 
+//Đi tới dòng cuối cùng trong bảng 
     public void lastChucVu() {
         this.row = tblChucVu.getRowCount() - 1;
         this.editChucVu();
     }
 
+//Add dữ liệu vào list tạm
     public void listChucVu() {
         listCV = chucVu.selectAll();
         List<ChucVuEntity> listChucVuTemp = new ArrayList<>();
@@ -1448,12 +1434,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         listCV.addAll(listChucVuTemp);
     }
 
-    // Sản phẩm
+//----------------------------------------------SẢN PHẨM------------------------------------------------------------------------
+//Lấy vị trí của dòng trong bảng
     public String recordSanPham() {
         List<SanPhamEntity> list = SanPham.selectAll();
         return (row + 1) + " trên " + list.size();
     }
 
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initSanPham() {
         setLocationRelativeTo(null);
         listSPT();
@@ -1462,6 +1450,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusSanPham();
     }
 
+    //Add dữ liệu vào list tạm
+    public void listSPT() {
+        list = SanPham.selectAll();
+        List<SanPhamEntity> listSanPhamTemp = new ArrayList<>();
+        listSanPhamTemp.addAll(list);
+        list.clear();
+        list.addAll(listSanPhamTemp);
+    }
+
+//Hiển thị dữ liệu lên bảng
     public void fillTableSanPham() {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
@@ -1478,6 +1476,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Tìm sản phẩm theo tên
     void fillTableSanPham(String tenSP) {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
@@ -1496,6 +1495,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Lấy dữ liệu trên database
     public void setFormSanPham(SanPhamEntity sp) {
         txtMaSP.setText(sp.getMaSP());
         txtTenSP.setText(sp.getTenSP());
@@ -1529,6 +1529,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtMoTaSP.setText(sp.getMoTa());
     }
 
+//Đẩy dữ liệu lên database
     public SanPhamEntity getFormSanPham() {
         String tenloai = (String) cboMaLoai.getSelectedItem();
         String tenhang = (String) cboMaHang.getSelectedItem();
@@ -1549,13 +1550,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         sp.setGiaNhap(Float.parseFloat(txtGiaNhapSP.getText()));
         sp.setGiaBan(Float.parseFloat(txtGiaBanSP.getText()));
-        sp.setNgayNhap(XDate.toDate(txtNgayNhapSP.getText(), "yyyy-MM-dd"));
+        sp.setNgayNhap(XDate.toDate(txtNgayNhapSP.getText(), "dd-MM-yyyy"));
         sp.setHinh(txtMaSP.getText());
         sp.setMoTa(txtMoTaSP.getText());
         return sp;
-
     }
 
+//Xóa trống form
     public void clearFormSanPham() {
         SanPhamEntity sp = new SanPhamEntity();
         this.setFormSanPham(sp);
@@ -1566,12 +1567,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusSanPham();
     }
 
+//Trạng thái của các nút
     public void updateStatusSanPham() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblSanPham.getRowCount() - 1);
         //Trạng thái form
-//        btnThemSP.setEnabled(!edit);
         btnCapNhatSP.setEnabled(edit);
         btnXoaSP.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1581,6 +1582,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLastSP.setEnabled(edit && !last);
     }
 
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
     public void editSanPham() {
         countClick = 0;
         String masp = (String) tblSanPham.getValueAt(this.row, 0);
@@ -1591,6 +1593,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
     }
 
+//Thêm dữ liệu
     public void insertSanPham() {
         List<SanPhamEntity> listsp = SanPham.selectAll();
         Qr qr = new Qr();
@@ -1603,7 +1606,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     return;
                 }
             }
-
         }
         SanPhamEntity sp = getFormSanPham();
         try {
@@ -1619,6 +1621,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Cập nhật dữ liệu
     public void updateSanPham() {
         SanPhamEntity sp = getFormSanPham();
         Qr qr = new Qr();
@@ -1635,6 +1638,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Xóa dữ liệu
     public void deleteSanPham() {
         String masp = txtMaSP.getText();
         Qr qr = new Qr();
@@ -1650,15 +1654,15 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thất bại!");
             System.out.println(e);
         }
-
     }
 
+//Chạy tới dòng tiếp theo trên bảng
     public void firstSanPham() {
         this.row = 0;
         this.editSanPham();
-
     }
 
+//Chạy tới dòng tiếp theo trên bảng
     public void nextSanPham() {
         if (this.row < tblSanPham.getRowCount() - 1) {
             this.row++;
@@ -1667,25 +1671,25 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         } else {
             this.firstSanPham();
         }
-
     }
 
+//Lùi về 1 dòng trên bảng
     public void prevSanPham() {
         if (this.row > 0) {
             this.row--;
             this.editSanPham();
-
         } else {
             this.lastSanPham();
         }
-
     }
 
+//Đi tới dòng cuối cùng trong bảng 
     public void lastSanPham() {
         this.row = tblSanPham.getRowCount() - 1;
         this.editSanPham();
     }
 
+//Hiển thị tên Loại trên combobox
     public void fillComboxLoai() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboMaLoai.getModel();
         model.removeAllElements();
@@ -1695,6 +1699,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Hiển thị tên Hãng trên combobox
     public void fillComboxHang() {
         DefaultComboBoxModel model = (DefaultComboBoxModel) cboMaHang.getModel();
         model.removeAllElements();
@@ -1704,6 +1709,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Chọn ảnh
     public void ChonAnh() {
         try {
             f.showOpenDialog(null);
@@ -1716,7 +1722,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "Error");
         }
-
     }
 
     public void choseImage() {
@@ -1755,7 +1760,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 JOptionPane.showMessageDialog(this, "Ôi không!\nHình ảnh không tương thích!");
                 return;
             }
-
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ôi không!\nHình ảnh không tương thích!");
             return;
@@ -1774,12 +1778,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         while ((length = in.read(buffer)) > 0) {
             out.write(buffer, 0, length);
         }
-//        System.out.println("File da duoc copy " + targetFolder);
         in.close();
         out.close();
-
     }
 
+//Kiểm tra lỗi của sản phẩm
     public boolean checkSP() {
         if (txtMaSP.getText().equals("")) {
             MsgBox.alert(this, "Mã sản phẩm không được để trống!");
@@ -1832,7 +1835,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 formater.setLenient(false);
                 formater.parse(txtNgayNhapSP.getText());
             } catch (Exception ex) {
-                MsgBox.alert(this, "Vui lòng nhập ngày sinh đúng định dạng năm - tháng - ngày!");
+                MsgBox.alert(this, "Vui lòng nhập ngày sinh đúng định dạng ngày - tháng - năm!");
                 txtNgayNhapSP.requestFocus();
                 return false;
             }
@@ -1847,7 +1850,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         return true;
     }
+//---------------------------------------------------KHÁCH HÀNG----------------------------------------------------------------
 
+//Kiểm tra lỗi khách hàng
     public boolean checkKH() {
         if (txtmaKH.getText().equals("")) {
             MsgBox.alert(this, "Mã khách hàng không được để trống!");
@@ -1869,6 +1874,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return true;
     }
 
+    //Add dữ liệu vào list tạm
+    public void listKhachHang() {
+        listKhachHang = KhachHang.selectAll();
+        List<KhachHangEntity> listKHTemp = new ArrayList<>();
+        listKHTemp.addAll(listKhachHang);
+        listKhachHang.clear();
+        listKhachHang.addAll(listKHTemp);
+    }
+
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initKhachHang() {
         setLocationRelativeTo(null);
         listKhachHang();
@@ -1877,11 +1892,23 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusKhachHang();
     }
 
+    //Tìm kiếm theo tên khách hàng
+    private void timKiemKH() {
+        String keyword = txtTimKiemKH.getText();
+        listKhachHang = KhachHang.selectByKeyword(keyword);
+        this.fillTableKhachHang();
+        this.clearFormKhachHang();
+        this.row = - 1;
+        updateStatusKhachHang();
+    }
+
+//Lấy vị trí của dòng trong bảng
     public String recordKhachHang() {
         List<KhachHangEntity> list = KhachHang.selectAll();
         return (row + 1) + " trên " + list.size();
     }
 
+//Hiển thị dữ liệu lên bảng
     public void fillTableKhachHang() {
         DefaultTableModel model = (DefaultTableModel) tblKhachHang.getModel();
         model.setRowCount(0);
@@ -1896,6 +1923,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Lấy dữ liệu trên database
     public void setFormKhachHang(KhachHangEntity kh) {
         txtmaKH.setText(kh.getMaKH());
         txthoTen.setText(kh.getHoTen());
@@ -1905,6 +1933,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     }
 
+//Đẩy dữ liệu trên database
     public KhachHangEntity getFormKhachHang() {
         KhachHangEntity kh = new KhachHangEntity();
         kh.setMaKH(txtmaKH.getText());
@@ -1916,22 +1945,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     }
 
+//Xóa trắng form
     public void clearFormKhachHang() {
         KhachHangEntity kh = new KhachHangEntity();
         this.setFormKhachHang(kh);
-//        txtGiaBanSP.setText(" ");
-//        txtNgayNhapSP.setText(" ");
-//        txtGiaNhapSP.setText(" ");
         this.row = -1;
         this.updateStatusKhachHang();
     }
 
+//Trạng thái của các nút
     public void updateStatusKhachHang() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblKhachHang.getRowCount() - 1);
         //Trạng thái form
-//        btnThemKhachHang.setEnabled(!edit);
         btncapNhatKhachHang.setEnabled(edit);
         btnxoaKhachHang.setEnabled(edit);
         //Trạng thái điều hướng
@@ -1941,6 +1968,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLastSP.setEnabled(edit && !last);
     }
 
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
     public void editKhachHang() {
         countClick = 0;
         String makh = (String) tblKhachHang.getValueAt(this.row, 0);
@@ -1951,8 +1979,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordKH.setText(recordKhachHang());
     }
 
+//Thêm dữ liệu
     public void insertKhachHang() {
-
         List<KhachHangEntity> listkh = KhachHang.selectAll();
         for (KhachHangEntity sp1 : listkh) {
             if (txtMAKH.getText().equals(sp1.getMaKH())) {
@@ -1963,7 +1991,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     return;
                 }
             }
-
         }
         KhachHangEntity kh = getFormKhachHang();
         try {
@@ -1976,23 +2003,24 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Thêm mới thất bại!");
             System.out.println(e);
         }
-
     }
 
-    public void insertGH(String maGH, String maKH, String tenDn) {
-        GioHangEntity gh = new GioHangEntity();
+//Xóa dữ liệu
+    public void deleteKhachHang() {
+        String makh = txtmaKH.getText();
         try {
-            gh.setMaGH(maGH);
-            gh.setMaKH(maKH);
-            gh.setTenDN(tenDn);
-            Giohang.insert(gh);
-            listGioHang();
+            KhachHang.delete(makh);
+            listKhachHang();
+            this.fillTableKhachHang();
+            this.clearFormKhachHang();
+            MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
-            MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+            MsgBox.alert(this, "Xóa thất bại!");
             System.out.println(e);
         }
     }
 
+//Cập nhật dữ liệu
     public void updateKhachHang() {
         listGioHang();
         KhachHangEntity kh = getFormKhachHang();
@@ -2014,54 +2042,40 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
-    public void deleteKhachHang() {
-        String makh = txtmaKH.getText();
-        try {
-            KhachHang.delete(makh);
-            listKhachHang();
-            this.fillTableKhachHang();
-            this.clearFormKhachHang();
-            MsgBox.alert(this, "Xóa thành công!");
-        } catch (Exception e) {
-            MsgBox.alert(this, "Xóa thất bại!");
-            System.out.println(e);
-        }
-
-    }
-
+//Trở về dòng đầu tiên trên bảng
     public void firstKhachHang() {
         this.row = 0;
         this.editKhachHang();
-
     }
 
+//Chạy tới dòng tiếp theo trên bảng
     public void nextKhachHang() {
         if (this.row < tblKhachHang.getRowCount() - 1) {
             this.row++;
             this.editKhachHang();
-
         } else {
             this.firstKhachHang();
         }
-
     }
 
+//Lùi về 1 dòng
     public void prevKhachHang() {
         if (this.row > 0) {
             this.row--;
             this.editKhachHang();
-
         } else {
             this.lastKhachHang();
         }
-
     }
 
+//Đi tới dòng cuối cùng của bảng
     public void lastKhachHang() {
         this.row = tblKhachHang.getRowCount() - 1;
         this.editKhachHang();
     }
+//--------------------------------------------------------------HÓA ĐƠN----------------------------------------------------------
 
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initHoaDon() {
         btnIn.setEnabled(false);
         //btnXoahd.setEnabled(false);
@@ -2072,11 +2086,22 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.updateStatusHoaDon();
     }
 
+//Lấy vị trí của dòng trong bảng
     public String recordHoaDon() {
         List<HoaDonEntity> list = HoaDon.selectAll();
         return (row + 1) + " trên " + list.size();
     }
 
+    //Add dữ liệu vào list tạm
+    public void listHoaDon() {
+        listHoaDon = HoaDon.selectAll();
+        List<HoaDonEntity> listHDTemp = new ArrayList<>();
+        listHDTemp.addAll(listHoaDon);
+        listHoaDon.clear();
+        listHoaDon.addAll(listHDTemp);
+    }
+
+//Hiển thị dữ liệu lên bảng
     public void fillTableHoaDon() {
         DefaultTableModel model = (DefaultTableModel) tblHoaDon.getModel();
         model.setRowCount(0);
@@ -2091,20 +2116,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Lấy dữ liệu từ database
     public void setFormHoaDon(HoaDonEntity hd) {
         txtMAKH.setText(hd.getMaKH());
         txtTENKH.setText(hd.getTenKH());
         txtTENNV.setText(hd.getTenNV());
         txtPhanTramGG.setText(String.valueOf(hd.getPhanTramGG()));
         txtTichDiem.setText(String.valueOf(hd.getTichDiem()));
-
     }
 
+//Đẩy dữ liệu lên database
     public HoaDonEntity getFormHoaDon() {
         HoaDonEntity hd = new HoaDonEntity();
         GioHangTamEntity gh = listGHT.get(0);
         listHoaDon();
-//        listHoaDon = HoaDon.selectAll();
         if (listHoaDon.size() < 10) {
             hd.setMaHD("HD0" + (listHoaDon.size() + 1));
         } else {
@@ -2121,23 +2146,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return hd;
     }
 
+//Xóa trống form
     public void clearFormHoaDon() {
         HoaDonEntity hd = new HoaDonEntity();
         this.setFormHoaDon(hd);
-//        txtGiaBanSP.setText(" ");
-//        txtNgayNhapSP.setText(" ");
-//        txtGiaNhapSP.setText(" ");
         this.row = -1;
         this.updateStatusHoaDon();
     }
 
+//Trạng thái của các nút và form
     public void updateStatusHoaDon() {
         boolean edit = (this.row >= 0);
         boolean first = (this.row == 0);
         boolean last = (this.row == tblHoaDon.getRowCount() - 1);
         //Trạng thái form
-//        btnThemKhachHang.setEnabled(edit);
-//        btncapNhatKhachHang.setEnabled(edit);
         btnXoahd.setEnabled(edit);
         //Trạng thái điều hướng
         btnFirsthd.setEnabled(edit && !first);
@@ -2146,6 +2168,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLasthd.setEnabled(edit && !last);
     }
 
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
     public void editHoaDon() {
         countClick = 0;
         String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
@@ -2157,6 +2180,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordhd.setText(recordHoaDon());
     }
 
+//Thêm dữ liệu 
     public void insertHoaDon() {
         HoaDonEntity hd = getFormHoaDon();
         float tien = Float.valueOf(txtTongtiensp.getText().substring(0, txtTongtiensp.getText().length() - 3));
@@ -2183,6 +2207,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     }
 
+//Cập nhật dữ liệu
     public void updateHoaDon() {
         HoaDonEntity hd = getFormHoaDon();
         try {
@@ -2197,6 +2222,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
+//Xóa dữ liệu
     public void deleteHoaDon() {
         String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
         try {
@@ -2210,9 +2236,18 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thất bại!");
             System.out.println(e);
         }
-
     }
 
+    //Add dữ liệu vào list tạm
+    public void listHoaDonCT() {
+        listCtHD = HDCT.selectAll();
+        List<HoaDonCTEntity> listHDCTTemp = new ArrayList<>();
+        listHDCTTemp.addAll(listCtHD);
+        listCtHD.clear();
+        listCtHD.addAll(listHDCTTemp);
+    }
+
+//Xóa hóa đơn chi tiết
     public void deleteHoaDonCT(String mahd) {
         try {
             HDCT.delete(mahd);
@@ -2221,42 +2256,41 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             MsgBox.alert(this, "Xóa thất bại!");
             System.out.println(e);
         }
-
     }
 
+//Trở về dòng đầu tiên của bảng
     public void firstHoaDon() {
         this.row = 0;
         this.editHoaDon();
-
     }
 
+//Đi tới dòng tiếp theo
     public void nextHoaDon() {
         if (this.row < tblHoaDon.getRowCount() - 1) {
             this.row++;
             this.editHoaDon();
-
         } else {
             this.firstHoaDon();
         }
-
     }
 
+//Lùi về 1 dòng
     public void prevHoaDon() {
         if (this.row > 0) {
             this.row--;
             this.editHoaDon();
-
         } else {
             this.lastHoaDon();
         }
-
     }
 
+//Đi tới dòng cuối cùng của bảng
     public void lastHoaDon() {
         this.row = tblHoaDon.getRowCount() - 1;
         this.editHoaDon();
     }
 
+//Tìm hóa đơn 
     private void timHoaDon() {
         String keyword = txtTimKiemhd.getText();
         listHoaDon = (List<HoaDonEntity>) HoaDon.selectById(keyword);
@@ -2264,61 +2298,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.clearFormHoaDon();
         this.row = - 1;
         updateStatusHoaDon();
-    }
-
-    private void timKiemSP() {
-//        String keyword = txtTimKiemSP.getText();
-//        list = SanPham.selectByKeyword(keyword);
-//        this.fillTableSanPham();
-//        this.clearFormSanPham();
-//        this.row = - 1;
-//        updateStatusSanPham();
-
-    }
-
-    private void timKiemLoai() {
-        String keyword = txtTimKiemLoai.getText();
-        listLoai = Loai.selectByKeyword(keyword);
-        this.fillTableLoai();
-        this.clearFormLoai();
-        this.row = - 1;
-        updateStatusLoai();
-    }
-
-    private void timKiemhang() {
-        String keyword = txtTimKiemHang.getText();
-        listHang = Hang.selectByKeyword(keyword);
-        this.fillTableHang();
-        this.clearFormHang();
-        this.row = - 1;
-        updateStatusHang();
-    }
-
-    private void timKiemKH() {
-        String keyword = txtTimKiemKH.getText();
-        listKhachHang = KhachHang.selectByKeyword(keyword);
-        this.fillTableKhachHang();
-        this.clearFormKhachHang();
-        this.row = - 1;
-        updateStatusKhachHang();
-    }
-
-    private void timKiemNV() {
-        String keyword = txtTimKiemNV.getText();
-        listNhanVien = NhanVien.selectByKeyword(keyword);
-        this.fillTableNhanVien();
-        this.clearFormNV();
-        this.row = - 1;
-        updateStatusNhanVien();
-    }
-
-    private void timKiemCV() {
-        String keyword = txtTimCV.getText();
-        listCV = chucVu.selectByKeyword(keyword);
-        this.fillTableChucVu();
-        this.clearFormChucVu();
-        this.row = - 1;
-        updateStatusChucVu();
     }
 
     private void timKiemHD() {
@@ -2329,9 +2308,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.row = - 1;
         updateStatusHoaDon();
     }
+    //Tìm kiếm chức vụ
+
+    private void timKiemCV() {
+        String keyword = txtTimCV.getText();
+        listCV = chucVu.selectByKeyword(keyword);
+        this.fillTableChucVu();
+        this.clearFormChucVu();
+        this.row = - 1;
+        updateStatusChucVu();
+    }
+//------------------------------------------CÁC CHỨC NĂNG KHÁC----------------------------------------------------------
+    //Sắp xếp loại
 
     public void sortLoai(int i) {
-
         String Loai = (String) cboLoai.getSelectedItem();
         if (Loai.equalsIgnoreCase("Mã loại")) {
             Comparator<LoaiHangEntity> azl = new Comparator<LoaiHangEntity>() {
@@ -2344,7 +2334,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 Collections.sort(listLoai, azl);
             } else {
                 Collections.sort(listLoai, azl.reversed());
-
             }
         } else {
             Comparator<LoaiHangEntity> zal = new Comparator<LoaiHangEntity>() {
@@ -2357,14 +2346,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 Collections.sort(listLoai, zal);
             } else {
                 Collections.sort(listLoai, zal.reversed());
-
             }
         }
-
         this.fillTableLoai();
-
     }
 
+    //Sắp xếp Hãng
     public void sortHang(int i) {
 
         String Hang = (String) cboHang.getSelectedItem();
@@ -2379,7 +2366,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 Collections.sort(listHang, azh);
             } else {
                 Collections.sort(listHang, azh.reversed());
-
             }
         } else {
             Comparator<HangEntity> zah = new Comparator<HangEntity>() {
@@ -2392,12 +2378,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 Collections.sort(listHang, zah);
             } else {
                 Collections.sort(listHang, zah.reversed());
-
             }
         }
         this.fillTableHang();
-
     }
+    //Sắp xếp khách hàng
 
     public void SortKH(int i) {
         String kh = (String) cboKh.getSelectedItem();
@@ -2418,6 +2403,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         this.fillTableKhachHang();
     }
+    //Sắp xếp sản phẩm
 
     public void SortSP(int i) {
         String SP = (String) cboSP.getSelectedItem();
@@ -2445,7 +2431,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                         return 0;
                     }
                 }
-
             }
         };
         if (i == 0) {
@@ -2453,9 +2438,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         } else {
             Collections.sort(list, azsp.reversed());
         }
-
         this.fillTableSanPham();
     }
+    //Sắp xếp nhân viên
 
     public void SortNV(int i) {
         String NV = (String) cboSortNV.getSelectedItem();
@@ -2467,7 +2452,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 } else {
                     return nv1.getTenNV().compareTo(nv2.getTenNV());
                 }
-
             }
         };
         if (i == 0) {
@@ -2478,6 +2462,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         this.fillTableNhanVien();
     }
+    //Sắp xếp hóa đơn
 
     public void SortHoaDon(int i) {
         String HD = (String) comboboxHD.getSelectedItem();
@@ -2539,11 +2524,358 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     }
 
+//------------------------------------------------------------NHÂN VIÊN--------------------------------------------------------
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút
+    public void initNhanVien() {
+        setLocationRelativeTo(null);
+        listNVT();
+        this.fillTableNhanVien();
+        this.row = -1;
+        this.updateStatusNhanVien();
+    }
+//Hiển thị dữ liệu lên table
+
+    public void fillTableNhanVien() {
+        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+        model.setRowCount(0);
+        try {
+            for (TaiKhoanEntity nv : listNhanVien) {
+                if ("admin".equalsIgnoreCase(ktCV)) {
+                    Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
+                        nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
+                        nv.getDiaChi(), nv.getDienThoai(), nv.getNgaySinh(), nv.isGioiTInh()};
+                    model.addRow(row);
+                } else {
+                    if (!nv.getTenCV().equalsIgnoreCase("admin")) {
+                        Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
+                            nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
+                            nv.getDiaChi(), nv.getDienThoai(), nv.getNgaySinh(), nv.isGioiTInh()};
+                        model.addRow(row);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+            System.out.println(e);
+        }
+    }
+//Trạng thái của các nút
+
+    public void updateStatusNhanVien() {
+        boolean edit = (this.row >= 0);
+        boolean first = (this.row == 0);
+        boolean last = (this.row == tblNhanVien.getRowCount() - 1);
+        //Trạng thái form
+        btnCapNhatNV.setEnabled(edit);
+        btnXoaNV.setEnabled(edit);
+        //Trạng thái điều hướng
+        btnFirstNV.setEnabled(edit && !first);
+        btnPrevNV.setEnabled(edit && !first);
+        btnNextNV.setEnabled(edit && !last);
+        btnLastNV.setEnabled(edit && !last);
+    }
+//Đẩy dữ liệu lên database
+
+    public void setFormNhanVien(TaiKhoanEntity tk) {
+        txtTenDN.setText(tk.getTenDN());
+        txtHoTenNV.setText(tk.getTenNV());
+        ChucVuEntity listcv = chucVu.selectById(String.valueOf(tk.getMaCV()));
+        if (listcv == null) {
+            cboVaiTro.setSelectedIndex(0);
+        } else {
+            cboVaiTro.setSelectedItem(listcv.getTenCV());
+        }
+        txtEmailNV.setText(tk.getEmail());
+        txtMatKhauNV.setText(tk.getMatKhau());
+        txtDiaChiNV.setText(tk.getDiaChi());
+        txtSDTNV.setText(tk.getDienThoai());
+        txtNgaySinhNV.setText(String.valueOf(tk.getNgaySinh()));
+        rdoNam.setSelected(tk.isGioiTInh());
+        rdoNu.setSelected(!tk.isGioiTInh());
+        if (tk.isTrangThai()) {
+            txtTrangThaiNV.setText("Đang hoạt động");
+            txtTrangThaiNV.setForeground(new Color(0, 153, 0));
+            sbtnTrangThaiNV.setSelected(true);
+        } else {
+            sbtnTrangThaiNV.setSelected(false);
+            txtTrangThaiNV.setText("Ngưng hoạt động");
+            txtTrangThaiNV.setForeground(Color.red);
+        }
+    }
+//Hiển thị chức vụ
+
+    public void fillComboxCV() {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) cboVaiTro.getModel();
+        model.removeAllElements();
+
+        for (ChucVuEntity h : listCV) {
+            model.addElement(String.valueOf(h.getTenCV()));
+        }
+    }
+//Lấy dữ liệu từ database
+
+    public TaiKhoanEntity getFormNhanVien() {
+        String tencv = (String) cboVaiTro.getSelectedItem();
+        TaiKhoanEntity h = new TaiKhoanEntity();
+        h.setTenDN(txtTenDN.getText());
+        h.setTenNV(txtHoTenNV.getText());
+        List<ChucVuEntity> listcv = chucVu.selectAll();
+        for (ChucVuEntity c : listcv) {
+            if (tencv.equals(c.getTenCV())) {
+                h.setMaCV(c.getMaCV());
+            }
+        }
+        h.setEmail(txtEmailNV.getText());
+        h.setMatKhau(txtMatKhauNV.getText());
+        h.setDiaChi(txtDiaChiNV.getText());
+        h.setDienThoai(txtSDTNV.getText());
+        h.setNgaySinh(XDate.toDate(txtNgaySinhNV.getText(), "yyyy-MM-dd"));
+        h.setGioiTInh(rdoNam.isSelected());
+        h.setTrangThai(sbtnTrangThaiNV.isSelected());
+        return h;
+    }
+//Sự kiện của nút trạng thái
+
+    public void setTrangThaiHoatDong() {
+        if (tblNhanVien.getSelectedRow() > -1) {
+            int ketQua = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn thay đổi trạng thái hoạt động của người dùng này?", "Cập nhật trạng thái", JOptionPane.YES_OPTION);
+            if (ketQua == JOptionPane.YES_OPTION) {
+                //switchButton();
+                if (sbtnTrangThaiNV.isSelected()) {
+                    txtTrangThaiNV.setText("Đang hoạt động");
+                    txtTrangThaiNV.setForeground(new Color(0, 153, 0));
+                } else {
+                    txtTrangThaiNV.setText("Ngưng hoạt động");
+                    txtTrangThaiNV.setForeground(Color.red);
+                }
+            } else {
+                if (sbtnTrangThaiNV.isSelected()) {
+                    sbtnTrangThaiNV.setSelected(false);
+                } else {
+                    sbtnTrangThaiNV.setSelected(true);
+                }
+            }
+        }
+    }
+//Hàm trung gian nhận dữ liệu từ table rồi đẩy dữ liệu lên setform
+
+    public void editNV() {
+        countClick = 0;
+        String tendn = (String) tblNhanVien.getValueAt(this.row, 0);
+        TaiKhoanEntity h = NhanVien.selectById(tendn);
+        tblNhanVien.setRowSelectionInterval(this.row, this.row);
+        this.setFormNhanVien(h);
+        this.updateStatusNhanVien();
+        lblRecordNV.setText(recordNV());
+        lblrecordHang.setText(recordHang());
+        lblrecordLoai.setText(recordLoai());
+    }
+    //Tìm kiếm theo tên nhân viên
+
+    private void timKiemNV() {
+        String keyword = txtTimKiemNV.getText();
+        listNhanVien = NhanVien.selectByKeyword(keyword);
+        this.fillTableNhanVien();
+        this.clearFormNV();
+        this.row = - 1;
+        updateStatusNhanVien();
+    }
+
+    //Add dữ liệu vào list tạm
+    public void listNVT() {
+        listNhanVien = NhanVien.selectAll();
+        List<TaiKhoanEntity> listNhanVienTemp = new ArrayList<>();
+        listNhanVienTemp.addAll(listNhanVien);
+        listNhanVien.clear();
+        listNhanVien.addAll(listNhanVienTemp);
+    }
+    //Lấy vị trí của dòng trong bảng
+
+    public String recordNV() {
+        List<TaiKhoanEntity> list = NhanVien.selectAll();
+        return (row + 1) + " trên " + list.size();
+    }
+//Xóa trống form
+
+    public void clearFormNV() {
+        TaiKhoanEntity nv = new TaiKhoanEntity();
+        this.setFormNhanVien(nv);
+        this.row = -1;
+        this.updateStatusNhanVien();
+    }
+//Thêm dữ liệu
+
+    public void insertNV() {
+        List<TaiKhoanEntity> listnv = NhanVien.selectAll();
+        for (TaiKhoanEntity sp1 : listnv) {
+            if (txtTenDN.getText().equals(sp1.getTenDN())) {
+                int choice = (JOptionPane.showConfirmDialog(this, "Bạn có muốn cập nhật tên nhân viên: " + txtTenDN.getText() + "?", "Xác nhận", JOptionPane.YES_NO_OPTION));
+                if (choice == JOptionPane.YES_OPTION) {
+                    updateNV();
+                } else {
+                    return;
+                }
+            }
+        }
+        TaiKhoanEntity nv = getFormNhanVien();
+        try {
+            NhanVien.insert(nv);
+            listNVT();
+            this.fillTableNhanVien();
+            this.clearFormNV();
+            MsgBox.alert(this, "Thêm mới thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, "Thêm mới thất bại!");
+            System.out.println(e);
+        }
+    }
+//Cập nhật dữ liệu
+
+    public void updateNV() {
+        TaiKhoanEntity nv = getFormNhanVien();
+        try {
+            NhanVien.update(nv);
+            listNVT();
+            this.fillTableNhanVien();
+            this.clearFormNV();
+            MsgBox.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
+        }
+    }
+//Xóa dữ liệu
+
+    public void deleteNV() {
+        String tendn = txtTenDN.getText();
+        if (ktCV.equalsIgnoreCase("admin")) {
+            MsgBox.alert(this, "Không thể xóa tài khoản Admin!");
+            return;
+        } else {
+            try {
+                NhanVien.delete(tendn);
+                listNVT();
+                this.fillTableNhanVien();
+                this.clearFormNV();
+                MsgBox.alert(this, "Xóa thành công!");
+            } catch (Exception e) {
+                MsgBox.alert(this, "Xóa thất bại!");
+                System.out.println(e);
+            }
+        }
+    }
+    
+//Trở về dòng đầu tiên trong bảng
+
+    public void firstNV() {
+        this.row = 0;
+        this.editNV();
+    }
+//Đi tới dòng tiếp theo 
+
+    public void nextNV() {
+        if (this.row < tblNhanVien.getRowCount() - 1) {
+            this.row++;
+            this.editNV();
+        } else {
+            this.firstNV();
+        }
+    }
+//Lùi về 1 dòng
+
+    public void prevNV() {
+        if (this.row > 0) {
+            this.row--;
+            this.editNV();
+        } else {
+            this.lastNV();
+        }
+    }
+//Đi tới dòng cuối cùng
+
+    public void lastNV() {
+        this.row = tblNhanVien.getRowCount() - 1;
+        this.editNV();
+    }
+//Kiểm tra lỗi nhân viên
+
+    public boolean checkNhanVien() {
+        if (txtTenDN.getText().equals(" ")) {
+            MsgBox.alert(this, " Tên đăng nhập không để trống!");
+            txtTenDN.requestFocus();
+            return false;
+        }
+        if (txtHoTenNV.getText().equals(" ")) {
+            MsgBox.alert(this, "Họ tên nhân viên không để trống!");
+            txtHoTenNV.requestFocus();
+            return false;
+        }
+        if (txtMatKhauNV.getText().equals(" ")) {
+            MsgBox.alert(this, "Mật khẩu không được để trống!");
+            txtMatKhauNV.requestFocus();
+            return false;
+        }
+        if (txtDiaChiNV.getText().equals(" ")) {
+            MsgBox.alert(this, "Dia chi khong de trong!");
+            txtDiaChiNV.requestFocus();
+            return false;
+        }
+        if (txtNgaySinhNV.getText().equals(" ")) {
+            MsgBox.alert(this, "Ngay sinh khong de trong!");
+            txtNgaySinhNV.requestFocus();
+            return false;
+        }
+        if (txtEmailNV.getText().equals(" ")) {
+            MsgBox.alert(this, "Email không được để trống!");
+            txtEmailNV.requestFocus();
+            return false;
+        } else {
+            Matcher matcher = Pattern.compile(MAIL_REGEX).matcher(txtEmailNV.getText());
+            if (matcher.matches() == false) {
+                MsgBox.alert(this, "Email không đúng dịnh dạng!");
+                txtEmailNV.requestFocus();
+                return false;
+            }
+        }
+        return true;
+    }
+//----------------------------------------------------------GIỎ HÀNG----------------------------------------------------------
+    //Thêm sản phẩm vào giỏ hàng
+
+    public void insertGH(String maGH, String maKH, String tenDn) {
+        GioHangEntity gh = new GioHangEntity();
+        try {
+            gh.setMaGH(maGH);
+            gh.setMaKH(maKH);
+            gh.setTenDN(tenDn);
+            Giohang.insert(gh);
+            listGioHang();
+        } catch (Exception e) {
+            MsgBox.alert(cardHoaDonSanPham, "Thêm mới thất bại!");
+            System.out.println(e);
+        }
+    }
+    
+    //Add dữ liệu vào list tạm
+
+    public void listGioHang() {
+        listGiohang = Giohang.selectAll();
+        List<GioHangEntity> listGioHang = new ArrayList<>();
+        listGioHang.addAll(listGiohang);
+        listGiohang.clear();
+        listGiohang.addAll(listGioHang);
+    }
+
+    //Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
+    
     public void initgioHang() {
         btnxoaGioHang.setEnabled(false);
         btnXacNhanDonHang.setEnabled(false);
         spnSL.setEnabled(false);
     }
+    
+//Thêm dữ liệu
 
     public void insertGH(String ma, int sl) {
         listGHT.clear();
@@ -2594,7 +2926,170 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 System.out.println(e);
             }
         }
+    }
 
+    public GioHangTamEntity getFormGH(int sl) {
+        GioHangTamEntity gh = new GioHangTamEntity();
+        gh.setMaGH(txtSdtKH.getText());
+        gh.setMaSP((String) tblCart.getValueAt(this.row, 0));
+        gh.setSoLuong(sl);
+        return gh;
+    }
+//hiển thị sdt khách hàng 
+    public void sdtKH(String sdt) {
+        JPopupMenu popupMenu = new JPopupMenu("Title");
+        if (!sdt.equals("")) {
+            for (KhachHangEntity kh : listKhachHang) {
+                if (kh.getDienThoai().contains(txtSdtKH.getText())) {
+                    JMenuItem cutMenuItem = new JMenuItem(kh.getDienThoai());
+                    cutMenuItem.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            txtSdtKH.setText(kh.getDienThoai());
+                        }
+                    });
+                    popupMenu.add(cutMenuItem);
+                }
+            }
+            System.out.println(sdt);
+            popupMenu.setBackground(Color.white);
+            popupMenu.show(home, 780, 10);
+            txtSdtKH.requestFocus();
+        }
+    }
+
+    public void editGH() {
+        countClick = 0;
+        String magh = (String) tblCart.getValueAt(this.row, 0);
+        GioHangTamEntity gh = GioHangtam.selectById(magh);
+        tblCart.setRowSelectionInterval(this.row, this.row);
+    }
+//Add dữ liệu vào list tạm
+
+    public void listGHT() {
+        listGHT = GioHangtam.selectAll();
+        List<GioHangTamEntity> listGHTemp = new ArrayList<>();
+        listGHTemp.addAll(listGHT);
+        listGHT.clear();
+        listGHT.addAll(listGHTemp);
+    }
+//update số lượng
+    public void updategh(int sl) {
+        GioHangTamEntity gh = getFormGH(sl);
+        try {
+            GioHangtam.update(gh);
+            listGHT();
+            this.filltableGioHang();
+        } catch (Exception e) {
+            MsgBox.alert(this, "Cập nhật thất bại!");
+            System.out.println(e);
+        }
+    }
+//delete dữ liệ giỏ hàng tạm
+    public void deleteGH() {
+        String magh = txtSdtKH.getText();
+        String masp = (String) tblCart.getValueAt(this.row, 0);
+        try {
+            GioHangtam.delete2(magh, masp);
+            listGHT();
+            this.filltableGioHang();
+            btnxoaGioHang.setEnabled(false);
+        } catch (Exception e) {
+            MsgBox.alert(this, "Xóa thất bại!");
+            System.out.println(e);
+        }
+    }
+//update sl trên bảng
+    public void updateSl() {
+        int sl = (Integer) tblCart.getValueAt(this.row, 3);
+        if (sl == 0) {
+            deleteGH();
+            spnSL.setEnabled(false);
+            return;
+        } else {
+            updategh(sl);
+        }
+        MsgBox.alert(this, "Cập nhật điểm thành công!");
+    }
+//Lấy ngày hiện tại
+    public java.sql.Date day() {
+        return dayNow;
+    }
+
+    public HoaDonCTEntity getFormHDCT(int i) {
+        if (i >= 0) {
+            listCtHD.clear();
+            listCtHD = HDCT.selectAll();
+            HoaDonCTEntity hd = new HoaDonCTEntity();
+            GioHangTamEntity gh = listGHT.get(i);
+            if (listCtHD.size() < 10) {
+                hd.setMaCTHD("CTHD0" + (listCtHD.size() + 1));
+            } else {
+                hd.setMaCTHD("CTHD" + (listCtHD.size() + 1));
+            }
+            hd.setMaHD(maHDT);
+            hd.setMaSP(gh.getMaSP());
+            hd.setMaHang(gh.getMaHang());
+            hd.setMaLH(gh.getMaLoai());
+            hd.setNgayLap(dayNow);
+            hd.setTenSP(gh.getTenSP());
+            hd.setTenHang(gh.getTenHang());
+            hd.setTenLH(gh.getTenLoai());
+            hd.setNgayNhap(dayNow);
+            hd.setGiaNhap(gh.getGiaNhap());
+            hd.setGiaBan(gh.getGiaBan());
+            hd.setSl(gh.getSoLuong());
+            return hd;
+        }
+        return null;
+    }
+//Thêm dữ liệu 
+    public void insertCTHD() {
+        int i = 0;
+        listGHT.clear();
+        listGHT = GioHangtam.selectByIdlist(txtSdtKH.getText());
+        for (GioHangTamEntity gh : listGHT) {
+            HoaDonCTEntity hd = getFormHDCT(i);
+            try {
+                HDCT.insert(hd);
+                GioHangtam.delete2(gh.getMaGH(), gh.getMaSP()); // Xóa giỏ hàng tạm
+                listHoaDonCT();
+                listGHT();
+                this.filltableGioHang();
+            } catch (Exception e) {
+                MsgBox.alert(this, "Thêm mới thất bại!");
+                System.out.println(e);
+            }
+        }
+        i++;
+    }
+
+    public void openWebCame() {
+        if (webcam.isOpen()) {
+            webcam.close();
+            cardHoaDonQR.setVisible(false);
+            cardHoaDonSanPham.setVisible(true);
+        } else {
+            cardHoaDonQR.setVisible(true);
+            cardHoaDonSanPham.setVisible(false);
+            if (webcam.isOpen()) {
+                webcam.close();
+            }
+            initWebcam();
+        }
+    }
+
+    public void clearHD() {
+        txtTienNhan.setText("");
+        listCtHD.clear();
+        tenSP.clear();
+        giaSP.clear();
+        SL.clear();
+        thanhTien.clear();
+        txtMAKH.setText("");
+        txtTENKH.setText("");
+        txtTichDiem.setText("");
+        txtTENNV.setText("");
+        txtPhanTramGG.setText("");
     }
 
     void cartShoping(String tenSpCart) {
@@ -2650,7 +3145,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public void filltableGioHang() {
-
         DefaultTableModel model = (DefaultTableModel) tblCart.getModel();
         model.setRowCount(0);
         int thanhTien = 0;
@@ -2682,7 +3176,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
-    //Thong ke ------------------------------------------------------------------------
+//-----------------------------------------------------------THỐNG KÊ------------------------------------------------------------
+//Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút
     public void initThongKe() {
         fillCboDay_ThongKe();
         fillCboMonth_ThongKe();
@@ -2691,6 +3186,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         setDataChart(pnlView);
 
     }
+//Hiển thị ngày lên combobox
 
     public void fillCboDay_ThongKe() {
         DefaultComboBoxModel modelSP = (DefaultComboBoxModel) cboDaySP.getModel();
@@ -2705,6 +3201,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Hiển thị tháng lên combobox
 
     public void fillCboMonth_ThongKe() {
         DefaultComboBoxModel modelSP = (DefaultComboBoxModel) cboMonthSP.getModel();
@@ -2719,6 +3216,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
 
     }
+//Hiển thị năm lên combobox
 
     public void fillCboYear_ThongKe() {
         DefaultComboBoxModel modelSP = (DefaultComboBoxModel) cboYearSP.getModel();
@@ -2730,6 +3228,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             modelDT.addElement(String.valueOf(i));
         }
     }
+//Thống kê sản phẩm bán chạy theo ngày hoặc tháng hoặc năm
 
     public void fillTableSPBanChay() {
         try {
@@ -2757,6 +3256,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             //System.out.println(ex);
         }
     }
+//Thống kê doanh thu theo ngày hoặc tháng hoặc năm
 
     public void fillTableDoanhThu() {
         try {
@@ -2796,9 +3296,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 }
             }
         } catch (Exception ex) {
-//                System.out.println(ex);
         }
     }
+//Thống kê 3 nhân viên xuất sắc nhất
 
     public void fillTableNhanVienXX() {
         int countNV = 0;
@@ -2816,6 +3316,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }
     }
+//Đọc file excel sản phẩm
 
     public void ImportFileExcelThongKeSP() {
         try {
@@ -2968,6 +3469,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(ex);
         }
     }
+//Xuất sản phẩm bán chạy ra excel
 
     public void ExportFileExcelThongKeSP() {
         try {
@@ -3003,7 +3505,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
             JFileChooser fc = new JFileChooser();
             fc.showOpenDialog(null);
-            //fc.setName("Danhsach.xlsx");
             File f = fc.getSelectedFile();
             String path = f.getAbsoluteFile().toString();
             String file = f.getAbsolutePath();
@@ -3024,6 +3525,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(ex);
         }
     }
+//Vẽ biểu đồ thống kê sản phẩm bán chạy trong năm
 
     public void setDataChart(JPanel jpPie) {
         DefaultPieDataset data = new DefaultPieDataset();
@@ -3041,7 +3543,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             data.setValue((String) (row[0]), (((int) row[1] / tongsl) * 100));
         }
         JFreeChart Chart = ChartFactory.createPieChart("Tỷ lệ phần trăm sản phẩm bán được", data, true, true, true);
-        //JFreeChart Chart = ChartFactory.createPieChart3D("Tỷ lệ phần trăm sản phẩm bán được", data, true, true, true);
         Chart.setBackgroundPaint(Color.WHITE);
         ChartPanel chartPanel = new ChartPanel(Chart);
         chartPanel.setPreferredSize(new Dimension(jpPie.getWidth(), jpPie.getHeight()));
@@ -3056,6 +3557,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
     boolean threadClock = true;
 
+//Hiển thị giờ
     void Clock() {
         new Thread(new Runnable() {
             @Override
@@ -3084,303 +3586,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 }
             }
         }).start();
-    }
-//NhanVien
-
-    public void initNhanVien() {
-        setLocationRelativeTo(null);
-        listNVT();
-        this.fillTableNhanVien();
-        this.row = -1;
-        this.updateStatusNhanVien();
-    }
-
-    public void fillTableNhanVien() {
-        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
-        model.setRowCount(0);
-        try {
-//            List<TaiKhoanEntity> list = NhanVien.selectAll();
-
-            for (TaiKhoanEntity nv : listNhanVien) {
-                if ("admin".equalsIgnoreCase(ktCV)) {
-                    Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
-                        nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
-                        nv.getDiaChi(), nv.getDienThoai(), nv.getNgaySinh(), nv.isGioiTInh()};
-                    model.addRow(row);
-                } else {
-                    if (!nv.getTenCV().equalsIgnoreCase("admin")) {
-                        Object[] row = {nv.getTenDN(), nv.getTenNV(), nv.getTenCV(), nv.getEmail(),
-                            nv.isTrangThai() ? "Đang hoạt động" : "Ngưng hoạt động", nv.getMatKhau(),
-                            nv.getDiaChi(), nv.getDienThoai(), nv.getNgaySinh(), nv.isGioiTInh()};
-                        model.addRow(row);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
-            System.out.println(e);
-        }
-    }
-
-    public void updateStatusNhanVien() {
-        boolean edit = (this.row >= 0);
-        boolean first = (this.row == 0);
-        boolean last = (this.row == tblNhanVien.getRowCount() - 1);
-        //Trạng thái form
-        //btnThemNV.setEnabled(edit);
-        btnCapNhatNV.setEnabled(edit);
-        btnXoaNV.setEnabled(edit);
-        //Trạng thái điều hướng
-        btnFirstNV.setEnabled(edit && !first);
-        btnPrevNV.setEnabled(edit && !first);
-        btnNextNV.setEnabled(edit && !last);
-        btnLastNV.setEnabled(edit && !last);
-    }
-
-    public void setFormNhanVien(TaiKhoanEntity tk) {
-        txtTenDN.setText(tk.getTenDN());
-        txtHoTenNV.setText(tk.getTenNV());
-//        cboVaiTro.setSelectedItem(tk.getTenCV());\
-        ChucVuEntity listcv = chucVu.selectById(String.valueOf(tk.getMaCV()));
-        if (listcv == null) {
-            cboVaiTro.setSelectedIndex(0);
-
-        } else {
-            cboVaiTro.setSelectedItem(listcv.getTenCV());
-
-        }
-        txtEmailNV.setText(tk.getEmail());
-        txtMatKhauNV.setText(tk.getMatKhau());
-        txtDiaChiNV.setText(tk.getDiaChi());
-        txtSDTNV.setText(tk.getDienThoai());
-        txtNgaySinhNV.setText(String.valueOf(tk.getNgaySinh()));
-        rdoNam.setSelected(tk.isGioiTInh());
-        rdoNu.setSelected(!tk.isGioiTInh());
-        if (tk.isTrangThai()) {
-            txtTrangThaiNV.setText("Đang hoạt động");
-            txtTrangThaiNV.setForeground(new Color(0, 153, 0));
-            sbtnTrangThaiNV.setSelected(true);
-        } else {
-            sbtnTrangThaiNV.setSelected(false);
-            txtTrangThaiNV.setText("Ngưng hoạt động");
-            txtTrangThaiNV.setForeground(Color.red);
-        }
-    }
-
-    public void fillComboxCV() {
-        DefaultComboBoxModel model = (DefaultComboBoxModel) cboVaiTro.getModel();
-        model.removeAllElements();
-
-        for (ChucVuEntity h : listCV) {
-            model.addElement(String.valueOf(h.getTenCV()));
-        }
-    }
-
-    public TaiKhoanEntity getFormNhanVien() {
-        String tencv = (String) cboVaiTro.getSelectedItem();
-        TaiKhoanEntity h = new TaiKhoanEntity();
-        h.setTenDN(txtTenDN.getText());
-        h.setTenNV(txtHoTenNV.getText());
-        List<ChucVuEntity> listcv = chucVu.selectAll();
-        for (ChucVuEntity c : listcv) {
-            if (tencv.equals(c.getTenCV())) {
-                h.setMaCV(c.getMaCV());
-            }
-        }
-//        h.setTenCV((String) cboVaiTro.getSelectedItem());
-        h.setEmail(txtEmailNV.getText());
-        h.setMatKhau(txtMatKhauNV.getText());
-        h.setDiaChi(txtDiaChiNV.getText());
-        h.setDienThoai(txtSDTNV.getText());
-        h.setNgaySinh(XDate.toDate(txtNgaySinhNV.getText(), "yyyy-MM-dd"));
-        h.setGioiTInh(rdoNam.isSelected());
-        h.setTrangThai(sbtnTrangThaiNV.isSelected());
-
-        return h;
-
-    }
-
-    public void setTrangThaiHoatDong() {
-        if (tblNhanVien.getSelectedRow() > -1) {
-            int ketQua = JOptionPane.showConfirmDialog(this, "Bạn chắc chắn muốn thay đổi trạng thái hoạt động của người dùng này?", "Cập nhật trạng thái", JOptionPane.YES_OPTION);
-            if (ketQua == JOptionPane.YES_OPTION) {
-                //switchButton();
-                if (sbtnTrangThaiNV.isSelected()) {
-                    txtTrangThaiNV.setText("Đang hoạt động");
-                    txtTrangThaiNV.setForeground(new Color(0, 153, 0));
-                } else {
-                    txtTrangThaiNV.setText("Ngưng hoạt động");
-                    txtTrangThaiNV.setForeground(Color.red);
-                }
-                //updateAccount();
-            } else {
-                if (sbtnTrangThaiNV.isSelected()) {
-                    sbtnTrangThaiNV.setSelected(false);
-                } else {
-                    sbtnTrangThaiNV.setSelected(true);
-                }
-            }
-        }
-    }
-
-    public void editNV() {
-        countClick = 0;
-        String tendn = (String) tblNhanVien.getValueAt(this.row, 0);
-        TaiKhoanEntity h = NhanVien.selectById(tendn);
-        tblNhanVien.setRowSelectionInterval(this.row, this.row);
-        this.setFormNhanVien(h);
-        this.updateStatusNhanVien();
-        lblRecordNV.setText(recordNV());
-        lblrecordHang.setText(recordHang());
-        lblrecordLoai.setText(recordLoai());
-    }
-
-    public String recordNV() {
-        List<TaiKhoanEntity> list = NhanVien.selectAll();
-        return (row + 1) + " trên " + list.size();
-    }
-
-    public void clearFormNV() {
-        TaiKhoanEntity nv = new TaiKhoanEntity();
-        this.setFormNhanVien(nv);
-        this.row = -1;
-        this.updateStatusNhanVien();
-    }
-
-    public void insertNV() {
-        List<TaiKhoanEntity> listnv = NhanVien.selectAll();
-        for (TaiKhoanEntity sp1 : listnv) {
-            if (txtTenDN.getText().equals(sp1.getTenDN())) {
-                int choice = (JOptionPane.showConfirmDialog(this, "Bạn có muốn cập nhật tên nhân viên: " + txtTenDN.getText() + "?", "Xác nhận", JOptionPane.YES_NO_OPTION));
-                if (choice == JOptionPane.YES_OPTION) {
-                    updateNV();
-                } else {
-                    return;
-                }
-            }
-
-        }
-        TaiKhoanEntity nv = getFormNhanVien();
-        try {
-            NhanVien.insert(nv);
-            listNVT();
-            this.fillTableNhanVien();
-            this.clearFormNV();
-            MsgBox.alert(this, "Thêm mới thành công!");
-        } catch (Exception e) {
-            MsgBox.alert(this, "Thêm mới thất bại!");
-            System.out.println(e);
-        }
-    }
-
-    public void updateNV() {
-        TaiKhoanEntity nv = getFormNhanVien();
-
-        try {
-            NhanVien.update(nv);
-            listNVT();
-            this.fillTableNhanVien();
-            this.clearFormNV();
-            MsgBox.alert(this, "Cập nhật thành công!");
-        } catch (Exception e) {
-            MsgBox.alert(this, "Cập nhật thất bại!");
-            System.out.println(e);
-        }
-    }
-
-    public void deleteNV() {
-        String tendn = txtTenDN.getText();
-        if (ktCV.equalsIgnoreCase("admin")) {
-            MsgBox.alert(this, "Không thể xóa tài khoản Admin!");
-            return;
-        } else {
-            try {
-                NhanVien.delete(tendn);
-                listNVT();
-                this.fillTableNhanVien();
-                this.clearFormNV();
-                MsgBox.alert(this, "Xóa thành công!");
-            } catch (Exception e) {
-                MsgBox.alert(this, "Xóa thất bại!");
-                System.out.println(e);
-            }
-        }
-
-    }
-
-    public void firstNV() {
-        this.row = 0;
-        this.editNV();
-
-    }
-
-    public void nextNV() {
-        if (this.row < tblNhanVien.getRowCount() - 1) {
-            this.row++;
-            this.editNV();
-
-        } else {
-            this.firstNV();
-        }
-
-    }
-
-    public void prevNV() {
-        if (this.row > 0) {
-            this.row--;
-            this.editNV();
-
-        } else {
-            this.lastNV();
-        }
-
-    }
-
-    public void lastNV() {
-        this.row = tblNhanVien.getRowCount() - 1;
-        this.editNV();
-    }
-
-    public boolean checkNhanVien() {
-        if (txtTenDN.getText().equals(" ")) {
-            MsgBox.alert(this, " Tên đăng nhập không để trống!");
-            txtTenDN.requestFocus();
-            return false;
-        }
-        if (txtHoTenNV.getText().equals(" ")) {
-            MsgBox.alert(this, "Họ tên nhân viên không để trống!");
-            txtHoTenNV.requestFocus();
-            return false;
-        }
-        if (txtMatKhauNV.getText().equals(" ")) {
-            MsgBox.alert(this, "Mật khẩu không được để trống!");
-            txtMatKhauNV.requestFocus();
-            return false;
-        }
-        if (txtDiaChiNV.getText().equals(" ")) {
-            MsgBox.alert(this, "Dia chi khong de trong!");
-            txtDiaChiNV.requestFocus();
-            return false;
-        }
-        if (txtNgaySinhNV.getText().equals(" ")) {
-            MsgBox.alert(this, "Ngay sinh khong de trong!");
-            txtNgaySinhNV.requestFocus();
-            return false;
-        }
-        if (txtEmailNV.getText().equals(" ")) {
-            MsgBox.alert(this, "Email không được để trống!");
-            txtEmailNV.requestFocus();
-            return false;
-        } else {
-            Matcher matcher = Pattern.compile(MAIL_REGEX).matcher(txtEmailNV.getText());
-            if (matcher.matches() == false) {
-                MsgBox.alert(this, "Email không đúng dịnh dạng!");
-                txtEmailNV.requestFocus();
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -8315,9 +8520,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 txtTrangThaiNV.setVisible(true);
             }
             editNV();
-
         }
-
     }//GEN-LAST:event_tblNhanVienMouseClicked
 
     private void btnxoaGioHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxoaGioHangActionPerformed
@@ -8474,6 +8677,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_txtSdtKHCaretUpdate
 
     private void spnSLStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnSLStateChanged
+//Update số lượng sản phẩm trong giỏ hàng
         String masp = (String) tblCart.getValueAt(this.row, 0);
         if (!masp.equals("")) {
             if ((int) spnSL.getValue() == 0) {
@@ -8557,6 +8761,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_txtPhanTramGGActionPerformed
 
     private void btnSuDungDiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuDungDiemActionPerformed
+        //Sử dụng tích điểm và phần trăm giảm giá
         int tichDiem = 0;
         int phanTram = 0;
         if (txtPhanTramGG.getText().equalsIgnoreCase("")) {
@@ -8654,241 +8859,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void txtFindNameProductCartCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFindNameProductCartCaretUpdate
         findItemCart();
     }//GEN-LAST:event_txtFindNameProductCartCaretUpdate
-    public GioHangTamEntity getFormGH(int sl) {
-        GioHangTamEntity gh = new GioHangTamEntity();
-        gh.setMaGH(txtSdtKH.getText());
-        gh.setMaSP((String) tblCart.getValueAt(this.row, 0));
-        gh.setSoLuong(sl);
-        return gh;
-
-    }
-
-    public void sdtKH(String sdt) {
-        JPopupMenu popupMenu = new JPopupMenu("Title");
-        if (!sdt.equals("")) {
-            for (KhachHangEntity kh : listKhachHang) {
-                if (kh.getDienThoai().contains(txtSdtKH.getText())) {
-                    JMenuItem cutMenuItem = new JMenuItem(kh.getDienThoai());
-                    cutMenuItem.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            txtSdtKH.setText(kh.getDienThoai());
-
-                        }
-                    });
-                    popupMenu.add(cutMenuItem);
-                }
-            }
-            System.out.println(sdt);
-
-            popupMenu.setBackground(Color.white);
-            popupMenu.show(home, 780, 10);
-
-            txtSdtKH.requestFocus();
-        }
-
-    }
-
-    public void editGH() {
-        countClick = 0;
-        String magh = (String) tblCart.getValueAt(this.row, 0);
-        GioHangTamEntity gh = GioHangtam.selectById(magh);
-        tblCart.setRowSelectionInterval(this.row, this.row);
-//        spnSL.setValue((int) gh.getSoLuong());
-    }
-
-    public void updategh(int sl) {
-        GioHangTamEntity gh = getFormGH(sl);
-        try {
-            GioHangtam.update(gh);
-            listGHT();
-            this.filltableGioHang();
-        } catch (Exception e) {
-            MsgBox.alert(this, "Cập nhật thất bại!");
-            System.out.println(e);
-        }
-    }
-
-    public void deleteGH() {
-        String magh = txtSdtKH.getText();
-        String masp = (String) tblCart.getValueAt(this.row, 0);
-        try {
-            GioHangtam.delete2(magh, masp);
-            listGHT();
-            this.filltableGioHang();
-            btnxoaGioHang.setEnabled(false);
-        } catch (Exception e) {
-            MsgBox.alert(this, "Xóa thất bại!");
-            System.out.println(e);
-        }
-    }
-
-    public void updateSl() {
-        int sl = (Integer) tblCart.getValueAt(this.row, 3);
-        if (sl == 0) {
-            deleteGH();
-            spnSL.setEnabled(false);
-            return;
-        } else {
-            updategh(sl);
-        }
-        MsgBox.alert(this, "Cập nhật điểm thành công!");
-    }
-
-    public java.sql.Date day() {
-        return dayNow;
-    }
-
-    public HoaDonCTEntity getFormHDCT(int i) {
-        if (i >= 0) {
-            listCtHD.clear();
-            listCtHD = HDCT.selectAll();
-            HoaDonCTEntity hd = new HoaDonCTEntity();
-            GioHangTamEntity gh = listGHT.get(i);
-//            System.out.println(listCtHD.size());
-//            System.out.println(gh.getMaSP());
-            if (listCtHD.size() < 10) {
-                hd.setMaCTHD("CTHD0" + (listCtHD.size() + 1));
-            } else {
-                hd.setMaCTHD("CTHD" + (listCtHD.size() + 1));
-            }
-            hd.setMaHD(maHDT);
-            hd.setMaSP(gh.getMaSP());
-            hd.setMaHang(gh.getMaHang());
-            hd.setMaLH(gh.getMaLoai());
-            hd.setNgayLap(dayNow);
-            hd.setTenSP(gh.getTenSP());
-            hd.setTenHang(gh.getTenHang());
-            hd.setTenLH(gh.getTenLoai());
-            hd.setNgayNhap(dayNow);
-            hd.setGiaNhap(gh.getGiaNhap());
-            hd.setGiaBan(gh.getGiaBan());
-            hd.setSl(gh.getSoLuong());
-            return hd;
-        }
-        return null;
-    }
-
-    public void insertCTHD() {
-        int i = 0;
-        listGHT.clear();
-        listGHT = GioHangtam.selectByIdlist(txtSdtKH.getText());
-        for (GioHangTamEntity gh : listGHT) {
-            HoaDonCTEntity hd = getFormHDCT(i);
-            try {
-                HDCT.insert(hd);
-                GioHangtam.delete2(gh.getMaGH(), gh.getMaSP());
-                listHoaDonCT();
-                listGHT();
-                this.filltableGioHang();
-            } catch (Exception e) {
-                MsgBox.alert(this, "Thêm mới thất bại!");
-                System.out.println(e);
-            }
-        }
-        i++;
-    }
-
-    public void openWebCame() {
-        if (webcam.isOpen()) {
-            webcam.close();
-            cardHoaDonQR.setVisible(false);
-            cardHoaDonSanPham.setVisible(true);
-        } else {
-            cardHoaDonQR.setVisible(true);
-            cardHoaDonSanPham.setVisible(false);
-            if (webcam.isOpen()) {
-                webcam.close();
-            }
-            initWebcam();
-        }
-    }
-
-    public void listSPT() {
-        list = SanPham.selectAll();
-        List<SanPhamEntity> listSanPhamTemp = new ArrayList<>();
-        listSanPhamTemp.addAll(list);
-        list.clear();
-        list.addAll(listSanPhamTemp);
-    }
-
-    public void listHang() {
-        listHang = Hang.selectAll();
-        List<HangEntity> listHangTemp = new ArrayList<>();
-        listHangTemp.addAll(listHang);
-        listHang.clear();
-        listHang.addAll(listHangTemp);
-    }
-
-    public void listLoai() {
-        listLoai = Loai.selectAll();
-        List<LoaiHangEntity> listLoaiTemp = new ArrayList<>();
-        listLoaiTemp.addAll(listLoai);
-        listLoai.clear();
-        listLoai.addAll(listLoaiTemp);
-    }
-
-    public void listKhachHang() {
-        listKhachHang = KhachHang.selectAll();
-        List<KhachHangEntity> listKHTemp = new ArrayList<>();
-        listKHTemp.addAll(listKhachHang);
-        listKhachHang.clear();
-        listKhachHang.addAll(listKHTemp);
-    }
-
-    public void listHoaDon() {
-        listHoaDon = HoaDon.selectAll();
-        List<HoaDonEntity> listHDTemp = new ArrayList<>();
-        listHDTemp.addAll(listHoaDon);
-        listHoaDon.clear();
-        listHoaDon.addAll(listHDTemp);
-    }
-
-    public void listHoaDonCT() {
-        listCtHD = HDCT.selectAll();
-        List<HoaDonCTEntity> listHDCTTemp = new ArrayList<>();
-        listHDCTTemp.addAll(listCtHD);
-        listCtHD.clear();
-        listCtHD.addAll(listHDCTTemp);
-    }
-
-    public void listNVT() {
-        listNhanVien = NhanVien.selectAll();
-        List<TaiKhoanEntity> listNhanVienTemp = new ArrayList<>();
-        listNhanVienTemp.addAll(listNhanVien);
-        listNhanVien.clear();
-        listNhanVien.addAll(listNhanVienTemp);
-    }
-
-    public void listGHT() {
-        listGHT = GioHangtam.selectAll();
-        List<GioHangTamEntity> listGHTemp = new ArrayList<>();
-        listGHTemp.addAll(listGHT);
-        listGHT.clear();
-        listGHT.addAll(listGHTemp);
-    }
-
-    public void listGioHang() {
-        listGiohang = Giohang.selectAll();
-        List<GioHangEntity> listGioHang = new ArrayList<>();
-        listGioHang.addAll(listGiohang);
-        listGiohang.clear();
-        listGiohang.addAll(listGioHang);
-    }
-
-    /*----------------------------------------------------------*/
-    public void clearHD() {
-        txtTienNhan.setText("");
-        listCtHD.clear();
-        tenSP.clear();
-        giaSP.clear();
-        SL.clear();
-        thanhTien.clear();
-        txtMAKH.setText("");
-        txtTENKH.setText("");
-        txtTichDiem.setText("");
-        txtTENNV.setText("");
-        txtPhanTramGG.setText("");
-    }
+//Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
 
@@ -8918,6 +8889,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public class BillPrintable implements Printable {
+//In hóa đơn
 
         public int print(Graphics graphics, PageFormat pageFormat, int pageIndex)
                 throws PrinterException {
