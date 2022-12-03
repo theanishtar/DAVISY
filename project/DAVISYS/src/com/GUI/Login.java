@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.GUI;
+package com.gui;
 
 import AppPackage.AnimationClass;
 import com.dao.TaiKhoanDAO;
 import com.entity.TaiKhoanEntity;
-import com.library.Extensisons.ScanQR;
+import com.library.extensisons.ScanQR;
 import com.utils.MsgBox;
 import java.awt.Color;
 import java.awt.event.KeyEvent;

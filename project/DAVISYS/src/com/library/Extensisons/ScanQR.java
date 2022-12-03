@@ -1,6 +1,6 @@
-package com.library.Extensisons;
+package com.library.extensisons;
 
-import com.GUI.QuenMatKhau;
+import com.gui.QuenMatKhau;
 import com.entity.SanPhamEntity;
 import com.github.sarxos.webcam.Webcam;
 import com.github.sarxos.webcam.WebcamPanel;

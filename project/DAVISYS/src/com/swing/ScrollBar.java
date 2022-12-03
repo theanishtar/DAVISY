@@ -1,6 +1,6 @@
 package com.swing;
 
-import com.UI.drawer.scroll.ModernScrollBarUI;
+import com.ui.drawer.scroll.ModernScrollBarUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JScrollBar;

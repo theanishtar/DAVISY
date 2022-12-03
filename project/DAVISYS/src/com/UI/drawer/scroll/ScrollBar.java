@@ -1,4 +1,4 @@
-package com.UI.drawer.scroll;
+package com.ui.drawer.scroll;
 
 import java.awt.Dimension;
 import javax.swing.JScrollBar;

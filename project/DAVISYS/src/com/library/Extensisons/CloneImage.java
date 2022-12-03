@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.library.Extensisons;
+package com.library.extensisons;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;

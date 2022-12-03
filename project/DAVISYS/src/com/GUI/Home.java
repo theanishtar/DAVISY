@@ -3,17 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.GUI;
+package com.gui;
 
-import com.library.Extensisons.ReadMoney;
+import com.library.extensisons.ReadMoney;
 import java.awt.event.*;
 import AppPackage.AnimationClass;
 import com.frame.Header;
 import java.awt.Color;
-import com.UI.drawer.Drawer;
-import com.UI.drawer.DrawerController;
-import com.UI.drawer.scroll.DrawerItem;
-import com.UI.drawer.EventDrawer;
+import com.ui.drawer.scroll.Drawer;
+import com.ui.drawer.scroll.DrawerController;
+import com.ui.drawer.scroll.DrawerItem;
+import com.ui.drawer.scroll.EventDrawer;
 import com.dao.HangDAO;
 import com.dao.LoaiHangDAO;
 import com.dao.SanPhamDAO;
@@ -77,7 +77,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import com.hicode.switchbutton.Event;
-import com.library.Extensisons.ScanQRProduct;
+import com.library.extensisons.ScanQRProduct;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.util.Date;
@@ -101,7 +101,9 @@ import com.entity.GioHangTamEntity;
 import com.entity.GioHangTempEntity;
 import com.entity.HoaDonCTEntity;
 import com.entity.HoaDonEntity;
-import com.library.Extensisons.Qr;
+import com.library.extensisons.Qr;
+import com.library.extensisons.SendInforProduct;
+import com.library.extensisons.Validate;
 import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -257,6 +259,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
         SanPhamHr1.setVisible(false);
         loadMainDone = true;
+
+        banner();
     }
 
     public Home(String tenDN) {
@@ -292,6 +296,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
         SanPhamHr1.setVisible(false);
         loadMainDone = true;
+
+        banner();
     }
     boolean loadMainDone = false;
 
@@ -457,6 +463,64 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     int chooserMenuIndex = 1;
+//banner chuyển động
+
+    void banner() {
+        JLabel[] arrBaner = {
+            banner1, banner2, banner3
+        };
+        //511, 240
+        Thread threadBanner = new Thread() {
+            @Override
+            public void run() {
+                int i = 0;
+                while (true) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    switch (i) {
+                        case 0:
+                            banner1.setVisible(false);
+                            banner2.setVisible(true);
+                            banner3.setVisible(false);
+                            i++;
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            continue;
+                        case 1:
+                            banner1.setVisible(false);
+                            banner2.setVisible(false);
+                            banner3.setVisible(true);
+                            i++;
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            continue;
+                        case 2:
+                            banner1.setVisible(true);
+                            banner2.setVisible(false);
+                            banner3.setVisible(false);
+                            i = 0;
+                            try {
+                                Thread.sleep(2000);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            continue;
+                    }
+                }
+            }
+
+        };
+        threadBanner.start();
+    }
 //dang xuat
 
     void signOut() {
@@ -1850,6 +1914,52 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         return true;
     }
+    
+    //Gửi thông tin sản phẩm cho khách hàng qua mail
+    public void exportInforProdct(){
+        int index = tblSanPham.getSelectedRow();
+        if (index > -1) {
+            SendInforProduct send = new SendInforProduct();
+            int messageType = JOptionPane.QUESTION_MESSAGE;
+            String[] option = {"In thông tin", "Gửi thông tin qua email", "Thoát"};
+            int code = JOptionPane.showOptionDialog(this, "Bạn muốn thao tác gì?", "In dữ liệu thành văn bản", 0, messageType, null, option, "Save");
+            if (code == 0) {
+                try {
+                    if (!send.saveFile(index)){
+                        MsgBox.alert(this, "Tạm không thể xuất file\nVui lòng kiểm tra lại thao tác");
+                    } else {
+                        MsgBox.alert(this, "Xuất file thành công!");
+                    }
+
+                } catch (IOException ex) {
+                    MsgBox.alert(this, "Thao tác không thành công\nVui lòng thử lại sau!");
+                }
+            } else if (code == 1) {
+                String email = JOptionPane.showInputDialog("Nhập vào email: ");
+                Validate validate = new Validate();
+                if (!validate.checkMail(email)) {
+                    JOptionPane.showMessageDialog(this, "Hệ thống không thể duyệt email này\nHãy nhập lại một email khác!");
+                    return;
+                }
+                try {
+                    
+                    if(!send.sendInforPCEmail(email, index)){
+                        MsgBox.alert(this, "Tạm không thể email\nVui lòng kiểm tra lại thao tác");
+                    } else{
+                        MsgBox.alert(this, "Gửi nội dung thành công!");
+                    }
+
+                } catch (IOException ex) {
+                    MsgBox.alert(this, "Thao tác không thành công\nVui lòng thử lại sau!");
+                }
+            } else {
+                return;
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sản phẩm!");
+        }
+    }
+
 //---------------------------------------------------KHÁCH HÀNG----------------------------------------------------------------
 
 //Kiểm tra lỗi khách hàng
@@ -2765,9 +2875,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }
     }
-    
-//Trở về dòng đầu tiên trong bảng
 
+//Trở về dòng đầu tiên trong bảng
     public void firstNV() {
         this.row = 0;
         this.editNV();
@@ -2856,9 +2965,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             System.out.println(e);
         }
     }
-    
-    //Add dữ liệu vào list tạm
 
+    //Add dữ liệu vào list tạm
     public void listGioHang() {
         listGiohang = Giohang.selectAll();
         List<GioHangEntity> listGioHang = new ArrayList<>();
@@ -2868,15 +2976,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     //Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
-    
     public void initgioHang() {
         btnxoaGioHang.setEnabled(false);
         btnXacNhanDonHang.setEnabled(false);
         spnSL.setEnabled(false);
     }
-    
-//Thêm dữ liệu
 
+//Thêm dữ liệu
     public void insertGH(String ma, int sl) {
         listGHT.clear();
         listGHT = GioHangtam.selectByIdlist(txtSdtKH.getText());
@@ -2936,6 +3042,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return gh;
     }
 //hiển thị sdt khách hàng 
+
     public void sdtKH(String sdt) {
         JPopupMenu popupMenu = new JPopupMenu("Title");
         if (!sdt.equals("")) {
@@ -2973,6 +3080,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         listGHT.addAll(listGHTemp);
     }
 //update số lượng
+
     public void updategh(int sl) {
         GioHangTamEntity gh = getFormGH(sl);
         try {
@@ -2985,6 +3093,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 //delete dữ liệ giỏ hàng tạm
+
     public void deleteGH() {
         String magh = txtSdtKH.getText();
         String masp = (String) tblCart.getValueAt(this.row, 0);
@@ -2999,6 +3108,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 //update sl trên bảng
+
     public void updateSl() {
         int sl = (Integer) tblCart.getValueAt(this.row, 3);
         if (sl == 0) {
@@ -3011,6 +3121,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         MsgBox.alert(this, "Cập nhật điểm thành công!");
     }
 //Lấy ngày hiện tại
+
     public java.sql.Date day() {
         return dayNow;
     }
@@ -3043,6 +3154,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         return null;
     }
 //Thêm dữ liệu 
+
     public void insertCTHD() {
         int i = 0;
         listGHT.clear();
@@ -3587,7 +3699,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }).start();
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -3687,6 +3800,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblNV3 = new javax.swing.JLabel();
         jSeparator18 = new javax.swing.JSeparator();
         panelRound2 = new com.swing.PanelRound();
+        banner1 = new javax.swing.JLabel();
+        banner2 = new javax.swing.JLabel();
+        banner3 = new javax.swing.JLabel();
         panelRound3 = new com.swing.PanelRound();
         lblAnhSpBanChay = new javax.swing.JLabel();
         cardThongKeDoanhThu = new com.swing.PanelRound();
@@ -3848,6 +3964,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel76 = new javax.swing.JLabel();
         jLabel114 = new javax.swing.JLabel();
         lblImportFileExcel = new com.swing.Button();
+        lblExportInfor = new com.swing.Button();
         cardHangSanXuat = new com.swing.PanelRound();
         cardLoai1 = new com.swing.PanelRound();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -4812,17 +4929,19 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         panelRound2.setRoundBottomRight(30);
         panelRound2.setRoundTopLeft(30);
         panelRound2.setRoundTopRight(30);
+        panelRound2.setLayout(new java.awt.CardLayout());
 
-        javax.swing.GroupLayout panelRound2Layout = new javax.swing.GroupLayout(panelRound2);
-        panelRound2.setLayout(panelRound2Layout);
-        panelRound2Layout.setHorizontalGroup(
-            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 510, Short.MAX_VALUE)
-        );
-        panelRound2Layout.setVerticalGroup(
-            panelRound2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 240, Short.MAX_VALUE)
-        );
+        banner1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/asset/slide-login/bn1.jpeg"))); // NOI18N
+        banner1.setPreferredSize(new java.awt.Dimension(511, 240));
+        panelRound2.add(banner1, "card2");
+
+        banner2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/asset/slide-login/bn2.jpg"))); // NOI18N
+        banner2.setPreferredSize(new java.awt.Dimension(511, 240));
+        panelRound2.add(banner2, "card4");
+
+        banner3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/asset/slide-login/bn3.jpg"))); // NOI18N
+        banner3.setPreferredSize(new java.awt.Dimension(511, 240));
+        panelRound2.add(banner3, "card3");
 
         cardTrangChuTongQuan.add(panelRound2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 510, 240));
 
@@ -5962,7 +6081,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel27Layout.setHorizontalGroup(
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel27Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnXoaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLamMoiSP, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -5973,7 +6092,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     .addComponent(jPanel35, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel67, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(cboSP, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         jPanel27Layout.setVerticalGroup(
             jPanel27Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -6090,7 +6209,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 lblImportFileExcelActionPerformed(evt);
             }
         });
-        cardLoai2.add(lblImportFileExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 290, 110, -1));
+        cardLoai2.add(lblImportFileExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 290, 110, -1));
+
+        lblExportInfor.setBackground(new java.awt.Color(255, 204, 255));
+        lblExportInfor.setText("Xuất thông tin");
+        lblExportInfor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lblExportInforActionPerformed(evt);
+            }
+        });
+        cardLoai2.add(lblExportInfor, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 290, 110, -1));
 
         cardHangSanXuat1.add(cardLoai2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -6374,34 +6502,34 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(22, 22, 22)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLamMoiHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCapNhatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThemHang, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(btnLamMoiHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnThemHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCapNhatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnLamMoiHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnThemHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCapNhatHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnXoaHang, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        cardLoai1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 50, 410, 230));
+        cardLoai1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 40, 410, 240));
 
         jLabel73.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel73.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/visits (1).png"))); // NOI18N
@@ -6688,7 +6816,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel24Layout.createSequentialGroup()
-                .addComponent(cboLoai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(cboLoai, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel91, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
@@ -6708,34 +6836,34 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel23Layout.setHorizontalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel23Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(22, 22, 22)
                 .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnXoaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnLamMoiLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCapNhatLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnThemLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel23Layout.setVerticalGroup(
             jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel23Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel23Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel23Layout.createSequentialGroup()
-                        .addComponent(btnLamMoiLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnThemLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCapNhatLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnXoaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addComponent(btnLamMoiLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnThemLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnCapNhatLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnXoaLoai, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(jPanel23Layout.createSequentialGroup()
+                .addComponent(jPanel24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        cardLoai.add(jPanel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 380, 230));
+        cardLoai.add(jPanel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 40, 380, 240));
 
         jLabel68.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel68.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/visits (1).png"))); // NOI18N
@@ -7109,7 +7237,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         });
         jPanel28.add(btnIn1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 116, 39));
 
-        cardHoaDon.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 90, -1, 245));
+        cardHoaDon.add(jPanel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(752, 90, 410, 245));
 
         jPanel12.setBackground(new java.awt.Color(204, 204, 255));
 
@@ -7600,7 +7728,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 34, Short.MAX_VALUE)
+                .addGap(0, 4, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -7661,7 +7789,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 .addContainerGap())
         );
 
-        cardKhachHang.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 30, 410, 230));
+        cardKhachHang.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 30, 380, 230));
 
         jLabel62.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel62.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/visits (1).png"))); // NOI18N
@@ -8859,6 +8987,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void txtFindNameProductCartCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtFindNameProductCartCaretUpdate
         findItemCart();
     }//GEN-LAST:event_txtFindNameProductCartCaretUpdate
+
+    private void lblExportInforActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblExportInforActionPerformed
+        exportInforProdct();
+    }//GEN-LAST:event_lblExportInforActionPerformed
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
@@ -9075,6 +9207,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel ThongKeTittle2;
     private javax.swing.JLabel TrangChuHr;
     private javax.swing.JLabel TrangChuTittle2;
+    private javax.swing.JLabel banner1;
+    private javax.swing.JLabel banner2;
+    private javax.swing.JLabel banner3;
     private com.swing.Button btnCapNhatCV;
     private com.swing.Button btnCapNhatHang;
     private com.swing.Button btnCapNhatLoai;
@@ -9393,6 +9528,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel lblDay2;
     private javax.swing.JLabel lblDay3;
     private javax.swing.JLabel lblDay4;
+    private com.swing.Button lblExportInfor;
     private javax.swing.JLabel lblHangemp;
     private com.swing.Button lblImportFileExcel;
     private javax.swing.JLabel lblLoaiTemp;
