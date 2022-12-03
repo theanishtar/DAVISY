@@ -232,8 +232,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         initMenu(); //gọi lại phương thức khởi tạo MENU
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
-        getTenNhanVien("NhuomTV");
-        ktTenDN = "NhuomTV";
+        getTenNhanVien("dannk");
+        ktTenDN = "dannk";
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -271,6 +271,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
         getTenNhanVien(tenDN);
+        ktTenDN = tenDN;
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -1914,9 +1915,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
         return true;
     }
-    
+
     //Gửi thông tin sản phẩm cho khách hàng qua mail
-    public void exportInforProdct(){
+    public void exportInforProdct() {
         int index = tblSanPham.getSelectedRow();
         if (index > -1) {
             SendInforProduct send = new SendInforProduct();
@@ -1925,7 +1926,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             int code = JOptionPane.showOptionDialog(this, "Bạn muốn thao tác gì?", "In dữ liệu thành văn bản", 0, messageType, null, option, "Save");
             if (code == 0) {
                 try {
-                    if (!send.saveFile(index)){
+                    if (!send.saveFile(index)) {
                         MsgBox.alert(this, "Tạm không thể xuất file\nVui lòng kiểm tra lại thao tác");
                     } else {
                         MsgBox.alert(this, "Xuất file thành công!");
@@ -1942,10 +1943,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     return;
                 }
                 try {
-                    
-                    if(!send.sendInforPCEmail(email, index)){
+
+                    if (!send.sendInforPCEmail(email, index)) {
                         MsgBox.alert(this, "Tạm không thể email\nVui lòng kiểm tra lại thao tác");
-                    } else{
+                    } else {
                         MsgBox.alert(this, "Gửi nội dung thành công!");
                     }
 
@@ -1961,7 +1962,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
 //---------------------------------------------------KHÁCH HÀNG----------------------------------------------------------------
-
 //Kiểm tra lỗi khách hàng
     public boolean checkKH() {
         if (txtmaKH.getText().equals("")) {
@@ -3110,15 +3110,32 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //update sl trên bảng
 
     public void updateSl() {
-        int sl = (Integer) tblCart.getValueAt(this.row, 3);
-        if (sl == 0) {
-            deleteGH();
-            spnSL.setEnabled(false);
-            return;
-        } else {
-            updategh(sl);
+        GioHangTamEntity gh = new GioHangTamEntity();
+        for (int i = 0; i < tblCart.getRowCount(); i++) {
+//            int sl =(int) tblCart.getValueAt(i, 3) ;
+System.out.println((int) tblCart.getValueAt(i, 3));
+            if ((int) tblCart.getValueAt(i, 3) == 0) {
+                this.row=i;
+                deleteGH();
+                spnSL.setEnabled(false);
+                return;
+            } else {
+                gh.setMaGH(txtSdtKH.getText());
+                gh.setMaSP((String) tblCart.getValueAt(i, 0));
+                gh.setSoLuong((int) tblCart.getValueAt(i, 3));
+                try {
+                    GioHangtam.update(gh);
+                    listGHT();
+                    this.filltableGioHang();
+                } catch (Exception e) {
+                    MsgBox.alert(this, "Cập nhật thất bại!");
+                    System.out.println(e);
+                }
+
+            }
+            MsgBox.alert(this, "Cập nhật điểm thành công!");
         }
-        MsgBox.alert(this, "Cập nhật điểm thành công!");
+
     }
 //Lấy ngày hiện tại
 
@@ -3166,6 +3183,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 GioHangtam.delete2(gh.getMaGH(), gh.getMaSP()); // Xóa giỏ hàng tạm
                 listHoaDonCT();
                 listGHT();
+                spnSL.setValue(0);
                 this.filltableGioHang();
             } catch (Exception e) {
                 MsgBox.alert(this, "Thêm mới thất bại!");
@@ -3699,8 +3717,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }).start();
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -7067,6 +7084,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 tblCartMouseClicked(evt);
             }
         });
+        tblCart.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tblCartKeyPressed(evt);
+            }
+        });
         jScrollPane13.setViewportView(tblCart);
         if (tblCart.getColumnModel().getColumnCount() > 0) {
             tblCart.getColumnModel().getColumn(0).setHeaderValue("Mã sản phẩm");
@@ -8823,7 +8845,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void tblCartMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCartMouseClicked
         countClick++;
-        if (countClick == 1) {
+        if (countClick == 1) {;
             this.row = tblCart.getSelectedRow();
             spnSL.setValue((int) tblCart.getValueAt(this.row, 3));
             editGH();
@@ -8991,6 +9013,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void lblExportInforActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblExportInforActionPerformed
         exportInforProdct();
     }//GEN-LAST:event_lblExportInforActionPerformed
+
+    private void tblCartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCartKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+//            updateSl();
+        }
+
+    }//GEN-LAST:event_tblCartKeyPressed
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
