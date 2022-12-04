@@ -129,6 +129,8 @@ import javax.swing.JOptionPane;
 import javax.swing.Popup;
 import javax.swing.event.PopupMenuEvent;
 import org.apache.poi.ss.usermodel.Row;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 /**
  *
@@ -3113,9 +3115,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         GioHangTamEntity gh = new GioHangTamEntity();
         for (int i = 0; i < tblCart.getRowCount(); i++) {
 //            int sl =(int) tblCart.getValueAt(i, 3) ;
-System.out.println((int) tblCart.getValueAt(i, 3));
+            System.out.println((int) tblCart.getValueAt(i, 3));
             if ((int) tblCart.getValueAt(i, 3) == 0) {
-                this.row=i;
+                this.row = i;
                 deleteGH();
                 spnSL.setEnabled(false);
                 return;
@@ -3313,7 +3315,8 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         fillCboMonth_ThongKe();
         fillCboYear_ThongKe();
         fillTableNhanVienXX();
-        setDataChart(pnlView);
+        setDataPieChart(pnlChart);
+        setDataBarChart(pnlChartDT);
 
     }
 //Hiển thị ngày lên combobox
@@ -3379,8 +3382,23 @@ System.out.println((int) tblCart.getValueAt(i, 3));
             if (day.equals("Không chọn") && !month.equals("Không chọn")) {
                 listTKSP = TKdao.getSPBanChay(month, year);
             }
+            int i = 0;
             for (Object[] row : listTKSP) {
+                i++;
                 model.addRow(row);
+                if (i == 1) {
+                    SanPhamEntity sp = SanPham.selectById(String.valueOf(row[0]));
+                    File file = new File("src\\com\\images\\" + sp.getHinh() + ".PNG");
+                    try {
+                        Image img = ImageIO.read(file);
+                        lblAnhSpBanChay.setText("");
+                        int w = lblAnhSpBanChay.getWidth();
+                        int h = lblAnhSpBanChay.getHeight();
+                        lblAnhSpBanChay.setIcon(new ImageIcon(img.getScaledInstance(w, h, 0)));
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
             }
         } catch (Exception ex) {
             //System.out.println(ex);
@@ -3407,23 +3425,8 @@ System.out.println((int) tblCart.getValueAt(i, 3));
             if (day.equals("Không chọn") && !month.equals("Không chọn")) {
                 listTKDT = TKdao.getDoanhthu(month, year);
             }
-            int i = 0;
-            for (Object[] row : listTKSP) {
-                i++;
+            for (Object[] row : listTKDT) {
                 model.addRow(row);
-                if (i == 1) {
-                    SanPhamEntity sp = SanPham.selectById(String.valueOf(row[0]));
-                    File file = new File("src\\com\\images\\" + sp.getHinh() + ".PNG");
-                    try {
-                        Image img = ImageIO.read(file);
-                        lblAnhSpBanChay.setText("");
-                        int w = lblAnhSpBanChay.getWidth();
-                        int h = lblAnhSpBanChay.getHeight();
-                        lblAnhSpBanChay.setIcon(new ImageIcon(img.getScaledInstance(w, h, 0)));
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                }
             }
         } catch (Exception ex) {
         }
@@ -3450,10 +3453,14 @@ System.out.println((int) tblCart.getValueAt(i, 3));
 
     public void ImportFileExcelThongKeSP() {
         try {
+            String ktrMaSp = "";
             JFileChooser fc = new JFileChooser();
             fc.showOpenDialog(null);
             File f = fc.getSelectedFile();
-            try {
+            String path = f.getAbsoluteFile().toString();
+            if (!path.contains(".xlsx")) {
+                MsgBox.alert(this, "Vui lòng chọn file Excel!");
+            } else {
                 FileInputStream fis = new FileInputStream(f);
                 XSSFWorkbook wb = new XSSFWorkbook(fis);
                 XSSFSheet sheet = wb.getSheetAt(0);
@@ -3468,11 +3475,10 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                             Cell cell = cellIter.next();
                             switch (cell.getColumnIndex()) {
                                 case 0:
-                                    System.out.print(cell + " ");
                                     sp.setMaSP(String.valueOf(cell));
+                                    ktrMaSp = String.valueOf(cell);
                                     break;
                                 case 1:
-                                    System.out.print(cell + " ");
                                     sp.setTenSP(String.valueOf(cell));
                                     break;
                                 case 2:
@@ -3496,7 +3502,6 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                                             }
                                         }
                                     }
-                                    System.out.println(malhMoi + " final");
                                     LoaiHangEntity lhn = new LoaiHangEntity();
                                     String checkMalh = "Exist";
                                     for (LoaiHangEntity lh : listlh) {
@@ -3539,7 +3544,6 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                                             }
                                         }
                                     }
-                                    System.out.println(mahangMoi + " final");
                                     HangEntity hn = new HangEntity();
                                     String checkMah = "Exist";
                                     for (HangEntity h : listh) {
@@ -3553,7 +3557,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                                     }
                                     if (checkMah.equals("Not Exist")) {
                                         hn.setMaHang(mahangMoi);
-                                        hn.setTenHang(hang.substring(0, 1).toUpperCase() + hang.substring(1).toLowerCase());
+                                        hn.setTenHang(hang.toUpperCase());
                                         Hang.insert(hn);
                                         sp.setMaHang(mahangMoi);
                                         listHang();
@@ -3562,45 +3566,45 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                                     }
                                     break;
                                 case 4:
-                                    System.out.print(cell + " ");
                                     String giaNhap = String.valueOf(cell);
                                     float gianhap = Float.valueOf(giaNhap);
                                     sp.setGiaNhap(gianhap);
                                     break;
                                 case 5:
-                                    System.out.print(cell + " ");
                                     String giaBan = String.valueOf(cell);
                                     float giaban = Float.valueOf(giaBan);
                                     sp.setGiaBan(giaban);
                                     break;
                                 case 6:
-                                    System.out.print(cell + " \n");
                                     sp.setNgayNhap(dayNow);
                                     sp.setHinh("logokhongvien-01");
                                     sp.setMoTa(String.valueOf(cell));
                                     break;
                             }
                         }
-                        SanPham.insert(sp);
-                        listSPT();
-                        fillTableSanPham();
-                        fillComboxHang();
-                        fillComboxLoai();
+                        SanPhamEntity checksp = SanPham.selectById(ktrMaSp);
+                        if (checksp != null) {
+                            MsgBox.alert(this, "Vui lòng kiểm tra mã sản phẩm: " + ktrMaSp + "trong file excel vì mã này đã tồn tại!");
+                        } else {
+                            SanPham.insert(sp);
+                            listSPT();
+                            fillTableSanPham();
+                            fillComboxHang();
+                            fillComboxLoai();
+                        }
                     }
                     i++;
                 }
                 fis.close();
-                MsgBox.alert(this, "Đọc thành công");
-            } catch (Exception ex) {
-                System.out.println("lỗi đọc file ");
-                //System.out.println(ex);
+                MsgBox.alert(this, "Đọc file excel thành công");
             }
         } catch (Exception ex) {
+            MsgBox.alert(this, "Lỗi đọc file");
             System.out.println(ex);
         }
     }
-//Xuất sản phẩm bán chạy ra excel
 
+//Xuất sản phẩm bán chạy ra excel
     public void ExportFileExcelThongKeSP() {
         try {
             XSSFWorkbook wb = new XSSFWorkbook();
@@ -3655,16 +3659,15 @@ System.out.println((int) tblCart.getValueAt(i, 3));
             System.out.println(ex);
         }
     }
-//Vẽ biểu đồ thống kê sản phẩm bán chạy trong năm
+//Vẽ biểu đồ tròn thống kê sản phẩm bán chạy trong năm
 
-    public void setDataChart(JPanel jpPie) {
-        DefaultPieDataset data = new DefaultPieDataset();
-        long millis = System.currentTimeMillis();
-        java.sql.Date day = new java.sql.Date(millis);
+    public void setDataPieChart(JPanel jpPie) {
+        Date now = new Date();
         SimpleDateFormat formater = new SimpleDateFormat();
         formater.applyPattern("yyyy");
-        String thisYear = formater.format(day);
+        String thisYear = formater.format(now);
         List<Object[]> listTKSP_L = TKdao.getSPBanChayTL(thisYear);
+        DefaultPieDataset data = new DefaultPieDataset();
         float tongsl = 0;
         for (Object[] row : listTKSP_L) {
             tongsl += (int) row[1];
@@ -3672,19 +3675,43 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         for (Object[] row : listTKSP_L) {
             data.setValue((String) (row[0]), (((int) row[1] / tongsl) * 100));
         }
-        JFreeChart Chart = ChartFactory.createPieChart("Tỷ lệ phần trăm sản phẩm bán được", data, true, true, true);
-        Chart.setBackgroundPaint(Color.WHITE);
+        JFreeChart Chart = ChartFactory.createPieChart("Tỷ lệ phần trăm loại sản phẩm bán được", data, true, true, true);
         ChartPanel chartPanel = new ChartPanel(Chart);
         chartPanel.setPreferredSize(new Dimension(jpPie.getWidth(), jpPie.getHeight()));
-        chartPanel.setBackground(Color.WHITE);
 
         jpPie.removeAll();
         jpPie.setLayout(new CardLayout());
         jpPie.add(chartPanel);
-        jpPie.validate();
-        jpPie.setBackground(Color.WHITE);
-        jpPie.repaint();
     }
+
+//Vẽ biểu đồ cột thống kê doanh thu
+    public void setDataBarChart(JPanel jpBar) {
+        String choice = (String) cboChoice.getSelectedItem();
+        List<Object[]> listTKDT_M = null;
+        if (choice.equals("Năm")) {
+            listTKDT_M = TKdao.getDoanhthuYearBarChart();
+        }
+        if (choice.equals("Tháng")) {
+            Date now = new Date();
+            SimpleDateFormat formater = new SimpleDateFormat();
+            formater.applyPattern("yyyy");
+            String thisYear = formater.format(now);
+            listTKDT_M = TKdao.getDoanhthuMonthBarChart(thisYear);
+        }
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
+        for (Object[] row : listTKDT_M) {
+            String tg = String.valueOf(row[0]);
+            data.setValue((double) row[1], choice, tg);
+        }
+        JFreeChart barChart = ChartFactory.createBarChart("Biểu đồ doanh thu", choice, "Tổng tiền", data, PlotOrientation.VERTICAL, false, false, false);
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new Dimension(jpBar.getWidth(), jpBar.getHeight()));
+
+        jpBar.removeAll();
+        jpBar.setLayout(new CardLayout());
+        jpBar.add(chartPanel);
+    }
+
     boolean threadClock = true;
 
 //Hiển thị giờ
@@ -3702,11 +3729,9 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                         formater.applyPattern("hh:mm:ss aa");
                         String time = formater.format(now);
                         lblTime.setText(time);
-                        long millis = System.currentTimeMillis();
-                        java.sql.Date day = new java.sql.Date(millis);
                         SimpleDateFormat formater2 = new SimpleDateFormat();
                         formater2.applyPattern("dd-MM-yyyy");
-                        String dayt = formater2.format(day);
+                        String dayt = formater2.format(now);
                         lblDay.setText(String.valueOf(dayt));
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
@@ -3831,17 +3856,24 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         cboDayDT = new com.swing.Combobox();
         cboMonthDT = new com.swing.Combobox();
         jLabel45 = new javax.swing.JLabel();
-        pnlView = new javax.swing.JPanel();
+        jPanel33 = new javax.swing.JPanel();
+        jLabel98 = new javax.swing.JLabel();
+        pnlChartDT = new javax.swing.JPanel();
+        jLabel50 = new javax.swing.JLabel();
+        cboChoice = new com.swing.Combobox();
         cardThongKeSanPham = new com.swing.PanelRound();
         jLabel46 = new javax.swing.JLabel();
         cboYearSP = new com.swing.Combobox();
-        jScrollPane10 = new javax.swing.JScrollPane();
-        tblSPBanChay = new javax.swing.JTable();
         jLabel47 = new javax.swing.JLabel();
         jLabel59 = new javax.swing.JLabel();
         cboDaySP = new com.swing.Combobox();
         cboMonthSP = new com.swing.Combobox();
+        pnlChart = new javax.swing.JPanel();
         btnExport = new com.swing.Button();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        tblSPBanChay = new javax.swing.JTable();
+        jPanel32 = new javax.swing.JPanel();
+        jLabel95 = new javax.swing.JLabel();
         cardTrangChuNoiBat = new com.swing.PanelRound();
         jLabel27 = new javax.swing.JLabel();
         cardTaiKhoanChucVu = new com.swing.PanelRound();
@@ -5008,10 +5040,10 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         tblDoanhThu.setGridColor(new java.awt.Color(255, 255, 255));
         jScrollPane11.setViewportView(tblDoanhThu);
 
-        cardThongKeDoanhThu.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 500, 470));
+        cardThongKeDoanhThu.add(jScrollPane11, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 570, 450));
 
-        jLabel43.setText("Năm");
-        cardThongKeDoanhThu.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 30, 40, 40));
+        jLabel43.setText("Theo");
+        cardThongKeDoanhThu.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 30, 40, 30));
 
         cboYearDT.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2022" }));
         cboYearDT.setLabeText("");
@@ -5025,10 +5057,10 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboYearDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboYearDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 20, 120, 40));
+        cardThongKeDoanhThu.add(cboYearDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 110, 40));
 
         jLabel44.setText("Tháng");
-        cardThongKeDoanhThu.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 30, 40, 40));
+        cardThongKeDoanhThu.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 40, 30));
 
         cboDayDT.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10" }));
         cboDayDT.setLabeText("");
@@ -5042,7 +5074,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboDayDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboDayDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 110, 40));
+        cardThongKeDoanhThu.add(cboDayDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 110, 40));
 
         cboMonthDT.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "6" }));
         cboMonthDT.setLabeText("");
@@ -5056,25 +5088,65 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboMonthDTActionPerformed(evt);
             }
         });
-        cardThongKeDoanhThu.add(cboMonthDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 110, 40));
+        cardThongKeDoanhThu.add(cboMonthDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 110, 40));
 
         jLabel45.setText("Ngày");
         cardThongKeDoanhThu.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 40, 30));
 
-        pnlView.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel33.setBackground(new java.awt.Color(204, 204, 255));
 
-        javax.swing.GroupLayout pnlViewLayout = new javax.swing.GroupLayout(pnlView);
-        pnlView.setLayout(pnlViewLayout);
-        pnlViewLayout.setHorizontalGroup(
-            pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+        jLabel98.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel98.setForeground(new java.awt.Color(204, 0, 51));
+        jLabel98.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel98.setText("BẢNG THÔNG TIN DOANH THU");
+
+        javax.swing.GroupLayout jPanel33Layout = new javax.swing.GroupLayout(jPanel33);
+        jPanel33.setLayout(jPanel33Layout);
+        jPanel33Layout.setHorizontalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel33Layout.createSequentialGroup()
+                .addGap(103, 103, 103)
+                .addComponent(jLabel98, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(112, Short.MAX_VALUE))
         );
-        pnlViewLayout.setVerticalGroup(
-            pnlViewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
+        jPanel33Layout.setVerticalGroup(
+            jPanel33Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel98, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
         );
 
-        cardThongKeDoanhThu.add(pnlView, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 50, 660, 520));
+        cardThongKeDoanhThu.add(jPanel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 570, 50));
+
+        pnlChartDT.setBackground(new java.awt.Color(204, 204, 255));
+
+        javax.swing.GroupLayout pnlChartDTLayout = new javax.swing.GroupLayout(pnlChartDT);
+        pnlChartDT.setLayout(pnlChartDTLayout);
+        pnlChartDTLayout.setHorizontalGroup(
+            pnlChartDTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+        );
+        pnlChartDTLayout.setVerticalGroup(
+            pnlChartDTLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+
+        cardThongKeDoanhThu.add(pnlChartDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 70, 570, 500));
+
+        jLabel50.setText("Năm");
+        cardThongKeDoanhThu.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 40, 30));
+
+        cboChoice.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tháng", "Năm" }));
+        cboChoice.setLabeText("");
+        cboChoice.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboChoiceItemStateChanged(evt);
+            }
+        });
+        cboChoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboChoiceActionPerformed(evt);
+            }
+        });
+        cardThongKeDoanhThu.add(cboChoice, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 110, 40));
 
         cardTrangChu.add(cardThongKeDoanhThu, "card3");
 
@@ -5082,7 +5154,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         cardThongKeSanPham.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel46.setText("Năm");
-        cardThongKeSanPham.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 30, 40, 30));
+        cardThongKeSanPham.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 30, 40, 30));
 
         cboYearSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "2022" }));
         cboYearSP.setLabeText("");
@@ -5096,28 +5168,13 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboYearSPActionPerformed(evt);
             }
         });
-        cardThongKeSanPham.add(cboYearSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, 130, 50));
-
-        tblSPBanChay.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "MASP", "TENSP", "LUOTBAN"
-            }
-        ));
-        jScrollPane10.setViewportView(tblSPBanChay);
-
-        cardThongKeSanPham.add(jScrollPane10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 1180, 500));
+        cardThongKeSanPham.add(cboYearSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, 110, 40));
 
         jLabel47.setText("Tháng");
-        cardThongKeSanPham.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 40, 30));
+        cardThongKeSanPham.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 40, 30));
 
         jLabel59.setText("Ngày");
-        cardThongKeSanPham.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 30, 30));
+        cardThongKeSanPham.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 30, 30));
 
         cboDaySP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10" }));
         cboDaySP.setLabeText("");
@@ -5131,7 +5188,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboDaySPActionPerformed(evt);
             }
         });
-        cardThongKeSanPham.add(cboDaySP, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 130, 40));
+        cardThongKeSanPham.add(cboDaySP, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 110, 40));
 
         cboMonthSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "6" }));
         cboMonthSP.setLabeText("");
@@ -5145,16 +5202,72 @@ System.out.println((int) tblCart.getValueAt(i, 3));
                 cboMonthSPActionPerformed(evt);
             }
         });
-        cardThongKeSanPham.add(cboMonthSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, 130, 40));
+        cardThongKeSanPham.add(cboMonthSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, 110, 40));
+
+        pnlChart.setBackground(new java.awt.Color(204, 204, 255));
+
+        javax.swing.GroupLayout pnlChartLayout = new javax.swing.GroupLayout(pnlChart);
+        pnlChart.setLayout(pnlChartLayout);
+        pnlChartLayout.setHorizontalGroup(
+            pnlChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 570, Short.MAX_VALUE)
+        );
+        pnlChartLayout.setVerticalGroup(
+            pnlChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 500, Short.MAX_VALUE)
+        );
+
+        cardThongKeSanPham.add(pnlChart, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 70, 570, 500));
 
         btnExport.setBackground(new java.awt.Color(204, 204, 255));
-        btnExport.setText("Xuất file");
+        btnExport.setText("Xuất file Excel");
         btnExport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExportActionPerformed(evt);
             }
         });
-        cardThongKeSanPham.add(btnExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 30, 80, -1));
+        cardThongKeSanPham.add(btnExport, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 30, 90, -1));
+
+        jScrollPane14.setBorder(null);
+
+        tblSPBanChay.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Mã sản phẩm", "Tên sản phẩm", "Lượt bán"
+            }
+        ));
+        tblSPBanChay.setGridColor(new java.awt.Color(255, 255, 255));
+        jScrollPane14.setViewportView(tblSPBanChay);
+
+        cardThongKeSanPham.add(jScrollPane14, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 570, 450));
+
+        jPanel32.setBackground(new java.awt.Color(204, 204, 255));
+
+        jLabel95.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel95.setForeground(new java.awt.Color(204, 0, 51));
+        jLabel95.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel95.setText("BẢNG THÔNG TIN SẢN PHẨM BÁN CHẠY");
+
+        javax.swing.GroupLayout jPanel32Layout = new javax.swing.GroupLayout(jPanel32);
+        jPanel32.setLayout(jPanel32Layout);
+        jPanel32Layout.setHorizontalGroup(
+            jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel32Layout.createSequentialGroup()
+                .addGap(103, 103, 103)
+                .addComponent(jLabel95, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(112, Short.MAX_VALUE))
+        );
+        jPanel32Layout.setVerticalGroup(
+            jPanel32Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel95, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+        );
+
+        cardThongKeSanPham.add(jPanel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, 570, 50));
 
         cardTrangChu.add(cardThongKeSanPham, "card4");
 
@@ -9020,6 +9133,14 @@ System.out.println((int) tblCart.getValueAt(i, 3));
         }
 
     }//GEN-LAST:event_tblCartKeyPressed
+
+    private void cboChoiceItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboChoiceItemStateChanged
+        setDataBarChart(pnlChartDT);
+    }//GEN-LAST:event_cboChoiceItemStateChanged
+
+    private void cboChoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChoiceActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboChoiceActionPerformed
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
@@ -9354,6 +9475,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private com.swing.PanelRound cardTrangChuNoiBat;
     private com.swing.PanelRound cardTrangChuTongQuan;
     private com.swing.Combobox cboCV;
+    private com.swing.Combobox cboChoice;
     private com.swing.Combobox cboDayDT;
     private com.swing.Combobox cboDaySP;
     private com.swing.Combobox cboHang;
@@ -9430,6 +9552,7 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private javax.swing.JLabel jLabel48;
     private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
     private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel54;
     private javax.swing.JLabel jLabel55;
@@ -9472,8 +9595,10 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private javax.swing.JLabel jLabel92;
     private javax.swing.JLabel jLabel93;
     private javax.swing.JLabel jLabel94;
+    private javax.swing.JLabel jLabel95;
     private javax.swing.JLabel jLabel96;
     private javax.swing.JLabel jLabel97;
+    private javax.swing.JLabel jLabel98;
     private javax.swing.JLabel jLabel99;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
@@ -9498,6 +9623,8 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private javax.swing.JPanel jPanel29;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
+    private javax.swing.JPanel jPanel32;
+    private javax.swing.JPanel jPanel33;
     private javax.swing.JPanel jPanel35;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -9505,10 +9632,10 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
     private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -9595,7 +9722,8 @@ System.out.println((int) tblCart.getValueAt(i, 3));
     private javax.swing.JPanel pnMenu;
     private javax.swing.JPanel pnPupopMenu;
     private javax.swing.JPanel pnQR;
-    private javax.swing.JPanel pnlView;
+    private javax.swing.JPanel pnlChart;
+    private javax.swing.JPanel pnlChartDT;
     private javax.swing.JRadioButton rdoNam;
     private javax.swing.JRadioButton rdoNu;
     private com.hicode.switchbutton.SwitchButton sbtnTrangThaiNV;

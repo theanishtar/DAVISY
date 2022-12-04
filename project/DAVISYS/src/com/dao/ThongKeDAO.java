@@ -66,14 +66,26 @@ public class ThongKeDAO {
 
     public List<Object[]> getDoanhthu(String month, String year) {
         String sql = "{CALL sp_ThongKeDoanhThu_MY(?, ?)}";
-        String[] cols = {"NGAYLAP", "TONGTIENHOMNAY"};
+        String[] cols = {"THANG", "TONGTIEN"};
         return this.getListOfArray(sql, cols, month, year);
     }
 
     public List<Object[]> getDoanhthu(String year) {
         String sql = "{CALL sp_ThongKeDoanhThu_Y(?)}";
-        String[] cols = {"NAM", "TONGTIENHOMNAY"};
+        String[] cols = {"NAM", "TONGTIEN"};
         return this.getListOfArray(sql, cols, year);
+    }
+
+    public List<Object[]> getDoanhthuMonthBarChart(String year) {
+        String sql = "{CALL sp_ThongKeDoanhThu_M_BarChart(?)}";
+        String[] cols = {"THANG", "TONGTIEN"};
+        return this.getListOfArray(sql, cols, year);
+    }
+    
+        public List<Object[]> getDoanhthuYearBarChart() {
+        String sql = "{CALL sp_ThongKeDoanhThu_Y_BarChart}";
+        String[] cols = {"NAM", "TONGTIEN"};
+        return this.getListOfArray(sql, cols);
     }
 
     public List<Object[]> getNhanVienXX() {
@@ -81,5 +93,5 @@ public class ThongKeDAO {
         String[] cols = {"TENNV", "SL"};
         return this.getListOfArray(sql, cols);
     }
-    
+
 }
