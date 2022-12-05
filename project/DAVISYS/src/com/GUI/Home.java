@@ -3426,7 +3426,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 listTKDT = TKdao.getDoanhthu(month, year);
             }
             for (Object[] row : listTKDT) {
-                model.addRow(row);
+                int tempS = (int) row[0];
+                double tempi = (double) row[1];
+                Object[] rowO = {tempS, (int) tempi};
+                model.addRow(rowO);
             }
         } catch (Exception ex) {
         }
@@ -3701,7 +3704,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         DefaultCategoryDataset data = new DefaultCategoryDataset();
         for (Object[] row : listTKDT_M) {
             String tg = String.valueOf(row[0]);
-            data.setValue((double) row[1], choice, tg);
+            double tempd = (double) row[1];
+            data.setValue((double) tempd, choice, tg);
         }
         JFreeChart barChart = ChartFactory.createBarChart("Biểu đồ doanh thu", choice, "Tổng tiền", data, PlotOrientation.VERTICAL, false, false, false);
         ChartPanel chartPanel = new ChartPanel(barChart);
@@ -8969,6 +8973,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void btnXacNhanDonHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXacNhanDonHangActionPerformed
         insertHoaDon();
+        setDataPieChart(pnlChart);
+        setDataBarChart(pnlChartDT);
     }//GEN-LAST:event_btnXacNhanDonHangActionPerformed
 
     private void txtTongtienspCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_txtTongtienspCaretUpdate
@@ -9168,6 +9174,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     protected static double toPPI(double inch) {
         return inch * 72d;
+
     }
 
     public class BillPrintable implements Printable {
@@ -9267,7 +9274,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     /*----------------------------------------------------------*/
-    //San Pham
+//San Pham
     /**
      * @param args the command line arguments
      */
