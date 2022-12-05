@@ -16,6 +16,7 @@ public class SanPhamDAO extends DAVISY<SanPhamEntity, String> {
     final String INSERT_SQL = "INSERT INTO SANPHAM (MASP, TENSP, MALH, MAHANG,GIANHAP,GIABAN,NGAYNHAP,HINH,MOTA) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     final String UPDATE_SQL = "UPDATE SANPHAM SET  TENSP = ?, MALH = ?, MAHANG = ?,GIANHAP = ?,GIABAN = ?,NGAYNHAP = ?,HINH = ?,MOTA = ? WHERE MASP = ?";
+    final String UPDATEHINH_SQL ="UPDATE SANPHAM SET HINH = ? WHERE HINH = ? ADN MASP = ?"; 
     final String DELETE_SQL = "DELETE FROM SANPHAM WHERE MASP = ?";
     final String SELECT_ALL_SQL = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG  ";
     final String SELECT_BY_ID_SQL = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG AND MASP = ?";
@@ -28,6 +29,10 @@ public class SanPhamDAO extends DAVISY<SanPhamEntity, String> {
     @Override
     public void update(SanPhamEntity entity) {
         JdbcHelper.update(UPDATE_SQL, entity.getTenSP(), entity.getMaLH(), entity.getMaHang(), entity.getGiaNhap(), entity.getGiaBan(), entity.getNgayNhap(), entity.getHinh(), entity.getMoTa(), entity.getMaSP());
+    }
+    
+    public void updateHinh(SanPhamEntity entity) {
+        JdbcHelper.update(UPDATEHINH_SQL,entity.getHinh(), entity.getMaSP());
     }
 
     @Override

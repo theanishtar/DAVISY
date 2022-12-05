@@ -143,7 +143,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
      */
     int chose = -1;
     int row = -1;
-    int countClick = 0, count = 0;
+    int countClick = 0, count = 0, slSP = 0;
     boolean chooserMainPage = true;
     JFileChooser f = new JFileChooser("src\\com\\images");
     File file = f.getSelectedFile();
@@ -1349,7 +1349,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtmaCV.setText(String.valueOf(cv.getMaCV()));
         txttenCV.setText(cv.getTenCV());
         txtMoTaCV.setText(cv.getMoTa());
-        System.out.println(cv.getMoTa());
+//        System.out.println(cv.getMoTa());
     }
 
 //Đẩy dữ liệu lên database
@@ -2230,11 +2230,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Lấy dữ liệu từ database
     public void setFormHoaDon(HoaDonEntity hd) {
+        KhachHangEntity kh = KhachHang.selectById(hd.getMaKH());
         txtMAKH.setText(hd.getMaKH());
         txtTENKH.setText(hd.getTenKH());
         txtTENNV.setText(hd.getTenNV());
         txtPhanTramGG.setText(String.valueOf(hd.getPhanTramGG()));
         txtTichDiem.setText(String.valueOf(hd.getTichDiem()));
+        lblTichDiemHD.setText(String.valueOf(kh.getTichDiem()));
     }
 
 //Đẩy dữ liệu lên database
@@ -3059,7 +3061,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     popupMenu.add(cutMenuItem);
                 }
             }
-            System.out.println(sdt);
+//            System.out.println(sdt);s
             popupMenu.setBackground(Color.white);
             popupMenu.show(home, 780, 10);
             txtSdtKH.requestFocus();
@@ -3111,34 +3113,36 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 //update sl trên bảng
 
-    public void updateSl() {
-        GioHangTamEntity gh = new GioHangTamEntity();
-        for (int i = 0; i < tblCart.getRowCount(); i++) {
-//            int sl =(int) tblCart.getValueAt(i, 3) ;
-            System.out.println((int) tblCart.getValueAt(i, 3));
-            if ((int) tblCart.getValueAt(i, 3) == 0) {
-                this.row = i;
-                deleteGH();
-                spnSL.setEnabled(false);
-                return;
-            } else {
-                gh.setMaGH(txtSdtKH.getText());
-                gh.setMaSP((String) tblCart.getValueAt(i, 0));
-                gh.setSoLuong((int) tblCart.getValueAt(i, 3));
-                try {
-                    GioHangtam.update(gh);
-                    listGHT();
-                    this.filltableGioHang();
-                } catch (Exception e) {
-                    MsgBox.alert(this, "Cập nhật thất bại!");
-                    System.out.println(e);
-                }
-
-            }
-            MsgBox.alert(this, "Cập nhật điểm thành công!");
-        }
-
-    }
+//    public void updateSl() {
+//        GioHangTamEntity gh = new GioHangTamEntity();
+//        int sl = (int) tblCart.getValueAt(1, 3);
+////        System.out.println(sl);
+//        System.out.println(tblCart.getRowCount());
+//        for (int i = 0; i < tblCart.getRowCount(); i++) {
+//
+////            if ((int) tblCart.getValueAt(i, 3) == 0) {
+////                this.row = i;
+////                deleteGH();
+////                spnSL.setEnabled(false);
+////                return;
+////            } else {
+////                gh.setMaGH(txtSdtKH.getText());
+////                gh.setMaSP((String) tblCart.getValueAt(i, 0));
+////                gh.setSoLuong((int) tblCart.getValueAt(i, 3));
+////                try {
+////                    GioHangtam.update(gh);
+////                    listGHT();
+////                    this.filltableGioHang();
+////                } catch (Exception e) {
+////                    MsgBox.alert(this, "Cập nhật thất bại!");
+////                    System.out.println(e);
+////                }
+////                
+////            }
+////            MsgBox.alert(this, "Cập nhật điểm thành công!");
+//        }
+//
+//    }
 //Lấy ngày hiện tại
 
     public java.sql.Date day() {
@@ -4150,6 +4154,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel121 = new javax.swing.JLabel();
         txtTichDiem = new javax.swing.JTextField();
         btnSuDungDiem = new com.swing.Button();
+        jLabel65 = new javax.swing.JLabel();
+        lblTichDiemHD = new javax.swing.JLabel();
         cardChiTietHoaDon = new com.swing.PanelRound();
         jLabel53 = new javax.swing.JLabel();
         jLabel54 = new javax.swing.JLabel();
@@ -7196,14 +7202,35 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         });
         tblCart.setGridColor(new java.awt.Color(255, 255, 255));
+        tblCart.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                tblCartFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tblCartFocusLost(evt);
+            }
+        });
         tblCart.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCartMouseClicked(evt);
             }
         });
+        tblCart.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                tblCartInputMethodTextChanged(evt);
+            }
+        });
         tblCart.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tblCartKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblCartKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tblCartKeyTyped(evt);
             }
         });
         jScrollPane13.setViewportView(tblCart);
@@ -7606,6 +7633,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         });
         cardHoaDon.add(btnSuDungDiem, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 110, 30));
+
+        jLabel65.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        jLabel65.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/credit-card.png"))); // NOI18N
+        jLabel65.setText("Tích điểm:");
+        cardHoaDon.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 20, 110, 30));
+
+        lblTichDiemHD.setFont(new java.awt.Font("Times New Roman", 1, 17)); // NOI18N
+        lblTichDiemHD.setForeground(new java.awt.Color(255, 0, 0));
+        lblTichDiemHD.setText("0");
+        cardHoaDon.add(lblTichDiemHD, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 220, 30));
 
         cardTrangChu.add(cardHoaDon, "card12");
 
@@ -8945,18 +8982,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void spnSLStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spnSLStateChanged
 //Update số lượng sản phẩm trong giỏ hàng
-        String masp = (String) tblCart.getValueAt(this.row, 0);
-        if (!masp.equals("")) {
-            if ((int) spnSL.getValue() == 0) {
-                deleteGH();
-                spnSL.setEnabled(false);
-                return;
+        if (this.row > -1) {
+            String masp = (String) tblCart.getValueAt(this.row, 0);
+            if (!masp.equals("")) {
+                if ((int) spnSL.getValue() == 0) {
+                    deleteGH();
+                    spnSL.setEnabled(false);
+                    return;
+                } else {
+                    updategh((int) spnSL.getValue());
+                    return;
+                }
             } else {
-                updategh((int) spnSL.getValue());
-                return;
+                MsgBox.alert(this, "Vui lòng chọn sản phẩm!");
             }
-        } else {
-            MsgBox.alert(this, "Vui lòng chọn sản phẩm!");
         }
     }//GEN-LAST:event_spnSLStateChanged
 
@@ -9031,7 +9070,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void btnSuDungDiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuDungDiemActionPerformed
         //Sử dụng tích điểm và phần trăm giảm giá
+        KhachHangEntity kh = KhachHang.selectById(txtMAKH.getText());
         int tichDiem = 0;
+        int diemSuDung = 0;
         int phanTram = 0;
         if (txtPhanTramGG.getText().equalsIgnoreCase("")) {
             txtPhanTramGG.setText("0");
@@ -9039,6 +9080,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         } else if (txtTichDiem.getText().equalsIgnoreCase("")) {
             txtTichDiem.setText("0");
         } else {
+
             try {
                 if (Integer.valueOf(txtPhanTramGG.getText().trim()) < 0 || Integer.valueOf(txtPhanTramGG.getText().trim()) > 100) {
                     MsgBox.alert(this, "Vui lòng nhập giá trị từ 0 đến 100!");
@@ -9048,56 +9090,70 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     phanTram = Integer.valueOf(txtPhanTramGG.getText().trim());
                 }
             } catch (Exception ex) {
-                MsgBox.alert(this, "Vui lòng nhập là số!");
+                MsgBox.alert(this, "Vui lòng nhập phần trăm là số!");
                 txtPhanTramGG.setText("");
                 txtPhanTramGG.requestFocus();
                 return;
             }
-        }
-        if (!txtTichDiem.getText().equals("")) {
-
-            KhachHangEntity kh = KhachHang.selectById(txtMAKH.getText());
-            String maHD = String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0));
-            HoaDonEntity hd = HoaDon.selectById(maHD);
-            tichDiem = kh.getTichDiem() - Integer.valueOf(txtTichDiem.getText());
-            kh.setMaKH(txtMAKH.getText());
-
-            float tinhTien = Float.valueOf(String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 6)));
-            float thanhTien = tinhTien - tinhTien * Integer.valueOf(txtTichDiem.getText()) / 100 - tinhTien * phanTram / 100;
-//            tichDiem =Integer.valueOf(txtTichDiem.getText()) + hd.getTichDiem();
-            if (Integer.valueOf(txtPhanTramGG.getText().trim()) == 0) {
-                thanhTien = hd.getTienGiam() + hd.getThanhTien();
-            }
-            if (Integer.valueOf(txtTichDiem.getText()) == 0) {
-                tichDiem = kh.getTichDiem() + hd.getTichDiem();
-                kh.setTichDiem(tichDiem);
-                thanhTien = hd.getTienGiam() + hd.getThanhTien();
-            }
-
-            tichDiem = 0;
             try {
-                KhachHang.updateTd(kh);
-                hd.setPhanTramGG(phanTram);
-                hd.setTichDiem(Integer.valueOf(txtTichDiem.getText()));
-                hd.setThanhTien(thanhTien);
-                hd.setMaHD(maHD);
-                HoaDon.updateTT(hd);
-                listHoaDon();
-                listKhachHang();
-                this.row = -1;
-                txtPhanTramGG.setText("");
-                txtTENKH.setText("");
-                txtMAKH.setText("");
-                txtTENNV.setText("");
+                if (Integer.valueOf(txtTichDiem.getText().trim()) < 0 || Integer.valueOf(txtTichDiem.getText().trim()) > kh.getTichDiem()) {
+                    MsgBox.alert(this, "Vui lòng nhập giá trị từ 0 đến " + kh.getTichDiem() + "!");
+                    txtTichDiem.requestFocus();
+                    return;
+                } else {
+                    diemSuDung = Integer.valueOf(txtTichDiem.getText().trim());
+                }
+            } catch (Exception ex) {
+                MsgBox.alert(this, "Vui lòng nhập tích điểm là số!");
                 txtTichDiem.setText("");
-                this.fillTableKhachHang();
-                this.fillTableHoaDon();
-                MsgBox.alert(this, "Cập nhật thành công!");
-
-            } catch (Exception e) {
-                System.out.println(e);
+                txtTichDiem.requestFocus();
+                return;
             }
         }
+//
+//            if (!txtTichDiem.getText().equals("")) {
+
+        String maHD = String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 0));
+        HoaDonEntity hd = HoaDon.selectById(maHD);
+        tichDiem = kh.getTichDiem() - diemSuDung;
+        kh.setMaKH(txtMAKH.getText());
+        kh.setTichDiem(tichDiem);
+        float tinhTien = Float.valueOf(String.valueOf(tblHoaDon.getValueAt(tblHoaDon.getSelectedRow(), 6)));
+        float thanhTien = tinhTien - tinhTien * Integer.valueOf(txtTichDiem.getText()) / 100 - tinhTien * phanTram / 100;
+//            tichDiem =Integer.valueOf(txtTichDiem.getText()) + hd.getTichDiem();
+        if (Integer.valueOf(txtPhanTramGG.getText().trim()) == 0) {
+            thanhTien = hd.getTienGiam() + hd.getThanhTien();
+        }
+        if (Integer.valueOf(txtTichDiem.getText()) == 0) {
+            tichDiem = kh.getTichDiem() + hd.getTichDiem();
+            kh.setTichDiem(tichDiem);
+            thanhTien = hd.getTienGiam() + hd.getThanhTien();
+        }
+        tichDiem = 0;
+        try {
+            KhachHang.updateTd(kh);
+            hd.setPhanTramGG(phanTram);
+            hd.setTichDiem(Integer.valueOf(txtTichDiem.getText()));
+            hd.setThanhTien(thanhTien);
+            hd.setMaHD(maHD);
+            HoaDon.updateTT(hd);
+            listHoaDon();
+            listKhachHang();
+            this.row = -1;
+            txtPhanTramGG.setText("");
+            txtTENKH.setText("");
+            txtMAKH.setText("");
+            txtTENNV.setText("");
+            txtTichDiem.setText("");
+            lblTichDiemHD.setText("");
+            this.fillTableKhachHang();
+            this.fillTableHoaDon();
+            MsgBox.alert(this, "Cập nhật thành công!");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+//        }
+//        }
 
     }//GEN-LAST:event_btnSuDungDiemActionPerformed
 
@@ -9134,9 +9190,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_lblExportInforActionPerformed
 
     private void tblCartKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCartKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-//            updateSl();
-        }
+
 
     }//GEN-LAST:event_tblCartKeyPressed
 
@@ -9147,6 +9201,68 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void cboChoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboChoiceActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboChoiceActionPerformed
+
+    private void tblCartInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tblCartInputMethodTextChanged
+
+    }//GEN-LAST:event_tblCartInputMethodTextChanged
+
+    private void tblCartFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblCartFocusGained
+//        row = tblCart.getSelectedRow();
+//        Object sl = tblCart.getValueAt(row, 3);
+//        String k = String.valueOf(sl);
+//          
+//            String masp = (String) tblCart.getValueAt(this.row, 0);
+//            if (!masp.equals("")) {
+//                if (Integer.valueOf(k) == 0) {
+//                    deleteGH();
+//                    spnSL.setEnabled(false);
+//                    return;
+//                } else {
+//                      System.out.println("hi");
+////                    updategh(Integer.valueOf(k));
+//                    return;
+//                }
+//            } else {
+//                MsgBox.alert(this, "Vui lòng chọn sản phẩm!");
+//            }
+    }//GEN-LAST:event_tblCartFocusGained
+
+    private void tblCartFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tblCartFocusLost
+
+    }//GEN-LAST:event_tblCartFocusLost
+
+    private void tblCartKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCartKeyTyped
+
+
+    }//GEN-LAST:event_tblCartKeyTyped
+
+    private void tblCartKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCartKeyReleased
+
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            spnSL.setEnabled(false);
+
+            row = tblCart.getSelectedRow();
+            Object sl = tblCart.getValueAt(row, 3);
+            String k = String.valueOf(sl);
+            String masp = (String) tblCart.getValueAt(this.row, 0);
+            if (!masp.equals("")) {
+                if (Integer.valueOf(k) == 0) {
+                    deleteGH();
+
+                    return;
+                } else {
+                    updategh(Integer.valueOf(k));
+                    this.row = -1;
+                    spnSL.setValue(0);
+                    return;
+                }
+            } else {
+                MsgBox.alert(this, "Vui lòng chọn sản phẩm!");
+            }
+//            
+
+        }
+    }//GEN-LAST:event_tblCartKeyReleased
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
@@ -9572,6 +9688,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
@@ -9701,6 +9818,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel lblNameCustomer;
     private javax.swing.JLabel lblRecordNV;
     private javax.swing.JLabel lblTichDiem;
+    private javax.swing.JLabel lblTichDiemHD;
     private javax.swing.JLabel lblTimKiemCV;
     private javax.swing.JLabel lblTimKiemHD;
     private javax.swing.JLabel lblTimKiemKH;
