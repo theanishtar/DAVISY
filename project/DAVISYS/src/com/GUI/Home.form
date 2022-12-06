@@ -3716,11 +3716,10 @@
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                           <StringArray count="3">
                             <StringItem index="0" value="Admin"/>
-                            <StringItem index="1" value="Qu&#x1ea3;n l&#xed;"/>
-                            <StringItem index="2" value="Nh&#xe2;n Vi&#xea;n"/>
+                            <StringItem index="1" value="Qu&#x1ea3;n l&#xed; "/>
+                            <StringItem index="2" value="Nh&#xe2;n vi&#xea;n"/>
                           </StringArray>
                         </Property>
-                        <Property name="selectedIndex" type="int" value="-1"/>
                         <Property name="labeText" type="java.lang.String" value=""/>
                       </Properties>
                       <Constraints>
