@@ -4003,6 +4003,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         dateChooser1 = new com.swing.datechooser.DateChooser();
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
+        dateChooser2 = new com.swing.datechooser.DateChooser();
         jPanel1 = new javax.swing.JPanel();
         loadingMain = new com.frame.LoadingMain();
         pnMenu = new javax.swing.JPanel();
@@ -4457,6 +4458,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         dateChooser1.setForeground(new java.awt.Color(0, 153, 51));
         dateChooser1.setTextRefernce(txtNgayNhapSP);
+
+        dateChooser2.setForeground(new java.awt.Color(0, 153, 51));
+        dateChooser2.setTextRefernce(txtNgaySinhNV);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -9869,6 +9873,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private com.swing.Combobox cboYearSP;
     private com.swing.Combobox comboboxHD;
     private com.swing.datechooser.DateChooser dateChooser1;
+    private com.swing.datechooser.DateChooser dateChooser2;
     private com.frame.Header header2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
