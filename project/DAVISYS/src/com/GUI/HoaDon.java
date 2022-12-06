@@ -16,6 +16,7 @@ import com.entity.HoaDonEntity;
 import com.entity.LoaiHangEntity;
 import com.entity.SanPhamEntity;
 import com.utils.MsgBox;
+import com.utils.XImage;
 import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class HoaDon extends javax.swing.JDialog {
     public HoaDon(java.awt.Frame parent, boolean modal, String mahd) {
         super(parent, modal);
         initComponents();
+           this.setIconImage(XImage.getAppIcon());
         setLocationRelativeTo(parent);
         setResizable(false);
 //        listHD = HoaDon.selectAll();

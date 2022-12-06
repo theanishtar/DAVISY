@@ -10,6 +10,7 @@ import com.dao.TaiKhoanDAO;
 import com.entity.TaiKhoanEntity;
 import com.library.extensisons.ScanQR;
 import com.utils.MsgBox;
+import com.utils.XImage;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -30,16 +31,18 @@ public class Login extends javax.swing.JFrame {
     AnimationClass ac = new AnimationClass();
     TaiKhoanDAO tk = new TaiKhoanDAO();
     List<TaiKhoanEntity> listTK = new ArrayList<>();
-    public String tenDN ;
+    public String tenDN;
 
     public Login() {
 
         initComponents();
+        this.setIconImage(XImage.getAppIcon());
         listTK = tk.selectAll();
         txtPassword.setEchoChar('●');
         lblHide.setVisible(false);
         slideShow();
     }
+
     public boolean ktNull() {
         if (txtUsername.getText().equals("")) {
             MsgBox.alert(this, "Vui lòng nhập tên đăng nhập!");
@@ -181,7 +184,7 @@ public class Login extends javax.swing.JFrame {
         }
         return false;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -486,13 +489,13 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void txtUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtPassword.requestFocus();
         }
     }//GEN-LAST:event_txtUsernameKeyPressed
 
     private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             dangNhap();
         }
     }//GEN-LAST:event_txtPasswordKeyPressed
@@ -520,7 +523,6 @@ public class Login extends javax.swing.JFrame {
         frhome.setVisible(true);
         this.dispose();
     }
-
 
     /**
      * @param args the command line arguments

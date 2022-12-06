@@ -26,6 +26,7 @@ public class QuenMatKhau extends javax.swing.JDialog {
     public QuenMatKhau(java.awt.Frame parent, boolean modal, String email) {
         super(parent, modal);
         initComponents();
+           this.setIconImage(XImage.getAppIcon());
         
         lblHide.setVisible(true);
         lblShow.setVisible(false);

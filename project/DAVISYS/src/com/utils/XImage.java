@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
 //Chèn icon fpt.png cho trang main (Trước Hệ quản lí đào tạo)
 public class XImage {
     public static Image getAppIcon(){
-        URL url = XImage.class.getResource("/com/edusys/icon/fpt.png");
+        URL url = XImage.class.getResource("/com/asset/header/logokhongvien-01.png");
         return new ImageIcon(url).getImage();
     }
     
