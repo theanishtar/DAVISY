@@ -521,24 +521,6 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
     }
 
-    public void losePanel() {
-        Main.setVisible(false);
-    }
-
-    public void loadFrame() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                losePanel();
-                try {
-                    Thread.sleep(2000);
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        }).start();
-    }
 
     /**
      * @param args the command line arguments
