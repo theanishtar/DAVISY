@@ -13,7 +13,7 @@ public class HoaDonEntity {
     private Date ngayLap;
     private int phanTramGG;
     private float gia, tongTien;
-    private int tichDiem;
+    private int tichDiem=0;
     private float tienGiam, thanhTien;
 
     public HoaDonEntity() {

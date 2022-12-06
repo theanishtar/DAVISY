@@ -36,7 +36,8 @@ public class GioHangTamDAO extends DAVISY<GioHangTamEntity, String> {
 
     @Override
     public void delete(String key) {
-        JdbcHelper.update(DELETE_SQL, key, key);
+        String sql ="DELETE FROM GIOHANGTAM WHERE MAGH = ?";
+        JdbcHelper.update(sql, key);
     }
 
     @Override

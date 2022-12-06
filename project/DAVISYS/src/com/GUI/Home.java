@@ -201,7 +201,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     String year;
     String ktCV = null;
     String ktTenDN = null;
-    String CV=null;
+    String CV = null;
 
     List<Object[]> listTKSP = null;
     List<Object[]> listTKDT = null;
@@ -236,8 +236,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.setIconImage(XImage.getAppIcon());
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
-        getTenNhanVien("dannk");
-        ktTenDN = "dannk";
+        getTenNhanVien("nhuomtv");
+        ktTenDN = "nhuomtv";
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
         initMenu(); //gọi lại phương thức khởi tạo MENU
 
@@ -307,7 +307,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
         SanPhamHr1.setVisible(false);
         loadMainDone = true;
-        
+
         banner();
     }
     boolean loadMainDone = false;
@@ -461,155 +461,155 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                         }
                     }).build();
         }
-        */
+         */
         drawer = Drawer.newDrawer(this)
-                    .background(new Color(90, 90, 90))
-                    .enableScroll(true)
-                    .header(new Header())
-                    .space(3)
-                    .addChild(new DrawerItem("Cửa sổ chính").build())
-                    .addChild(new DrawerItem("Tài khoản").build())
-                    .addChild(new DrawerItem("Sản phẩm").build())
-                    .addChild(new DrawerItem("Hóa đơn").build())
-                    .addChild(new DrawerItem("Giỏ hàng").build())
-                    .addChild(new DrawerItem("Thống kê").build())
-                    .addFooter(new Separator())
-                    .addFooter(new DrawerItem("Giới thiệu").build())
-                    .addFooter(new DrawerItem("Đăng xuất").build())
-                    .event(new EventDrawer() {
-                        @Override
-                        public void selected(int index, DrawerItem item) {
-                            if (drawer.isShow()) {
-                                drawer.hide();
-                            }
-                            switch (index) {
-                                case 0:
-                                    //gọi trang Main
-                                    if (chose == -1 || chose != 0) {
-                                        hidePage();
-                                        hideMenu();
-                                        cardMenubarTrangChu.setVisible(true);
-                                        cardTrangChuTongQuan.setVisible(true);
-                                        chose = 0;
-                                    }
-                                    break;
-                                case 1:
-                                    //gọi trang tài khoản
-                                    if (chose == -1 || chose != 1) {
-                                        System.out.println(CV);
-                                        if("Nhân viên".equalsIgnoreCase(CV)){
-                                            //nhanvien
-                                            TaiKhoanHr1.setVisible(false);
-                                            TaiKhoanHr3.setVisible(false);
-                                            TaiKhoanHr2.setVisible(true);
-                                            TaiKhoantittle1.setVisible(false);
-                                            TaiKhoantittle3.setVisible(false);
-                                            hidePage();
-                                            hideMenu();
-                                            cardMenubarTaiKhoan.setVisible(true);
-                                            cardKhachHang.setVisible(true);
-                                        } else {
-                                            //quan li, admin
-                                            TaiKhoanHr2.setVisible(false);
-                                            TaiKhoanHr3.setVisible(false);
-                                            TaiKhoanHr1.setVisible(true);
-                                            hidePage();
-                                            hideMenu();
-                                            cardMenubarTaiKhoan.setVisible(true);
-                                            cardTaiKhoanNhanVien.setVisible(true);
-                                        }
-                                        
-                                        chose = 1;
-                                        listNVT();
-                                        listKhachHang();
-                                        listChucVu();
-                                        fillTableNhanVien();
-                                        fillTableKhachHang();
-                                        fillTableChucVu();
-                                    }
-                                    break;
-                                case 2:
-                                    //gọi trang sản phẩm
-                                    if (chose == -1 || chose != 2) {
-                                        SanPhamHr1.setVisible(false);
-                                        SanPhamHr2.setVisible(false);
-                                        SanPhamHr.setVisible(true);
-                                        hidePage();
-                                        hideMenu();
-                                        cardMenubarSanPham.setVisible(true);
-                                        cardSanPham.setVisible(true);
-                                        chose = 2;
-                                        listSPT();
-                                        listHang();
-                                        listLoai();
-                                        fillTableSanPham();
-                                        fillTableHang();
-                                        fillTableLoai();
-                                    }
-                                    break;
-                                case 3:
-                                    //gọi trang hóa đơn
-                                    if (chose == -1 || chose != 3) {
-                                        HoaDonHr1.setVisible(true);
-                                        hidePage();
-                                        hideMenu();
-                                        cardMenubarHoaDon.setVisible(true);
-                                        cardHoaDon.setVisible(true);
-                                        chose = 3;
-                                        listHoaDon();
-                                        fillTableHoaDon();
-
-                                    }
-                                    break;
-                                case 4:
-                                    //gọi trang giỏ hàng
-                                    if (chose == -1 || chose != 4) {
-                                        hidePage();
-                                        hideMenu();
-                                        cartShoping("");
-                                        cardMenubarGioHang.setVisible(true);
-                                        cardGioHang.setVisible(true);
-                                        chose = 4;
-                                    }
-                                    break;
-                                case 5:
-                                    //gọi trang thống kê
-                                    if (chose == -1 || chose != 5) {
-                                        ThongKeHr2.setVisible(false);
-                                        ThongKeHr1.setVisible(true);
-                                        hidePage();
-                                        hideMenu();
-                                        cardMenubarThongKe.setVisible(true);
-                                        cardThongKeDoanhThu.setVisible(true);
-                                        chose = 5;
-                                        ThongKeTittle1.setVisible(false);
-                                        ThongKeHr1.setVisible(false);
-                                        cardThongKeDoanhThu.setVisible(false);
-                                        cardThongKeSanPham.setVisible(true);
-                                        ThongKeHr2.setVisible(true);
-                                        GioiThieuHr2.setVisible(false);
-                                    }
-                                    break;
-                                case 6:
-                                    //gọi trang giới thiệu
-                                    if (chose == -1 || chose != 6) {
-                                        hidePage();
-                                        hideMenu();
-                                        cardMenubarGioiThieu.setVisible(true);
-                                        cardGioiThieuSanPham.setVisible(true);
-                                        chose = 6;
-                                    }
-                                    break;
-                                case 7:
-                                    //gọi phương thức đăng xuất
-                                    signOut();
-                                    break;
-                                case 8:
-
-                                    break;
-                            }
+                .background(new Color(90, 90, 90))
+                .enableScroll(true)
+                .header(new Header())
+                .space(3)
+                .addChild(new DrawerItem("Cửa sổ chính").build())
+                .addChild(new DrawerItem("Tài khoản").build())
+                .addChild(new DrawerItem("Sản phẩm").build())
+                .addChild(new DrawerItem("Hóa đơn").build())
+                .addChild(new DrawerItem("Giỏ hàng").build())
+                .addChild(new DrawerItem("Thống kê").build())
+                .addFooter(new Separator())
+                .addFooter(new DrawerItem("Giới thiệu").build())
+                .addFooter(new DrawerItem("Đăng xuất").build())
+                .event(new EventDrawer() {
+                    @Override
+                    public void selected(int index, DrawerItem item) {
+                        if (drawer.isShow()) {
+                            drawer.hide();
                         }
-                    }).build();
+                        switch (index) {
+                            case 0:
+                                //gọi trang Main
+                                if (chose == -1 || chose != 0) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarTrangChu.setVisible(true);
+                                    cardTrangChuTongQuan.setVisible(true);
+                                    chose = 0;
+                                }
+                                break;
+                            case 1:
+                                //gọi trang tài khoản
+                                if (chose == -1 || chose != 1) {
+                                    System.out.println(CV);
+                                    if ("Nhân viên".equalsIgnoreCase(CV)) {
+                                        //nhanvien
+                                        TaiKhoanHr1.setVisible(false);
+                                        TaiKhoanHr3.setVisible(false);
+                                        TaiKhoanHr2.setVisible(true);
+                                        TaiKhoantittle1.setVisible(false);
+                                        TaiKhoantittle3.setVisible(false);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTaiKhoan.setVisible(true);
+                                        cardKhachHang.setVisible(true);
+                                    } else {
+                                        //quan li, admin
+                                        TaiKhoanHr2.setVisible(false);
+                                        TaiKhoanHr3.setVisible(false);
+                                        TaiKhoanHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTaiKhoan.setVisible(true);
+                                        cardTaiKhoanNhanVien.setVisible(true);
+                                    }
+
+                                    chose = 1;
+                                    listNVT();
+                                    listKhachHang();
+                                    listChucVu();
+                                    fillTableNhanVien();
+                                    fillTableKhachHang();
+                                    fillTableChucVu();
+                                }
+                                break;
+                            case 2:
+                                //gọi trang sản phẩm
+                                if (chose == -1 || chose != 2) {
+                                    SanPhamHr1.setVisible(false);
+                                    SanPhamHr2.setVisible(false);
+                                    SanPhamHr.setVisible(true);
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarSanPham.setVisible(true);
+                                    cardSanPham.setVisible(true);
+                                    chose = 2;
+                                    listSPT();
+                                    listHang();
+                                    listLoai();
+                                    fillTableSanPham();
+                                    fillTableHang();
+                                    fillTableLoai();
+                                }
+                                break;
+                            case 3:
+                                //gọi trang hóa đơn
+                                if (chose == -1 || chose != 3) {
+                                    HoaDonHr1.setVisible(true);
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarHoaDon.setVisible(true);
+                                    cardHoaDon.setVisible(true);
+                                    chose = 3;
+                                    listHoaDon();
+                                    fillTableHoaDon();
+
+                                }
+                                break;
+                            case 4:
+                                //gọi trang giỏ hàng
+                                if (chose == -1 || chose != 4) {
+                                    hidePage();
+                                    hideMenu();
+                                    cartShoping("");
+                                    cardMenubarGioHang.setVisible(true);
+                                    cardGioHang.setVisible(true);
+                                    chose = 4;
+                                }
+                                break;
+                            case 5:
+                                //gọi trang thống kê
+                                if (chose == -1 || chose != 5) {
+                                    ThongKeHr2.setVisible(false);
+                                    ThongKeHr1.setVisible(true);
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarThongKe.setVisible(true);
+                                    cardThongKeDoanhThu.setVisible(true);
+                                    chose = 5;
+                                    ThongKeTittle1.setVisible(false);
+                                    ThongKeHr1.setVisible(false);
+                                    cardThongKeDoanhThu.setVisible(false);
+                                    cardThongKeSanPham.setVisible(true);
+                                    ThongKeHr2.setVisible(true);
+                                    GioiThieuHr2.setVisible(false);
+                                }
+                                break;
+                            case 6:
+                                //gọi trang giới thiệu
+                                if (chose == -1 || chose != 6) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarGioiThieu.setVisible(true);
+                                    cardGioiThieuSanPham.setVisible(true);
+                                    chose = 6;
+                                }
+                                break;
+                            case 7:
+                                //gọi phương thức đăng xuất
+                                signOut();
+                                break;
+                            case 8:
+
+                                break;
+                        }
+                    }
+                }).build();
 
     }
 
@@ -855,11 +855,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             if (tenNV.equalsIgnoreCase(tk.getTenDN())) {
                 lbltenNV.setText(tk.getTenNV());
                 lblChucVu.setText("Chức vụ: " + tk.getTenCV());
-                CV=tk.getTenCV();
+                CV = tk.getTenCV();
                 if (!"Quản lí".equalsIgnoreCase(tk.getTenCV()) && !"admin".equalsIgnoreCase(tk.getTenCV())) {
                     checkChucVu = false;
                 } else if ("Quản lí".equalsIgnoreCase(tk.getTenCV()) || "admin".equalsIgnoreCase(tk.getTenCV())) {
                     ktCV = tk.getTenCV();
+                    if ("Admin".equalsIgnoreCase(ktCV)) {
+                        cboVaiTro.setEnabled(false);
+                    }
                 }
             }
         }
@@ -1152,11 +1155,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtMaHang.getText().equals(" ")) {
             MsgBox.alert(this, " Mã hãng không được để trống!");
             txtMaHang.requestFocus();
+            lblMaHang.setForeground(Color.RED);
             return false;
         }
         if (txtTenHang.getText().equals(" ")) {
             MsgBox.alert(this, "Tên hãng không được để trống!");
             txtTenHang.requestFocus();
+            lblTenHang.setForeground(Color.RED);
             return false;
         }
         return true;
@@ -1364,11 +1369,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtMaLoai.getText().equals(" ")) {
             MsgBox.alert(this, " Mã loại không được để trống!");
             txtMaLoai.requestFocus();
+            lblMaLoai.setForeground(Color.RED);
             return false;
         }
         if (txtTenLoai.getText().equals(" ")) {
             MsgBox.alert(this, "Tên loại không được để trống!");
             txtTenLoai.requestFocus();
+            lblTenLoai.setForeground(Color.RED);
             return false;
         }
         return true;
@@ -1439,7 +1446,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Chạy tới dòng tiếp theo trên bảng
     public void nextLoai() {
-        if (this.row < tblHang.getRowCount() - 1) {
+        if (this.row < tblLoaiHang.getRowCount() - 1) {
             this.row++;
             this.editLoai();
         } else {
@@ -1459,7 +1466,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Đi tới dòng cuối cùng trong bảng
     public void lastLoai() {
-        this.row = tblHang.getRowCount() - 1;
+        this.row = tblLoaiHang.getRowCount() - 1;
         this.editLoai();
     }
 //--------------------------------------------CHỨC VỤ-----------------------------------------------------------------------
@@ -2009,49 +2016,62 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtMaSP.getText().equals("")) {
             MsgBox.alert(this, "Mã sản phẩm không được để trống!");
             txtMaSP.requestFocus();
+            lblMaSP.setForeground(Color.RED);
             return false;
         } else {
             Matcher matcher = Pattern.compile(TypeProduct_REGEX).matcher(txtMaSP.getText());
             if (matcher.matches() == false) {
                 MsgBox.alert(this, "Mã sản phẩm không đúng định dạng!");
                 txtMaSP.requestFocus();
+                lblMaSP.setForeground(Color.RED);
                 return false;
             }
         }
         if (txtTenSP.getText().equals(" ")) {
             MsgBox.alert(this, "Tên sản phẩm không được để trống!");
             txtTenSP.requestFocus();
+            lblTenSP.setForeground(Color.RED);
             return false;
         }
         if (txtGiaNhapSP.getText().equals("")) {
             MsgBox.alert(this, "Giá nhập không được để trống!");
             txtGiaNhapSP.requestFocus();
+            lblGiaNhapSP.setForeground(Color.RED);
             return false;
         } else {
             try {
                 double gianhap = Double.valueOf(txtGiaNhapSP.getText());
                 if (gianhap <= 0) {
                     MsgBox.alert(this, "Giá nhập phải lớn hơn 0");
+                    txtGiaNhapSP.requestFocus();
+                    lblGiaNhapSP.setForeground(Color.RED);
                     return false;
                 }
             } catch (Exception ex) {
                 MsgBox.alert(this, "Vui lòng không nhập giá nhập là ký tự hoặc chữ");
+                txtGiaNhapSP.requestFocus();
+                lblGiaNhapSP.setForeground(Color.RED);
                 return false;
             }
         }
         if (txtGiaBanSP.getText().equals("")) {
             MsgBox.alert(this, "Giá bán không được để trống!");
             txtGiaBanSP.requestFocus();
+            lblGiaBanSP.setForeground(Color.RED);
             return false;
         } else {
             try {
                 double giaban = Double.valueOf(txtGiaBanSP.getText());
                 if (giaban <= 0) {
                     MsgBox.alert(this, "Giá bán phải lớn hơn 0");
+                    lblGiaBanSP.setForeground(Color.RED);
+                    txtGiaBanSP.requestFocus();
                     return false;
                 }
             } catch (Exception ex) {
                 MsgBox.alert(this, "Vui lòng không nhập giá bán là ký tự hoặc chữ");
+                lblGiaBanSP.setForeground(Color.RED);
+                txtGiaBanSP.requestFocus();
                 return false;
             }
         }
@@ -2122,28 +2142,33 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtmaKH.getText().equals("")) {
             MsgBox.alert(this, "Mã khách hàng không được để trống!");
             txtmaKH.requestFocus();
+            lblMaKH.setForeground(Color.RED);
             return false;
         }
         if (txthoTen.getText().equals(" ")) {
             MsgBox.alert(this, "Tên khách hàng không được để trống!");
             txthoTen.requestFocus();
+            lblHovaTenKH.setForeground(Color.RED);
             return false;
         }
         if (txtSDT.getText().equals("")) {
             MsgBox.alert(this, "Số điện thoại không được để trống!");
             txtSDT.requestFocus();
+            lblSDTKH.setForeground(Color.RED);
             return false;
         } else {
             Matcher matcher = Pattern.compile(SDT).matcher(txtSDT.getText());
             if (matcher.matches() == false) {
                 MsgBox.alert(this, "Số điện thoại không đúng dịnh dạng!");
                 txtSDT.requestFocus();
+                lblSDTKH.setForeground(Color.RED);
                 return false;
             }
         }
         if (txtdiaChi.getText().equals("")) {
             MsgBox.alert(this, "Địa chỉ không được để trống!");
             txtdiaChi.requestFocus();
+            lblDiaChiKH.setForeground(Color.RED);
             return false;
         }
 
@@ -2162,6 +2187,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initKhachHang() {
         setLocationRelativeTo(null);
+        btnaz.setEnabled(false);
+        btnza.setEnabled(false);
         listKhachHang();
         this.fillTableKhachHang();
         this.row = -1;
@@ -2201,6 +2228,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Lấy dữ liệu trên database
     public void setFormKhachHang(KhachHangEntity kh) {
+        txtmaKH.setEditable(false);
         txtmaKH.setText(kh.getMaKH());
         txthoTen.setText(kh.getHoTen());
         txtSDT.setText(kh.getDienThoai());
@@ -2223,6 +2251,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Xóa trắng form
     public void clearFormKhachHang() {
+        txtmaKH.setEditable(true);
         KhachHangEntity kh = new KhachHangEntity();
         this.setFormKhachHang(kh);
         this.row = -1;
@@ -2354,6 +2383,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initHoaDon() {
         btnIn.setEnabled(false);
+        btnazhd.setEnabled(false);
+        btnzahd.setEnabled(false);
         //btnXoahd.setEnabled(false);
         setLocationRelativeTo(null);
         listHoaDon();
@@ -2394,13 +2425,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Lấy dữ liệu từ database
     public void setFormHoaDon(HoaDonEntity hd) {
-        KhachHangEntity kh = KhachHang.selectById(hd.getMaKH());
         txtMAKH.setText(hd.getMaKH());
         txtTENKH.setText(hd.getTenKH());
         txtTENNV.setText(hd.getTenNV());
         txtPhanTramGG.setText(String.valueOf(hd.getPhanTramGG()));
         txtTichDiem.setText(String.valueOf(hd.getTichDiem()));
-        lblTichDiemHD.setText(String.valueOf(kh.getTichDiem()));
+        
     }
 
 //Đẩy dữ liệu lên database
@@ -2427,6 +2457,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Xóa trống form
     public void clearFormHoaDon() {
         HoaDonEntity hd = new HoaDonEntity();
+        lblTichDiemHD.setText("0");
         this.setFormHoaDon(hd);
         this.row = -1;
         this.updateStatusHoaDon();
@@ -2453,6 +2484,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         HoaDonEntity hd = HoaDon.selectById(mahd);
         maHDIn = mahd;
         tblHoaDon.setRowSelectionInterval(this.row, this.row);
+        KhachHangEntity kh = KhachHang.selectById(hd.getMaKH());
+        lblTichDiemHD.setText(String.valueOf(kh.getTichDiem()));
         this.setFormHoaDon(hd);
         this.updateStatusHoaDon();
         lblrecordhd.setText(recordHoaDon());
@@ -2469,8 +2502,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             maHDT = hd.getMaHD();
             insertCTHD();
             if (tien >= 100000) {
-                KhachHangEntity kh = new KhachHangEntity();
-                int diem = (int) (tien / 100000);
+                KhachHangEntity kh = KhachHang.selectById(hd.getMaKH());
+                int diem = (int) (tien / 100000)+kh.getTichDiem();
                 kh.setMaKH(hd.getMaKH());
                 kh.setTichDiem(diem);
                 KhachHang.updateTd(kh);
@@ -2503,17 +2536,17 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Xóa dữ liệu
     public void deleteHoaDon() {
         String mahd = (String) tblHoaDon.getValueAt(this.row, 0);
+        deleteHoaDonCT(mahd);
         try {
-            deleteHoaDonCT(mahd);
             HoaDon.delete(mahd);
             listHoaDon();
-            this.fillTableHoaDon();
-            this.clearFormHoaDon();
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
-            System.out.println(e);
+            System.out.println("1" + e);
         }
+        this.fillTableHoaDon();
+        this.clearFormHoaDon();
     }
 
     //Add dữ liệu vào list tạm
@@ -2532,7 +2565,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             listHoaDonCT();
         } catch (Exception e) {
             MsgBox.alert(this, "Xóa thất bại!");
-            System.out.println(e);
+            System.out.println("2" + e);
         }
     }
 
@@ -2740,8 +2773,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.fillTableSanPham();
         }
     }
-    //Sắp xếp nhân viên
 
+    //Sắp xếp nhân viên
     public void SortNV(int i) {
         String NV = (String) cboSortNV.getSelectedItem();
         if (NV.equalsIgnoreCase(" ")) {
@@ -2764,6 +2797,38 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
 
             this.fillTableNhanVien();
+        }
+
+    }
+
+    public void SortCV(int i) {
+        String cv = (String) cboCV.getSelectedItem();
+        if (cv.equalsIgnoreCase("")) {
+            MsgBox.alert(this, "Vui lòng chọn tiêu chí muốn sắp xếp! ");
+        } else {
+            Comparator<ChucVuEntity> aznv = new Comparator<ChucVuEntity>() {
+                @Override
+                public int compare(ChucVuEntity cv1, ChucVuEntity cv2) {
+                    if (CV.equalsIgnoreCase("Mã chức vụ")) {
+                        if (cv1.getMaCV() > cv2.getMaCV()) {
+                            return 1;
+                        } else if (cv1.getMaCV() < cv2.getMaCV()) {
+                            return -1;
+                        } else {
+                            return 0;
+                        }
+                    } else {
+                        return cv1.getTenCV().compareTo(cv2.getTenCV());
+                    }
+                }
+            };
+            if (i == 0) {
+                Collections.sort(listCV, aznv);
+            } else {
+                Collections.sort(listCV, aznv.reversed());
+            }
+
+            this.fillTableChucVu();
         }
 
     }
@@ -2812,18 +2877,25 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void btnHD() {
         String HD = (String) comboboxHD.getSelectedItem();
-        if (HD.equalsIgnoreCase("Mã hóa đơn")) {
-            btnazhd.setText("A - Z");
-            btnzahd.setText("Z - A");
+        if (HD.equalsIgnoreCase("")) {
+            btnazhd.setEnabled(false);
+            btnzahd.setEnabled(false);
         } else {
-            btnazhd.setText("Tăng");
-            btnzahd.setText("Giảm");
+            btnazhd.setEnabled(true);
+            btnzahd.setEnabled(true);
+            if (HD.equalsIgnoreCase("Mã hóa đơn")) {
+                btnazhd.setText("A - Z");
+                btnzahd.setText("Z - A");
+            } else {
+                btnazhd.setText("Tăng");
+                btnzahd.setText("Giảm");
+            }
         }
 
     }
 
     public void btnSP() {
-       String SP = (String) cboSP.getSelectedItem();
+        String SP = (String) cboSP.getSelectedItem();
         if (!SP.equalsIgnoreCase("")) {
             btnazsp.setEnabled(true);
             btnzasp.setEnabled(true);
@@ -2902,6 +2974,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             cboVaiTro.setSelectedIndex(0);
         } else {
             cboVaiTro.setSelectedItem(listcv.getTenCV());
+            if ("Admin".equalsIgnoreCase(listcv.getTenCV())) {
+                cboVaiTro.setEnabled(false);
+            } else {
+                cboVaiTro.setEnabled(true);
+            }
         }
         txtEmailNV.setText(tk.getEmail());
         txtMatKhauNV.setText(tk.getMatKhau());
@@ -3060,7 +3137,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         TaiKhoanEntity nv = getFormNhanVien();
         String tencv = (String) cboVaiTro.getSelectedItem();
         if ("Admin".equalsIgnoreCase(tencv)) {
-            MsgBox.alert(this, "Bạn không được phép thêm Admin!");
+            MsgBox.alert(this, "Bạn không được phép cập nhật thành Admin!");
             this.clearFormChucVu();
             return;
         } else {
@@ -3080,11 +3157,25 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public void deleteNV() {
         String tendn = txtTenDN.getText();
-        if (ktCV.equalsIgnoreCase("admin")) {
+
+        List<HoaDonEntity> listHD = new ArrayList<>();
+        List<GioHangEntity> listGH = new ArrayList<>();
+        String vaiTro = (String) cboVaiTro.getSelectedItem();
+        if (vaiTro.equalsIgnoreCase("admin")) {
             MsgBox.alert(this, "Không thể xóa tài khoản Admin!");
             return;
         } else {
             try {
+                listHD = HoaDon.selectByName(tendn);
+                listGH = Giohang.selectByName(tendn);
+                for (HoaDonEntity hd : listHD) {
+                    HDCT.delete(hd.getMaHD());
+                }
+                HoaDon.deleteTen(tendn);
+                for (GioHangEntity gh : listGH) {
+                    GioHangtam.delete(gh.getMaGH());
+                }
+                Giohang.deleteTen(tendn);
                 NhanVien.delete(tendn);
                 listNVT();
                 this.fillTableNhanVien();
@@ -3134,6 +3225,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtTenDN.getText().equals(" ")) {
             MsgBox.alert(this, " Tên đăng nhập không để trống!");
             txtTenDN.requestFocus();
+            lblTenDN.setForeground(Color.RED);
             return false;
         }
         if (txtHoTenNV.getText().equals(" ")) {
@@ -3144,39 +3236,46 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (txtMatKhauNV.getText().equals(" ")) {
             MsgBox.alert(this, "Mật khẩu không được để trống!");
             txtMatKhauNV.requestFocus();
+            lblMatKhau.setForeground(Color.RED);
             return false;
         }
         if (txtDiaChiNV.getText().equals(" ")) {
             MsgBox.alert(this, "Địa chỉ không để trống!");
             txtDiaChiNV.requestFocus();
+            lblDiaChiNV.setForeground(Color.RED);
             return false;
         }
         if (txtNgaySinhNV.getText().equals(" ")) {
             MsgBox.alert(this, "Ngày sinh không để trống!!");
             txtNgaySinhNV.requestFocus();
+            lblNgaySinhNV.setForeground(Color.RED);
             return false;
         }
         if (txtSDTNV.getText().equals(" ")) {
             MsgBox.alert(this, "Số điện thoại không được để trống!");
             txtSDTNV.requestFocus();
+            lblSDTNV.setForeground(Color.RED);
             return false;
         } else {
             Matcher matcher = Pattern.compile(SDT).matcher(txtSDTNV.getText());
             if (matcher.matches() == false) {
                 MsgBox.alert(this, "Số điện thoại không đúng dịnh dạng!");
                 txtSDTNV.requestFocus();
+                lblSDTNV.setForeground(Color.RED);
                 return false;
             }
         }
         if (txtEmailNV.getText().equals(" ")) {
             MsgBox.alert(this, "Email không được để trống!");
             txtEmailNV.requestFocus();
+            lblEmailNV.setForeground(Color.RED);
             return false;
         } else {
             Matcher matcher = Pattern.compile(MAIL_REGEX).matcher(txtEmailNV.getText());
             if (matcher.matches() == false) {
                 MsgBox.alert(this, "Email không đúng dịnh dạng!");
                 txtEmailNV.requestFocus();
+                lblEmailNV.setForeground(Color.RED);
                 return false;
             }
         }
@@ -3989,7 +4088,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         }
     }
 
-   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -4191,29 +4289,29 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jSeparator7 = new javax.swing.JSeparator();
         jSeparator8 = new javax.swing.JSeparator();
         btnThemNV = new com.swing.Button();
-        jLabel33 = new javax.swing.JLabel();
+        lblHovaTenNV = new javax.swing.JLabel();
         txtHoTenNV = new javax.swing.JTextField();
-        jLabel34 = new javax.swing.JLabel();
+        lblTenDN = new javax.swing.JLabel();
         txtTenDN = new javax.swing.JTextField();
         txtEmailNV = new javax.swing.JTextField();
         jLabel35 = new javax.swing.JLabel();
-        jLabel36 = new javax.swing.JLabel();
+        lblSDTNV = new javax.swing.JLabel();
         txtSDTNV = new javax.swing.JTextField();
         lblTrangThai = new javax.swing.JLabel();
         txtDiaChiNV = new javax.swing.JTextField();
         txtNgaySinhNV = new javax.swing.JTextField();
-        jLabel38 = new javax.swing.JLabel();
-        jLabel39 = new javax.swing.JLabel();
+        lblNgaySinhNV = new javax.swing.JLabel();
+        lblMatKhau = new javax.swing.JLabel();
         txtMatKhauNV = new javax.swing.JTextField();
         jLabel41 = new javax.swing.JLabel();
         jPanel18 = new javax.swing.JPanel();
         rdoNu = new javax.swing.JRadioButton();
         rdoNam = new javax.swing.JRadioButton();
         cboVaiTro = new com.swing.Combobox();
-        jLabel40 = new javax.swing.JLabel();
+        lblDiaChiNV = new javax.swing.JLabel();
         sbtnTrangThaiNV = new com.hicode.switchbutton.SwitchButton();
         txtTrangThaiNV = new javax.swing.JLabel();
-        jLabel61 = new javax.swing.JLabel();
+        lblEmailNV = new javax.swing.JLabel();
         cardSanPham = new com.swing.PanelRound();
         cardHangSanXuat1 = new com.swing.PanelRound();
         cardLoai2 = new com.swing.PanelRound();
@@ -4248,20 +4346,20 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jSeparator34 = new javax.swing.JSeparator();
         jSeparator35 = new javax.swing.JSeparator();
         txtTenSP = new javax.swing.JTextField();
-        jLabel70 = new javax.swing.JLabel();
+        lblTenSP = new javax.swing.JLabel();
         txtMaSP = new javax.swing.JTextField();
         jLabel71 = new javax.swing.JLabel();
         txtNgayNhapSP = new javax.swing.JTextField();
         jLabel106 = new javax.swing.JLabel();
         txtGiaNhapSP = new javax.swing.JTextField();
-        jLabel107 = new javax.swing.JLabel();
+        lblGiaNhapSP = new javax.swing.JLabel();
         txtGiaBanSP = new javax.swing.JTextField();
         jLabel108 = new javax.swing.JLabel();
         jScrollPane8 = new javax.swing.JScrollPane();
         txtMoTaSP = new javax.swing.JTextArea();
         jLabel109 = new javax.swing.JLabel();
-        jLabel76 = new javax.swing.JLabel();
-        jLabel114 = new javax.swing.JLabel();
+        lblMaSP = new javax.swing.JLabel();
+        lblGiaBanSP = new javax.swing.JLabel();
         lblImportFileExcel = new com.swing.Button();
         lblExportInfor = new com.swing.Button();
         cardHangSanXuat = new com.swing.PanelRound();
@@ -4295,9 +4393,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel73 = new javax.swing.JLabel();
         lblrecordHang = new javax.swing.JLabel();
         txtMaHang = new javax.swing.JTextField();
-        jLabel110 = new javax.swing.JLabel();
+        lblMaHang = new javax.swing.JLabel();
         txtTenHang = new javax.swing.JTextField();
-        jLabel111 = new javax.swing.JLabel();
+        lblTenHang = new javax.swing.JLabel();
         cardLoai = new com.swing.PanelRound();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblLoaiHang = new javax.swing.JTable();
@@ -4328,8 +4426,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel68 = new javax.swing.JLabel();
         lblrecordLoai = new javax.swing.JLabel();
         txtMaLoai = new javax.swing.JTextField();
-        jLabel112 = new javax.swing.JLabel();
-        jLabel113 = new javax.swing.JLabel();
+        lblMaLoai = new javax.swing.JLabel();
+        lblTenLoai = new javax.swing.JLabel();
         txtTenLoai = new javax.swing.JTextField();
         cardGioHang = new com.swing.PanelRound();
         pnGioHangSanPham = new javax.swing.JPanel();
@@ -4447,14 +4545,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnThemKhachHang = new com.swing.Button();
         jLabel62 = new javax.swing.JLabel();
         lblrecordKH = new javax.swing.JLabel();
-        jLabel42 = new javax.swing.JLabel();
+        lblHovaTenKH = new javax.swing.JLabel();
         txthoTen = new javax.swing.JTextField();
         txtSDT = new javax.swing.JTextField();
-        jLabel87 = new javax.swing.JLabel();
-        jLabel88 = new javax.swing.JLabel();
+        lblSDTKH = new javax.swing.JLabel();
+        lblMaKH = new javax.swing.JLabel();
         txtmaKH = new javax.swing.JTextField();
         txtdiaChi = new javax.swing.JTextField();
-        jLabel89 = new javax.swing.JLabel();
+        lblDiaChiKH = new javax.swing.JLabel();
 
         dateChooser1.setForeground(new java.awt.Color(0, 153, 51));
         dateChooser1.setTextRefernce(txtNgayNhapSP);
@@ -5596,9 +5694,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         jPanel20.setBackground(new java.awt.Color(255, 255, 255));
 
-        cboCV.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "a", "x", "e", "f", "e", "gd", " " }));
-        cboCV.setSelectedIndex(-1);
+        cboCV.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Mã chức vụ", "Tên chức vụ" }));
         cboCV.setLabeText("Sắp xếp theo");
+        cboCV.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboCVItemStateChanged(evt);
+            }
+        });
 
         jLabel93.setText(" Tiến hành sắp xếp");
         jLabel93.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -5609,12 +5711,22 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         btnazCV.setBackground(new java.awt.Color(102, 204, 255));
         btnazCV.setText("A -Z");
+        btnazCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnazCVActionPerformed(evt);
+            }
+        });
         jPanel21.add(btnazCV);
         btnazCV.setBounds(20, 20, 159, 30);
 
         btnzaCV.setBackground(new java.awt.Color(204, 153, 255));
         btnzaCV.setText("Z -A");
         btnzaCV.setMargin(new java.awt.Insets(5, 14, 14, 14));
+        btnzaCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnzaCVActionPerformed(evt);
+            }
+        });
         jPanel21.add(btnzaCV);
         btnzaCV.setBounds(20, 90, 159, 30);
 
@@ -6021,23 +6133,23 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         cardTaiKhoanNhanVien.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 30, 400, 250));
 
-        jLabel33.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel33.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel33.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel33.setText("Họ và tên:");
-        jLabel33.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 44, 110, 30));
+        lblHovaTenNV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblHovaTenNV.setForeground(new java.awt.Color(0, 0, 255));
+        lblHovaTenNV.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblHovaTenNV.setText("Họ và tên:");
+        lblHovaTenNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblHovaTenNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 44, 110, 30));
 
         txtHoTenNV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtHoTenNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardTaiKhoanNhanVien.add(txtHoTenNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 180, 30));
 
-        jLabel34.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel34.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel34.setText("Tên đăng nhập:");
-        jLabel34.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 110, 30));
+        lblTenDN.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblTenDN.setForeground(new java.awt.Color(0, 0, 255));
+        lblTenDN.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTenDN.setText("Tên đăng nhập:");
+        lblTenDN.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblTenDN, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 110, 30));
 
         txtTenDN.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTenDN.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -6054,12 +6166,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel35.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTaiKhoanNhanVien.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, 110, 30));
 
-        jLabel36.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel36.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel36.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel36.setText("Số diện thoại:");
-        jLabel36.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 110, 30));
+        lblSDTNV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblSDTNV.setForeground(new java.awt.Color(0, 0, 255));
+        lblSDTNV.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblSDTNV.setText("Số diện thoại:");
+        lblSDTNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblSDTNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 110, 30));
 
         txtSDTNV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSDTNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -6080,19 +6192,19 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtNgaySinhNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardTaiKhoanNhanVien.add(txtNgaySinhNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 160, 180, 30));
 
-        jLabel38.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel38.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel38.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel38.setText("Ngày sinh:");
-        jLabel38.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel38, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, 110, 30));
+        lblNgaySinhNV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblNgaySinhNV.setForeground(new java.awt.Color(0, 0, 255));
+        lblNgaySinhNV.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblNgaySinhNV.setText("Ngày sinh:");
+        lblNgaySinhNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblNgaySinhNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, 110, 30));
 
-        jLabel39.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel39.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel39.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel39.setText("Mật khẩu:");
-        jLabel39.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 110, 30));
+        lblMatKhau.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblMatKhau.setForeground(new java.awt.Color(0, 0, 255));
+        lblMatKhau.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblMatKhau.setText("Mật khẩu:");
+        lblMatKhau.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblMatKhau, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 110, 30));
 
         txtMatKhauNV.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtMatKhauNV.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -6142,12 +6254,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         cboVaiTro.setLabeText("");
         cardTaiKhoanNhanVien.add(cboVaiTro, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 20, 180, 50));
 
-        jLabel40.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel40.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel40.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel40.setText("Địa chỉ:");
-        jLabel40.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 110, 30));
+        lblDiaChiNV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblDiaChiNV.setForeground(new java.awt.Color(0, 0, 255));
+        lblDiaChiNV.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblDiaChiNV.setText("Địa chỉ:");
+        lblDiaChiNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblDiaChiNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 220, 110, 30));
 
         sbtnTrangThaiNV.setBackground(new java.awt.Color(0, 153, 0));
         sbtnTrangThaiNV.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -6162,12 +6274,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtTrangThaiNV.setText("Đang hoạt động");
         cardTaiKhoanNhanVien.add(txtTrangThaiNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 290, -1, -1));
 
-        jLabel61.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel61.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel61.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel61.setText("Email:");
-        jLabel61.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanNhanVien.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 110, 30));
+        lblEmailNV.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblEmailNV.setForeground(new java.awt.Color(0, 0, 255));
+        lblEmailNV.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblEmailNV.setText("Email:");
+        lblEmailNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanNhanVien.add(lblEmailNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 110, 30));
 
         cardTrangChu.add(cardTaiKhoanNhanVien, "card7");
 
@@ -6410,8 +6522,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         });
 
-        cboSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Mã sản phẩm", "Tên sản phẩm", "Giá nhập ", "Giá bán", " " }));
-        cboSP.setSelectedIndex(-1);
+        cboSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Mã sản phẩm", "Tên sản phẩm", "Giá nhập ", "Giá bán", " " }));
         cboSP.setLabeText("Sắp xếp theo");
         cboSP.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -6513,12 +6624,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtTenSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai2.add(txtTenSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 140, 200, 30));
 
-        jLabel70.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel70.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel70.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel70.setText("Tên sản phẩm:");
-        jLabel70.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai2.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 100, 30));
+        lblTenSP.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblTenSP.setForeground(new java.awt.Color(0, 0, 255));
+        lblTenSP.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTenSP.setText("Tên sản phẩm:");
+        lblTenSP.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai2.add(lblTenSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 100, 30));
 
         txtMaSP.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtMaSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -6546,12 +6657,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtGiaNhapSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai2.add(txtGiaNhapSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, 200, 30));
 
-        jLabel107.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel107.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel107.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel107.setText("Giá nhập:");
-        jLabel107.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai2.add(jLabel107, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 100, 30));
+        lblGiaNhapSP.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblGiaNhapSP.setForeground(new java.awt.Color(0, 0, 255));
+        lblGiaNhapSP.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblGiaNhapSP.setText("Giá nhập:");
+        lblGiaNhapSP.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai2.add(lblGiaNhapSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 100, 30));
 
         txtGiaBanSP.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtGiaBanSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -6578,19 +6689,19 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel109.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardLoai2.add(jLabel109, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 140, 80, -1));
 
-        jLabel76.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel76.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel76.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel76.setText("Mã sản phẩm:");
-        jLabel76.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai2.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 100, 30));
+        lblMaSP.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblMaSP.setForeground(new java.awt.Color(0, 0, 255));
+        lblMaSP.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblMaSP.setText("Mã sản phẩm:");
+        lblMaSP.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai2.add(lblMaSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, 100, 30));
 
-        jLabel114.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jLabel114.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel114.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel114.setText("Giá bán:");
-        jLabel114.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai2.add(jLabel114, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, 70, 30));
+        lblGiaBanSP.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblGiaBanSP.setForeground(new java.awt.Color(0, 0, 255));
+        lblGiaBanSP.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblGiaBanSP.setText("Giá bán:");
+        lblGiaBanSP.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai2.add(lblGiaBanSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, 70, 30));
 
         lblImportFileExcel.setBackground(new java.awt.Color(255, 204, 255));
         lblImportFileExcel.setText("Nhập File Excel");
@@ -6935,23 +7046,23 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtMaHang.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai1.add(txtMaHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 250, 30));
 
-        jLabel110.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel110.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel110.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel110.setText("Mã hãng sản xuất:");
-        jLabel110.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai1.add(jLabel110, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 150, 30));
+        lblMaHang.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblMaHang.setForeground(new java.awt.Color(0, 0, 255));
+        lblMaHang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMaHang.setText("Mã hãng sản xuất:");
+        lblMaHang.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai1.add(lblMaHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 90, 150, 30));
 
         txtTenHang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenHang.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai1.add(txtTenHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 250, 30));
 
-        jLabel111.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel111.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel111.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel111.setText("Tên hãng sản xuất:");
-        jLabel111.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai1.add(jLabel111, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 150, 30));
+        lblTenHang.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblTenHang.setForeground(new java.awt.Color(0, 0, 255));
+        lblTenHang.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTenHang.setText("Tên hãng sản xuất:");
+        lblTenHang.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai1.add(lblTenHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 150, 30));
 
         cardHangSanXuat.add(cardLoai1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -7269,19 +7380,19 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtMaLoai.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai.add(txtMaLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 90, 260, 30));
 
-        jLabel112.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel112.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel112.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel112.setText("Mã loại hàng:");
-        jLabel112.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai.add(jLabel112, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 160, 30));
+        lblMaLoai.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblMaLoai.setForeground(new java.awt.Color(0, 0, 255));
+        lblMaLoai.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblMaLoai.setText("Mã loại hàng:");
+        lblMaLoai.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai.add(lblMaLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 160, 30));
 
-        jLabel113.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel113.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel113.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel113.setText("Tên loại hàng:");
-        jLabel113.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardLoai.add(jLabel113, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 150, 30));
+        lblTenLoai.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblTenLoai.setForeground(new java.awt.Color(0, 0, 255));
+        lblTenLoai.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblTenLoai.setText("Tên loại hàng:");
+        lblTenLoai.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardLoai.add(lblTenLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 190, 150, 30));
 
         txtTenLoai.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtTenLoai.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -8106,6 +8217,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         cboKh.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "", "Mã khách hàng", "Tên khách hàng" }));
         cboKh.setLabeText("Sắp xếp theo");
+        cboKh.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cboKhItemStateChanged(evt);
+            }
+        });
 
         jLabel29.setText(" Tiến hành sắp xếp");
         jLabel29.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
@@ -8227,12 +8343,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordKH.setText("2 trên 10");
         cardKhachHang.add(lblrecordKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
 
-        jLabel42.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel42.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel42.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel42.setText("Họ và tên:");
-        jLabel42.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardKhachHang.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 150, 30));
+        lblHovaTenKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblHovaTenKH.setForeground(new java.awt.Color(0, 0, 255));
+        lblHovaTenKH.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblHovaTenKH.setText("Họ và tên:");
+        lblHovaTenKH.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardKhachHang.add(lblHovaTenKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, 150, 30));
 
         txthoTen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txthoTen.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -8242,19 +8358,19 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtSDT.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardKhachHang.add(txtSDT, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 130, 230, 30));
 
-        jLabel87.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel87.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel87.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel87.setText("Số điện thoại:");
-        jLabel87.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardKhachHang.add(jLabel87, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 90, 160, 30));
+        lblSDTKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblSDTKH.setForeground(new java.awt.Color(0, 0, 255));
+        lblSDTKH.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblSDTKH.setText("Số điện thoại:");
+        lblSDTKH.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardKhachHang.add(lblSDTKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 90, 160, 30));
 
-        jLabel88.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel88.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel88.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel88.setText("Mã khách hàng:");
-        jLabel88.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardKhachHang.add(jLabel88, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 150, 30));
+        lblMaKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblMaKH.setForeground(new java.awt.Color(0, 0, 255));
+        lblMaKH.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblMaKH.setText("Mã khách hàng:");
+        lblMaKH.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardKhachHang.add(lblMaKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 150, 30));
 
         txtmaKH.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtmaKH.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
@@ -8264,12 +8380,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtdiaChi.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardKhachHang.add(txtdiaChi, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 240, 240, 30));
 
-        jLabel89.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel89.setForeground(new java.awt.Color(0, 0, 255));
-        jLabel89.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel89.setText("Đại chỉ:");
-        jLabel89.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardKhachHang.add(jLabel89, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 200, 170, 30));
+        lblDiaChiKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
+        lblDiaChiKH.setForeground(new java.awt.Color(0, 0, 255));
+        lblDiaChiKH.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblDiaChiKH.setText("Đại chỉ:");
+        lblDiaChiKH.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardKhachHang.add(lblDiaChiKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 200, 170, 30));
 
         cardTrangChu.add(cardKhachHang, "card16");
 
@@ -8728,7 +8844,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_btnXoaLoaiActionPerformed
 
     private void btnNextLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextLoaiActionPerformed
-        // TODO add your handling code here:
+        nextLoai();
     }//GEN-LAST:event_btnNextLoaiActionPerformed
 
     private void tblLoaiHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblLoaiHangMouseClicked
@@ -8810,6 +8926,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         if (countClick == 1) {
             this.row = tblSanPham.getSelectedRow();
             editSanPham();
+            txtNgayNhapSP.setEnabled(false);
         }
     }//GEN-LAST:event_tblSanPhamMouseReleased
 
@@ -9517,8 +9634,48 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void panelRound5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRound5MouseClicked
         hidePage();
         //cardTaiKhoanCaNhan.setVisible(true);
-        new TaiKhoanCaNhan(this,true,ktTenDN).setVisible(true);
+        new TaiKhoanCaNhan(this, true, ktTenDN).setVisible(true);
     }//GEN-LAST:event_panelRound5MouseClicked
+
+    private void btnazCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnazCVActionPerformed
+        SortCV(0);
+    }//GEN-LAST:event_btnazCVActionPerformed
+
+    private void btnzaCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnzaCVActionPerformed
+        SortCV(1);
+    }//GEN-LAST:event_btnzaCVActionPerformed
+
+    private void cboKhItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboKhItemStateChanged
+
+        String kh = (String) cboKh.getSelectedItem();
+        if (kh.equalsIgnoreCase("")) {
+            btnaz.setEnabled(false);
+            btnza.setEnabled(false);
+        } else {
+            btnaz.setEnabled(true);
+            btnza.setEnabled(true);
+        }
+
+
+    }//GEN-LAST:event_cboKhItemStateChanged
+
+    private void cboCVItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cboCVItemStateChanged
+        String cv = (String) cboCV.getSelectedItem();
+        if (cv.equalsIgnoreCase("")) {
+            btnazCV.setEnabled(false);
+            btnzaCV.setEnabled(false);
+        } else {
+            btnazCV.setEnabled(true);
+            btnzaCV.setEnabled(true);
+            if (cv.equalsIgnoreCase("Tên chức vụ")) {
+                btnazCV.setText("A - Z");
+                btnzaCV.setText("Z - A");
+            } else {
+                btnazCV.setText("Tăng");
+                btnzaCV.setText("Giảm");
+            }
+        }
+    }//GEN-LAST:event_cboCVItemStateChanged
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {
@@ -9884,15 +10041,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel104;
     private javax.swing.JLabel jLabel105;
     private javax.swing.JLabel jLabel106;
-    private javax.swing.JLabel jLabel107;
     private javax.swing.JLabel jLabel108;
     private javax.swing.JLabel jLabel109;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel110;
-    private javax.swing.JLabel jLabel111;
-    private javax.swing.JLabel jLabel112;
-    private javax.swing.JLabel jLabel113;
-    private javax.swing.JLabel jLabel114;
     private javax.swing.JLabel jLabel117;
     private javax.swing.JLabel jLabel118;
     private javax.swing.JLabel jLabel119;
@@ -9916,16 +10067,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel35;
-    private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel38;
-    private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
-    private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
     private javax.swing.JLabel jLabel45;
@@ -9943,7 +10087,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel61;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
     private javax.swing.JLabel jLabel64;
@@ -9952,13 +10095,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel68;
     private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel70;
     private javax.swing.JLabel jLabel71;
     private javax.swing.JLabel jLabel72;
     private javax.swing.JLabel jLabel73;
     private javax.swing.JLabel jLabel74;
     private javax.swing.JLabel jLabel75;
-    private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel77;
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
@@ -9969,9 +10110,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel84;
     private javax.swing.JLabel jLabel85;
     private javax.swing.JLabel jLabel86;
-    private javax.swing.JLabel jLabel87;
-    private javax.swing.JLabel jLabel88;
-    private javax.swing.JLabel jLabel89;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabel90;
     private javax.swing.JLabel jLabel91;
@@ -10067,15 +10205,34 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel lblDay2;
     private javax.swing.JLabel lblDay3;
     private javax.swing.JLabel lblDay4;
+    private javax.swing.JLabel lblDiaChiKH;
+    private javax.swing.JLabel lblDiaChiNV;
+    private javax.swing.JLabel lblEmailNV;
     private com.swing.Button lblExportInfor;
+    private javax.swing.JLabel lblGiaBanSP;
+    private javax.swing.JLabel lblGiaNhapSP;
     private javax.swing.JLabel lblHangemp;
+    private javax.swing.JLabel lblHovaTenKH;
+    private javax.swing.JLabel lblHovaTenNV;
     private com.swing.Button lblImportFileExcel;
     private javax.swing.JLabel lblLoaiTemp;
+    private javax.swing.JLabel lblMaHang;
+    private javax.swing.JLabel lblMaKH;
+    private javax.swing.JLabel lblMaLoai;
+    private javax.swing.JLabel lblMaSP;
+    private javax.swing.JLabel lblMatKhau;
     private javax.swing.JLabel lblNV1;
     private javax.swing.JLabel lblNV2;
     private javax.swing.JLabel lblNV3;
     private javax.swing.JLabel lblNameCustomer;
+    private javax.swing.JLabel lblNgaySinhNV;
     private javax.swing.JLabel lblRecordNV;
+    private javax.swing.JLabel lblSDTKH;
+    private javax.swing.JLabel lblSDTNV;
+    private javax.swing.JLabel lblTenDN;
+    private javax.swing.JLabel lblTenHang;
+    private javax.swing.JLabel lblTenLoai;
+    private javax.swing.JLabel lblTenSP;
     private javax.swing.JLabel lblTichDiem;
     private javax.swing.JLabel lblTichDiemHD;
     private javax.swing.JLabel lblTimKiemCV;

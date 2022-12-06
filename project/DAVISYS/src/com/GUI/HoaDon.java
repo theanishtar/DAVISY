@@ -72,7 +72,7 @@ public class HoaDon extends javax.swing.JDialog {
         try {
             for (HoaDonCTEntity hd : listHD) {
                 if (maHD.equalsIgnoreCase(hd.getMaHD())) {               
-                    Object[] row = {hd.getMaHD(), hd.getTenSP(), hd.getNgayLap(), hd.getNgayNhap(), hd.getTichDiem(), hd.getSl(), hd.getGiaBan(), hd.getTongTien()};
+                    Object[] row = {hd.getMaHD(), hd.getTenSP(), hd.getNgayLap(), hd.getNgayNhap(), hd.getSl(), hd.getGiaBan(), hd.getTongTien()};
                     model.addRow(row);
                     listHDT.add(hd);
                 }
@@ -219,13 +219,13 @@ public class HoaDon extends javax.swing.JDialog {
 
         tblHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Mã hóa đơn", "Tên sản phẩm", "Ngày lập", "Ngày nhập", "Tích điểm", "Số lượng", "Giá bán", "Tổng tiền"
+                "Mã hóa đơn", "Tên sản phẩm", "Ngày lập", "Ngày nhập", "Số lượng", "Giá bán", "Tổng tiền"
             }
         ));
         tblHoaDon.addMouseListener(new java.awt.event.MouseAdapter() {

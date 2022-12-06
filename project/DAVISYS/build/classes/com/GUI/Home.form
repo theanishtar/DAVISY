@@ -2401,19 +2401,17 @@
                             <Component class="com.swing.Combobox" name="cboCV">
                               <Properties>
                                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                  <StringArray count="7">
-                                    <StringItem index="0" value="a"/>
-                                    <StringItem index="1" value="x"/>
-                                    <StringItem index="2" value="e"/>
-                                    <StringItem index="3" value="f"/>
-                                    <StringItem index="4" value="e"/>
-                                    <StringItem index="5" value="gd"/>
-                                    <StringItem index="6" value=" "/>
+                                  <StringArray count="3">
+                                    <StringItem index="0" value=" "/>
+                                    <StringItem index="1" value="M&#xe3; ch&#x1ee9;c v&#x1ee5;"/>
+                                    <StringItem index="2" value="T&#xea;n ch&#x1ee9;c v&#x1ee5;"/>
                                   </StringArray>
                                 </Property>
-                                <Property name="selectedIndex" type="int" value="-1"/>
                                 <Property name="labeText" type="java.lang.String" value="S&#x1eaf;p x&#x1ebf;p theo"/>
                               </Properties>
+                              <Events>
+                                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cboCVItemStateChanged"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="jLabel93">
                               <Properties>
@@ -2444,6 +2442,9 @@
                                     </Property>
                                     <Property name="text" type="java.lang.String" value="A -Z"/>
                                   </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnazCVActionPerformed"/>
+                                  </Events>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                                       <AbsoluteConstraints x="20" y="20" width="159" height="30"/>
@@ -2460,6 +2461,9 @@
                                       <Insets value="[5, 14, 14, 14]"/>
                                     </Property>
                                   </Properties>
+                                  <Events>
+                                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnzaCVActionPerformed"/>
+                                  </Events>
                                   <Constraints>
                                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                                       <AbsoluteConstraints x="20" y="90" width="159" height="30"/>
@@ -3383,7 +3387,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JLabel" name="jLabel33">
+                    <Component class="javax.swing.JLabel" name="lblHovaTenNV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3418,7 +3422,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel34">
+                    <Component class="javax.swing.JLabel" name="lblTenDN">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3488,7 +3492,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel36">
+                    <Component class="javax.swing.JLabel" name="lblSDTNV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3575,7 +3579,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel38">
+                    <Component class="javax.swing.JLabel" name="lblNgaySinhNV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3593,7 +3597,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel39">
+                    <Component class="javax.swing.JLabel" name="lblMatKhau">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3725,7 +3729,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel40">
+                    <Component class="javax.swing.JLabel" name="lblDiaChiNV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -3774,7 +3778,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel61">
+                    <Component class="javax.swing.JLabel" name="lblEmailNV">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="14" style="1"/>
@@ -4358,15 +4362,15 @@
                                 <Component class="com.swing.Combobox" name="cboSP">
                                   <Properties>
                                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                                      <StringArray count="5">
-                                        <StringItem index="0" value="M&#xe3; s&#x1ea3;n ph&#x1ea9;m"/>
-                                        <StringItem index="1" value="T&#xea;n s&#x1ea3;n ph&#x1ea9;m"/>
-                                        <StringItem index="2" value="Gi&#xe1; nh&#x1ead;p "/>
-                                        <StringItem index="3" value="Gi&#xe1; b&#xe1;n"/>
-                                        <StringItem index="4" value=" "/>
+                                      <StringArray count="6">
+                                        <StringItem index="0" value=" "/>
+                                        <StringItem index="1" value="M&#xe3; s&#x1ea3;n ph&#x1ea9;m"/>
+                                        <StringItem index="2" value="T&#xea;n s&#x1ea3;n ph&#x1ea9;m"/>
+                                        <StringItem index="3" value="Gi&#xe1; nh&#x1ead;p "/>
+                                        <StringItem index="4" value="Gi&#xe1; b&#xe1;n"/>
+                                        <StringItem index="5" value=" "/>
                                       </StringArray>
                                     </Property>
-                                    <Property name="selectedIndex" type="int" value="-1"/>
                                     <Property name="labeText" type="java.lang.String" value="S&#x1eaf;p x&#x1ebf;p theo"/>
                                   </Properties>
                                   <Events>
@@ -4496,7 +4500,7 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel70">
+                            <Component class="javax.swing.JLabel" name="lblTenSP">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Times New Roman" size="14" style="1"/>
@@ -4601,7 +4605,7 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel107">
+                            <Component class="javax.swing.JLabel" name="lblGiaNhapSP">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Times New Roman" size="14" style="1"/>
@@ -4695,7 +4699,7 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel76">
+                            <Component class="javax.swing.JLabel" name="lblMaSP">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Times New Roman" size="14" style="1"/>
@@ -4713,7 +4717,7 @@
                                 </Constraint>
                               </Constraints>
                             </Component>
-                            <Component class="javax.swing.JLabel" name="jLabel114">
+                            <Component class="javax.swing.JLabel" name="lblGiaBanSP">
                               <Properties>
                                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                                   <Font name="Times New Roman" size="14" style="1"/>
@@ -5371,7 +5375,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel110">
+                        <Component class="javax.swing.JLabel" name="lblMaHang">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Times New Roman" size="16" style="1"/>
@@ -5406,7 +5410,7 @@
                             </Constraint>
                           </Constraints>
                         </Component>
-                        <Component class="javax.swing.JLabel" name="jLabel111">
+                        <Component class="javax.swing.JLabel" name="lblTenHang">
                           <Properties>
                             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                               <Font name="Times New Roman" size="16" style="1"/>
@@ -6016,7 +6020,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel112">
+                    <Component class="javax.swing.JLabel" name="lblMaLoai">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>
@@ -6034,7 +6038,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel113">
+                    <Component class="javax.swing.JLabel" name="lblTenLoai">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>
@@ -8035,6 +8039,9 @@
                                 </Property>
                                 <Property name="labeText" type="java.lang.String" value="S&#x1eaf;p x&#x1ebf;p theo"/>
                               </Properties>
+                              <Events>
+                                <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cboKhItemStateChanged"/>
+                              </Events>
                             </Component>
                             <Component class="javax.swing.JLabel" name="jLabel29">
                               <Properties>
@@ -8186,7 +8193,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel42">
+                    <Component class="javax.swing.JLabel" name="lblHovaTenKH">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>
@@ -8238,7 +8245,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel87">
+                    <Component class="javax.swing.JLabel" name="lblSDTKH">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>
@@ -8256,7 +8263,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel88">
+                    <Component class="javax.swing.JLabel" name="lblMaKH">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>
@@ -8308,7 +8315,7 @@
                         </Constraint>
                       </Constraints>
                     </Component>
-                    <Component class="javax.swing.JLabel" name="jLabel89">
+                    <Component class="javax.swing.JLabel" name="lblDiaChiKH">
                       <Properties>
                         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                           <Font name="Times New Roman" size="16" style="1"/>

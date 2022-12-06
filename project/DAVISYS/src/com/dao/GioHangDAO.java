@@ -16,8 +16,10 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
     final String INSERT_SQL = "INSERT INTO GIOHANG (MAGH, MAKH, TENDN) values(?, ?,?)";
     final String UPDATE_SQL = "UPDATE GIOHANG SET  MAKH = ?, TENDN = ? WHERE MAGH = ?";
     final String DELETE_SQL = "DELETE FROM GIOHANG WHERE MAGH = ?";
+    final String DELETETENDN_SQL = "DELETE FROM GIOHANG WHERE TENDN = ?";
     final String SELECT_ALL_SQL = "SELECT *FROM GIOHANG";
     final String SELECT_BY_ID_SQL = "SELECT *FROM GIOHANG WHERE MAGH = ?";
+     final String SELECT_BY_NAME_SQL = "SELECT *FROM GIOHANG WHERE TENDN = ?";
 
     @Override
     public void insert(GioHangEntity entity) {
@@ -34,6 +36,10 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
         JdbcHelper.update(DELETE_SQL, key);
     }
 
+    public void deleteTen(String key) {
+        JdbcHelper.update(DELETETENDN_SQL, key);
+    }
+
     @Override
     public List<GioHangEntity> selectAll() {
         return this.selectBySql(SELECT_ALL_SQL);
@@ -46,6 +52,10 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
             return null;
         }
         return list.get(0);
+    }
+    public  List<GioHangEntity> selectByName(String key) {
+      return this.selectBySql(SELECT_BY_NAME_SQL, key);
+        
     }
 
     @Override
