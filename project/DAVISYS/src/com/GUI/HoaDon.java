@@ -141,14 +141,12 @@ public class HoaDon extends javax.swing.JDialog {
         lbltenSP.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lbltenSP.setForeground(new java.awt.Color(0, 0, 255));
         lbltenSP.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbltenSP.setText("Laptop Dell");
         lbltenSP.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lbltenSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 230, 200, 30));
 
         lblNgayNhap.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lblNgayNhap.setForeground(new java.awt.Color(0, 0, 255));
         lblNgayNhap.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNgayNhap.setText("11/12/2022");
         lblNgayNhap.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lblNgayNhap, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 20, 100, 30));
 
@@ -159,7 +157,6 @@ public class HoaDon extends javax.swing.JDialog {
         lblMacthd.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lblMacthd.setForeground(new java.awt.Color(0, 0, 255));
         lblMacthd.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblMacthd.setText("01");
         lblMacthd.setToolTipText("");
         jPanel1.add(lblMacthd, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 60, 230, 30));
 
@@ -215,7 +212,6 @@ public class HoaDon extends javax.swing.JDialog {
 
         lbltenNV.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         lbltenNV.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbltenNV.setText("Hồng Nhật");
         lbltenNV.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lbltenNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 240, 30));
 
@@ -244,13 +240,11 @@ public class HoaDon extends javax.swing.JDialog {
 
         lblTenHang.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lblTenHang.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTenHang.setText("Dell");
         lblTenHang.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lblTenHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 280, 200, 30));
 
         lblTenLoai.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         lblTenLoai.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblTenLoai.setText("Laptop");
         lblTenLoai.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lblTenLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 330, 200, 30));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(477, 54, 290, 10));
@@ -270,7 +264,6 @@ public class HoaDon extends javax.swing.JDialog {
         lbltenkh.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         lbltenkh.setForeground(new java.awt.Color(0, 0, 255));
         lbltenkh.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lbltenkh.setText("Duy Khánh");
         lbltenkh.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jPanel1.add(lbltenkh, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 240, 30));
 

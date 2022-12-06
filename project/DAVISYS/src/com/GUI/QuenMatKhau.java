@@ -5,7 +5,7 @@
 package com.gui;
 
 import com.dao.TaiKhoanDAO;
-import com.edusys.utils.XImage;
+import com.utils.XImage;
 import com.entity.TaiKhoanEntity;
 import java.awt.Color;
 import javax.swing.JOptionPane;

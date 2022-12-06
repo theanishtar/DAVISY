@@ -1,4 +1,4 @@
-package com.edusys.utils;
+package com.utils;
 
 import java.awt.Image;
 import java.io.File;

@@ -74,7 +74,6 @@
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Laptop Dell"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>
@@ -92,7 +91,6 @@
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="11/12/2022"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>
@@ -127,7 +125,6 @@
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="01"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
           <Constraints>
@@ -258,7 +255,6 @@
               <Font name="Times New Roman" size="18" style="0"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="H&#x1ed3;ng Nh&#x1ead;t"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>
@@ -354,7 +350,6 @@
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Dell"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>
@@ -369,7 +364,6 @@
               <Font name="Times New Roman" size="14" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Laptop"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>
@@ -424,7 +418,6 @@
               <Color blue="ff" green="0" red="0" type="rgb"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="2"/>
-            <Property name="text" type="java.lang.String" value="Duy Kh&#xe1;nh"/>
             <Property name="verticalAlignment" type="int" value="3"/>
           </Properties>
           <Constraints>

@@ -104,6 +104,7 @@ import com.entity.HoaDonEntity;
 import com.library.extensisons.Qr;
 import com.library.extensisons.SendInforProduct;
 import com.library.extensisons.Validate;
+import java.awt.Desktop;
 import java.lang.reflect.Array;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -230,13 +231,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     public Home() {
         initComponents();
-
-        loadMain(); //gọi component Loading khi đang chờ kết nối Database
-        initMenu(); //gọi lại phương thức khởi tạo MENU
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
         getTenNhanVien("dannk");
         ktTenDN = "dannk";
+        loadMain(); //gọi component Loading khi đang chờ kết nối Database
+        initMenu(); //gọi lại phương thức khởi tạo MENU
+
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -270,11 +271,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         initComponents();
 
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
-        initMenu(); //gọi lại phương thức khởi tạo MENU
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
+
         getTenNhanVien(tenDN);
         ktTenDN = tenDN;
+
+        initMenu(); //gọi lại phương thức khởi tạo MENU
+
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -337,133 +341,254 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     void initMenu() {
-        drawer = Drawer.newDrawer(this)
-                .background(new Color(90, 90, 90))
-                .enableScroll(true)
-                .header(new Header())
-                .space(3)
-                .addChild(new DrawerItem("Cửa sổ chính").build())
-                .addChild(new DrawerItem("Tài khoản").build())
-                .addChild(new DrawerItem("Sản phẩm").build())
-                .addChild(new DrawerItem("Hóa đơn").build())
-                .addChild(new DrawerItem("Giỏ hàng").build())
-                .addChild(new DrawerItem("Thống kê").build())
-                .addFooter(new Separator())
-                .addFooter(new DrawerItem("Giới thiệu").build())
-                .addFooter(new DrawerItem("Đăng xuất").build())
-                .event(new EventDrawer() {
-                    @Override
-                    public void selected(int index, DrawerItem item) {
-                        if (drawer.isShow()) {
-                            drawer.hide();
+        if (checkChucVu) {
+            drawer = Drawer.newDrawer(this)
+                    .background(new Color(90, 90, 90))
+                    .enableScroll(true)
+                    .header(new Header())
+                    .space(3)
+                    .addChild(new DrawerItem("Cửa sổ chính").build())
+                    .addChild(new DrawerItem("Tài khoản").build())
+                    .addChild(new DrawerItem("Sản phẩm").build())
+                    .addChild(new DrawerItem("Hóa đơn").build())
+                    .addChild(new DrawerItem("Giỏ hàng").build())
+                    .addChild(new DrawerItem("Thống kê").build())
+                    .addFooter(new Separator())
+                    .addFooter(new DrawerItem("Giới thiệu").build())
+                    .addFooter(new DrawerItem("Đăng xuất").build())
+                    .event(new EventDrawer() {
+                        @Override
+                        public void selected(int index, DrawerItem item) {
+                            if (drawer.isShow()) {
+                                drawer.hide();
+                            }
+                            switch (index) {
+                                case 0:
+                                    //gọi trang Main
+                                    if (chose == -1 || chose != 0) {
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTrangChu.setVisible(true);
+                                        cardTrangChuTongQuan.setVisible(true);
+                                        chose = 0;
+                                    }
+                                    break;
+                                case 1:
+                                    //gọi trang tài khoản
+                                    if (chose == -1 || chose != 1) {
+                                        TaiKhoanHr2.setVisible(false);
+                                        TaiKhoanHr3.setVisible(false);
+                                        TaiKhoanHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTaiKhoan.setVisible(true);
+                                        cardTaiKhoanNhanVien.setVisible(true);
+                                        chose = 1;
+                                        listNVT();
+                                        listKhachHang();
+                                        listChucVu();
+                                        fillTableNhanVien();
+                                        fillTableKhachHang();
+                                        fillTableChucVu();
+                                    }
+                                    break;
+                                case 2:
+                                    //gọi trang sản phẩm
+                                    if (chose == -1 || chose != 2) {
+                                        SanPhamHr1.setVisible(false);
+                                        SanPhamHr2.setVisible(false);
+                                        SanPhamHr.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarSanPham.setVisible(true);
+                                        cardSanPham.setVisible(true);
+                                        chose = 2;
+                                        listSPT();
+                                        listHang();
+                                        listLoai();
+                                        fillTableSanPham();
+                                        fillTableHang();
+                                        fillTableLoai();
+                                    }
+                                    break;
+                                case 3:
+                                    //gọi trang hóa đơn
+                                    if (chose == -1 || chose != 3) {
+                                        HoaDonHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarHoaDon.setVisible(true);
+                                        cardHoaDon.setVisible(true);
+                                        chose = 3;
+                                        listHoaDon();
+                                        fillTableHoaDon();
+
+                                    }
+                                    break;
+                                case 4:
+                                    //gọi trang giỏ hàng
+                                    if (chose == -1 || chose != 4) {
+                                        hidePage();
+                                        hideMenu();
+                                        cartShoping("");
+                                        cardMenubarGioHang.setVisible(true);
+                                        cardGioHang.setVisible(true);
+                                        chose = 4;
+                                    }
+                                    break;
+                                case 5:
+                                    //gọi trang thống kê
+                                    if (chose == -1 || chose != 5) {
+                                        ThongKeHr2.setVisible(false);
+                                        ThongKeHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarThongKe.setVisible(true);
+                                        cardThongKeDoanhThu.setVisible(true);
+                                        chose = 5;
+                                        ThongKeTittle1.setVisible(false);
+                                        ThongKeHr1.setVisible(false);
+                                        cardThongKeDoanhThu.setVisible(false);
+                                        cardThongKeSanPham.setVisible(true);
+                                        ThongKeHr2.setVisible(true);
+                                        GioiThieuHr2.setVisible(false);
+                                    }
+                                    break;
+                                case 6:
+                                    //gọi trang giới thiệu
+                                    if (chose == -1 || chose != 6) {
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarGioiThieu.setVisible(true);
+                                        cardGioiThieuSanPham.setVisible(true);
+                                        chose = 6;
+                                    }
+                                    break;
+                                case 7:
+                                    //gọi phương thức đăng xuất
+                                    signOut();
+                                    break;
+                                case 8:
+
+                                    break;
+                            }
                         }
-                        switch (index) {
-                            case 0:
-                                //gọi trang Main
-                                if (chose == -1 || chose != 0) {
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarTrangChu.setVisible(true);
-                                    cardTrangChuTongQuan.setVisible(true);
-                                    chose = 0;
-                                }
-                                break;
-                            case 1:
-                                //gọi trang tài khoản
-                                if (chose == -1 || chose != 1) {
-                                    TaiKhoanHr2.setVisible(false);
-                                    TaiKhoanHr3.setVisible(false);
-                                    TaiKhoanHr1.setVisible(true);
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarTaiKhoan.setVisible(true);
-                                    cardTaiKhoanNhanVien.setVisible(true);
-                                    chose = 1;
-                                    listNVT();
-                                    listKhachHang();
-                                    listChucVu();
-                                    fillTableNhanVien();
-                                    fillTableKhachHang();
-                                    fillTableChucVu();
-                                }
-                                break;
-                            case 2:
-                                //gọi trang sản phẩm
-                                if (chose == -1 || chose != 2) {
-                                    SanPhamHr1.setVisible(false);
-                                    SanPhamHr2.setVisible(false);
-                                    SanPhamHr.setVisible(true);
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarSanPham.setVisible(true);
-                                    cardSanPham.setVisible(true);
-                                    chose = 2;
-                                    listSPT();
-                                    listHang();
-                                    listLoai();
-                                    fillTableSanPham();
-                                    fillTableHang();
-                                    fillTableLoai();
-                                }
-                                break;
-                            case 3:
-                                //gọi trang hóa đơn
-                                if (chose == -1 || chose != 3) {
-                                    HoaDonHr1.setVisible(true);
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarHoaDon.setVisible(true);
-                                    cardHoaDon.setVisible(true);
-                                    chose = 3;
-                                    listHoaDon();
-                                    fillTableHoaDon();
+                    }).build();
+        } else {
+            drawer = Drawer.newDrawer(this)
+                    .background(new Color(90, 90, 90))
+                    .enableScroll(true)
+                    .header(new Header())
+                    .space(3)
+                    .addChild(new DrawerItem("Cửa sổ chính").build())
+                    .addChild(new DrawerItem("Sản phẩm").build())
+                    .addChild(new DrawerItem("Hóa đơn").build())
+                    .addChild(new DrawerItem("Giỏ hàng").build())
+                    .addChild(new DrawerItem("Thống kê").build())
+                    .addFooter(new Separator())
+                    .addFooter(new DrawerItem("Giới thiệu").build())
+                    .addFooter(new DrawerItem("Đăng xuất").build())
+                    .event(new EventDrawer() {
+                        @Override
+                        public void selected(int index, DrawerItem item) {
+                            if (drawer.isShow()) {
+                                drawer.hide();
+                            }
+                            switch (index) {
+                                case 0:
+                                    //gọi trang Main
+                                    if (chose == -1 || chose != 0) {
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTrangChu.setVisible(true);
+                                        cardTrangChuTongQuan.setVisible(true);
+                                        chose = 0;
+                                    }
+                                    break;
 
-                                }
-                                break;
-                            case 4:
-                                //gọi trang giỏ hàng
-                                if (chose == -1 || chose != 4) {
-                                    hidePage();
-                                    hideMenu();
-                                    cartShoping("");
-                                    cardMenubarGioHang.setVisible(true);
-                                    cardGioHang.setVisible(true);
-                                    chose = 4;
-                                }
-                                break;
-                            case 5:
-                                //gọi trang thống kê
-                                if (chose == -1 || chose != 5) {
-                                    ThongKeHr2.setVisible(false);
-                                    ThongKeHr1.setVisible(true);
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarThongKe.setVisible(true);
-                                    cardThongKeDoanhThu.setVisible(true);
-                                    chose = 5;
+                                case 1:
+                                    //gọi trang sản phẩm
+                                    if (chose == -1 || chose != 1) {
+                                        SanPhamHr1.setVisible(false);
+                                        SanPhamHr2.setVisible(false);
+                                        SanPhamHr.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarSanPham.setVisible(true);
+                                        cardSanPham.setVisible(true);
+                                        chose = 1;
+                                        listSPT();
+                                        listHang();
+                                        listLoai();
+                                        fillTableSanPham();
+                                        fillTableHang();
+                                        fillTableLoai();
+                                    }
+                                    break;
+                                case 2:
+                                    //gọi trang hóa đơn
+                                    if (chose == -1 || chose != 2) {
+                                        HoaDonHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarHoaDon.setVisible(true);
+                                        cardHoaDon.setVisible(true);
+                                        chose = 2;
+                                        listHoaDon();
+                                        fillTableHoaDon();
+                                    }
+                                    break;
+                                case 3:
+                                    //gọi trang giỏ hàng
+                                    if (chose == -1 || chose != 3) {
+                                        hidePage();
+                                        hideMenu();
+                                        cartShoping("");
+                                        cardMenubarGioHang.setVisible(true);
+                                        cardGioHang.setVisible(true);
+                                        chose = 3;
+                                    }
+                                    break;
+                                case 4:
+                                    //gọi trang thống kê
+                                    if (chose == -1 || chose != 4) {
+                                        ThongKeHr2.setVisible(false);
+                                        ThongKeHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarThongKe.setVisible(true);
+                                        cardThongKeDoanhThu.setVisible(true);
+                                        chose = 54;
+                                        ThongKeTittle1.setVisible(false);
+                                        ThongKeHr1.setVisible(false);
+                                        cardThongKeDoanhThu.setVisible(false);
+                                        cardThongKeSanPham.setVisible(true);
+                                        ThongKeHr2.setVisible(true);
+                                    }
+                                    break;
+                                case 5:
+                                    //gọi trang giới thiệu
+                                    if (chose == -1 || chose != 5) {
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarGioiThieu.setVisible(true);
+                                        cardGioiThieuSanPham.setVisible(true);
+                                        chose = 5;
+                                        GioiThieuHr2.setVisible(false);
+                                    }
+                                    break;
+                                case 6:
+                                    //gọi phương thức đăng xuất
+                                    signOut();
+                                    break;
+                                case 8:
 
-                                }
-                                break;
-                            case 6:
-                                //gọi trang giới thiệu
-                                if (chose == -1 || chose != 6) {
-                                    hidePage();
-                                    hideMenu();
-                                    cardMenubarGioiThieu.setVisible(true);
-                                    cardGioiThieuSanPham.setVisible(true);
-                                    chose = 6;
-                                }
-                                break;
-                            case 7:
-                                //gọi phương thức đăng xuất
-                                signOut();
-                                break;
-                            case 8:
-
-                                break;
+                                    break;
+                            }
                         }
-                    }
-                }).build();
+                    }).build();
+        }
+
     }
 
     int chooserMenuIndex = 1;
@@ -701,14 +826,15 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 //Hiển thị tên nhân viên trên cửa sổ chính
 
+    boolean checkChucVu = true; //quan li hoac admin
+
     public void getTenNhanVien(String tenNV) {
         for (TaiKhoanEntity tk : listTK) {
             if (tenNV.equalsIgnoreCase(tk.getTenDN())) {
                 lbltenNV.setText(tk.getTenNV());
                 lblChucVu.setText("Chức vụ: " + tk.getTenCV());
                 if (!"Quản lí".equalsIgnoreCase(tk.getTenCV()) && !"admin".equalsIgnoreCase(tk.getTenCV())) {
-                    btnTaiKhoan.setEnabled(false);
-                    btnTaiKhoan.setForeground(Color.lightGray);
+                    checkChucVu = false;
                 } else if ("Quản lí".equalsIgnoreCase(tk.getTenCV()) || "admin".equalsIgnoreCase(tk.getTenCV())) {
                     ktCV = tk.getTenCV();
                 }
@@ -2674,7 +2800,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }
 
     public void btnSP() {
-        String SP = (String) cboSP.getSelectedItem();
+       String SP = (String) cboSP.getSelectedItem();
         if (!SP.equalsIgnoreCase("")) {
             btnazsp.setEnabled(true);
             btnzasp.setEnabled(true);
@@ -3829,6 +3955,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         }).start();
     }
+//Đi tới trang web hướng dẫn
+
+    public void openHuongDan() {
+
+        try {
+            Desktop.getDesktop().browse(new File("src\\com\\web\\index.html").toURI());
+        } catch (IOException ex) {
+            MsgBox.alert(this, "Không tìm thấy file huớng dẫn");
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -3841,7 +3977,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         dateChooser1 = new com.swing.datechooser.DateChooser();
-        dateChooser3 = new com.swing.datechooser.DateChooser();
         jPanel1 = new javax.swing.JPanel();
         loadingMain = new com.frame.LoadingMain();
         pnMenu = new javax.swing.JPanel();
@@ -4296,8 +4431,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         dateChooser1.setForeground(new java.awt.Color(0, 153, 51));
         dateChooser1.setTextRefernce(txtNgayNhapSP);
-
-        dateChooser3.setTextRefernce(txtNgaySinhNV);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -9697,7 +9830,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private com.swing.Combobox cboYearSP;
     private com.swing.Combobox comboboxHD;
     private com.swing.datechooser.DateChooser dateChooser1;
-    private com.swing.datechooser.DateChooser dateChooser3;
     private com.frame.Header header2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

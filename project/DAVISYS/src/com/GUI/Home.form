@@ -14,13 +14,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="com.swing.datechooser.DateChooser" name="dateChooser3">
-      <Properties>
-        <Property name="textRefernce" type="javax.swing.JTextField" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="txtNgaySinhNV"/>
-        </Property>
-      </Properties>
-    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
