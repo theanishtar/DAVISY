@@ -11,6 +11,7 @@ public class SanPhamEntity {
 
     private String maSP, tenSP, maLH, maHang,tenH,tenL;
     private float giaNhap, giaBan;
+    private int sl=0;
     private Date ngayNhap;
     private String hinh, moTa;
 
@@ -30,20 +31,18 @@ public class SanPhamEntity {
         this.hinh = hinh;
         this.moTa = moTa;
     }
-    
-    public SanPhamEntity(String maSP, String tenSP, String maLH, String maHang,  float giaNhap, float giaBan, Date ngayNhap, String hinh, String moTa, String tenL,String tenH) {
-        this.maSP = maSP;
-        this.tenSP = tenSP;
-        this.maLH = maLH;
-        this.maHang = maHang;
-        this.tenH = tenH;
-        this.tenL = tenL;
-        this.giaNhap = giaNhap;
-        this.giaBan = giaBan;
-        this.ngayNhap = ngayNhap;
-        this.hinh = hinh;
-        this.moTa = moTa;
+
+    public int getSl() {
+        return sl;
     }
+
+    public void setSl(int sl) {
+        this.sl = sl;
+    }
+
+   
+    
+
 
     public String getTenH() {
         return tenH;

@@ -52,10 +52,19 @@ public class ModelItem {
         this.image = image;
     }
 
-    public ModelItem(int itemID, String itemName, String description, double price, String brandName, Icon image) {
+    public String getEnd() {
+        return end;
+    }
+
+    public void setEnd(String end) {
+        this.end = end;
+    }
+
+    public ModelItem(int itemID, String itemName, String description,String end, double price, String brandName, Icon image) {
         this.itemID = itemID;
         this.itemName = itemName;
         this.description = description;
+        this.end =end;
         this.price = price;
         this.brandName = brandName;
         this.image = image;
@@ -67,6 +76,7 @@ public class ModelItem {
     private int itemID;
     private String itemName;
     private String description;
+    private String end;
     private double price;
     private String brandName;
     private Icon image;

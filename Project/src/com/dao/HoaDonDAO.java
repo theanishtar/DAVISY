@@ -66,14 +66,22 @@ public class HoaDonDAO extends DAVISY<HoaDonEntity, String> {
         return this.selectBySql(sql, '%' + keyword + "%");
     }
 
-    public List<HoaDonEntity> selectByName(String key) {
-         return this.selectBySql(SELECT_BY_NAME_SQL, key);
-//        List<HoaDonEntity> list = this.selectBySql(SELECT_BY_NAME_SQL, key);
-//        if (list.isEmpty()) {
-//            return null;
-//        }
-//        return list.get(0);
+    public HoaDonEntity selectByName(String key) {
+        List<HoaDonEntity> list = this.selectBySql(SELECT_BY_NAME_SQL, key);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
+    
+//    public List<HoaDonEntity> selectByName(String key) {
+//         return this.selectBySql(SELECT_BY_NAME_SQL, key);
+////        List<HoaDonEntity> list = this.selectBySql(SELECT_BY_NAME_SQL, key);
+////        if (list.isEmpty()) {
+////            return null;
+////        }
+////        return list.get(0);
+//    }
 
     @Override
     protected List<HoaDonEntity> selectBySql(String sql, Object... args) {
