@@ -15,21 +15,32 @@ import javax.swing.JFrame;
  * @author DAVISY
  */
 public class TaiKhoanCaNhan extends javax.swing.JDialog {
-TaiKhoanDAO NhanVien = new TaiKhoanDAO();
-String ktTenDNTK = null;
+    
+    TaiKhoanDAO NhanVien = new TaiKhoanDAO();
+    String ktTenDNTK = null;
+
     /**
      * Creates new form TaiKhoanCaNhan
      */
-    public TaiKhoanCaNhan(java.awt.Frame parent, boolean modal,String ktTenDN) {
+    public TaiKhoanCaNhan(java.awt.Frame parent, boolean modal, String ktTenDN) {
         super(parent, modal);
         initComponents();
+        txtMatKhauTK.setEchoChar('●');
+        txtNhapLaiMatKhauTK.setEchoChar('●');
+        lblHide.setVisible(false);
+        lblHide1.setVisible(false);
         ktTenDNTK = ktTenDN;
         setFormThongTinNhanVien();
     }
-
-    private TaiKhoanCaNhan(JFrame jFrame, boolean modal){
+    
+    private TaiKhoanCaNhan(JFrame jFrame, boolean modal) {
         initComponents();
         setResizable(false);
+        txtMatKhauTK.setEchoChar('●');
+        txtNhapLaiMatKhauTK.setEchoChar('●');
+        lblHide.setVisible(false);
+        lblHide1.setVisible(false);
+        ktTenDNTK = "dannk";
         setFormThongTinNhanVien();
     }
     
@@ -46,8 +57,9 @@ String ktTenDNTK = null;
         rdoNuTK.setSelected(!tk.isGioiTInh());
     }
     
-    public void updateThongTinCaNhan(){
-        TaiKhoanEntity nv = getFormThongTinNhanVien();
+    public void updateThongTinCaNhan() {
+        if (txtMatKhauTK.getText().equalsIgnoreCase(txtNhapLaiMatKhauTK.getText())) {
+            TaiKhoanEntity nv = getFormThongTinNhanVien();
             try {
                 NhanVien.update(nv);
                 MsgBox.alert(this, "Cập nhật thành công!");
@@ -55,13 +67,19 @@ String ktTenDNTK = null;
                 MsgBox.alert(this, "Cập nhật thất bại!");
                 System.out.println(e);
             }
-        
+            
+        } else {
+            MsgBox.alert(this, "Mật khẩu không chính xác!");
+            txtNhapLaiMatKhauTK.setText("");
+            txtNhapLaiMatKhauTK.requestFocus();
+            return;
+        }
     }
     
     public TaiKhoanEntity getFormThongTinNhanVien() {
         TaiKhoanEntity h = new TaiKhoanEntity();
         h.setTenDN(txtTenDNTK.getText());
-        h.setTenNV(txtHoTenTK.getText());      
+        h.setTenNV(txtHoTenTK.getText());
         h.setEmail(txtEmailTK.getText());
         h.setMatKhau(txtMatKhauTK.getText());
         h.setDiaChi(txtDiaChiTK.getText());
@@ -70,7 +88,7 @@ String ktTenDNTK = null;
         h.setGioiTInh(rdoNamTK.isSelected());
         return h;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -89,7 +107,6 @@ String ktTenDNTK = null;
         txtTenDNTK = new javax.swing.JTextField();
         jLabel51 = new javax.swing.JLabel();
         jLabel52 = new javax.swing.JLabel();
-        txtMatKhauTK = new javax.swing.JTextField();
         jLabel66 = new javax.swing.JLabel();
         txtEmailTK = new javax.swing.JTextField();
         jLabel82 = new javax.swing.JLabel();
@@ -102,6 +119,13 @@ String ktTenDNTK = null;
         rdoNamTK = new javax.swing.JRadioButton();
         rdoNuTK = new javax.swing.JRadioButton();
         btnCapNhatTK = new com.swing.Button();
+        jLabel53 = new javax.swing.JLabel();
+        lblHide = new javax.swing.JLabel();
+        lblShow = new javax.swing.JLabel();
+        lblHide1 = new javax.swing.JLabel();
+        lblShow1 = new javax.swing.JLabel();
+        txtNhapLaiMatKhauTK = new textfield.PasswordField();
+        txtMatKhauTK = new textfield.PasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -148,10 +172,6 @@ String ktTenDNTK = null;
         jLabel52.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         cardTaiKhoanCaNhan.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 320, 110, 30));
 
-        txtMatKhauTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtMatKhauTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtMatKhauTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 320, 180, 30));
-
         jLabel66.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel66.setForeground(new java.awt.Color(0, 0, 255));
         jLabel66.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -179,22 +199,22 @@ String ktTenDNTK = null;
         jLabel115.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel115.setText("Địa chỉ:");
         jLabel115.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 400, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 460, 110, 30));
 
         txtDiaChiTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtDiaChiTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtDiaChiTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 400, 180, 30));
+        cardTaiKhoanCaNhan.add(txtDiaChiTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 460, 180, 30));
 
         jLabel116.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel116.setForeground(new java.awt.Color(0, 0, 255));
         jLabel116.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel116.setText("Số diện thoại:");
         jLabel116.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel116, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 400, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel116, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 110, 30));
 
         txtSDTNVTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSDTNVTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtSDTNVTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 400, 180, 30));
+        cardTaiKhoanCaNhan.add(txtSDTNVTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 390, 180, 30));
 
         jLabel122.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel122.setForeground(new java.awt.Color(0, 0, 255));
@@ -222,6 +242,51 @@ String ktTenDNTK = null;
             }
         });
         cardTaiKhoanCaNhan.add(btnCapNhatTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 160, 116, 39));
+
+        jLabel53.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel53.setForeground(new java.awt.Color(0, 0, 255));
+        jLabel53.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel53.setText("Nhập lại mật khẩu:");
+        jLabel53.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        cardTaiKhoanCaNhan.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 400, 130, 30));
+
+        lblHide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/hide.png"))); // NOI18N
+        lblHide.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHideMouseClicked(evt);
+            }
+        });
+        cardTaiKhoanCaNhan.add(lblHide, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, -1, -1));
+
+        lblShow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/show.png"))); // NOI18N
+        lblShow.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblShowMouseClicked(evt);
+            }
+        });
+        cardTaiKhoanCaNhan.add(lblShow, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, -1, -1));
+
+        lblHide1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/hide.png"))); // NOI18N
+        lblHide1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHide1MouseClicked(evt);
+            }
+        });
+        cardTaiKhoanCaNhan.add(lblHide1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 410, -1, -1));
+
+        lblShow1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/show.png"))); // NOI18N
+        lblShow1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblShow1MouseClicked(evt);
+            }
+        });
+        cardTaiKhoanCaNhan.add(lblShow1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 410, -1, -1));
+
+        txtNhapLaiMatKhauTK.setLabelText("");
+        cardTaiKhoanCaNhan.add(txtNhapLaiMatKhauTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 390, 180, -1));
+
+        txtMatKhauTK.setLabelText("");
+        cardTaiKhoanCaNhan.add(txtMatKhauTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 310, 180, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,6 +316,30 @@ String ktTenDNTK = null;
     private void btnCapNhatTKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCapNhatTKActionPerformed
         updateThongTinCaNhan();
     }//GEN-LAST:event_btnCapNhatTKActionPerformed
+
+    private void lblShowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblShowMouseClicked
+        lblShow.setVisible(false);
+        lblHide.setVisible(true);
+        txtMatKhauTK.setEchoChar((char) 0);
+    }//GEN-LAST:event_lblShowMouseClicked
+
+    private void lblHideMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHideMouseClicked
+        lblHide.setVisible(false);
+        lblShow.setVisible(true);
+        txtMatKhauTK.setEchoChar('●');
+    }//GEN-LAST:event_lblHideMouseClicked
+
+    private void lblHide1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHide1MouseClicked
+        lblHide1.setVisible(false);
+        lblShow1.setVisible(true);
+        txtNhapLaiMatKhauTK.setEchoChar('●');
+    }//GEN-LAST:event_lblHide1MouseClicked
+
+    private void lblShow1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblShow1MouseClicked
+        lblShow1.setVisible(false);
+        lblHide1.setVisible(true);
+        txtNhapLaiMatKhauTK.setEchoChar((char) 0);
+    }//GEN-LAST:event_lblShow1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -305,16 +394,22 @@ String ktTenDNTK = null;
     private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel51;
     private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
     private javax.swing.JLabel jLabel60;
     private javax.swing.JLabel jLabel66;
     private javax.swing.JLabel jLabel82;
+    private javax.swing.JLabel lblHide;
+    private javax.swing.JLabel lblHide1;
+    private javax.swing.JLabel lblShow;
+    private javax.swing.JLabel lblShow1;
     private javax.swing.JRadioButton rdoNamTK;
     private javax.swing.JRadioButton rdoNuTK;
     private javax.swing.JTextField txtDiaChiTK;
     private javax.swing.JTextField txtEmailTK;
     private javax.swing.JTextField txtHoTenTK;
-    private javax.swing.JTextField txtMatKhauTK;
+    private textfield.PasswordField txtMatKhauTK;
     private javax.swing.JTextField txtNgaySinhTK;
+    private textfield.PasswordField txtNhapLaiMatKhauTK;
     private javax.swing.JTextField txtSDTNVTK;
     private javax.swing.JTextField txtTenDNTK;
     // End of variables declaration//GEN-END:variables

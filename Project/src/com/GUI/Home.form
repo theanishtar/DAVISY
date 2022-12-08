@@ -8501,7 +8501,7 @@
                           <Color blue="ff" green="0" red="0" type="rgb"/>
                         </Property>
                         <Property name="horizontalAlignment" type="int" value="2"/>
-                        <Property name="text" type="java.lang.String" value="&#x110;&#x1ea1;i ch&#x1ec9;:"/>
+                        <Property name="text" type="java.lang.String" value="&#x110;&#x1ecb;a ch&#x1ec9;:"/>
                         <Property name="verticalAlignment" type="int" value="3"/>
                       </Properties>
                       <Constraints>

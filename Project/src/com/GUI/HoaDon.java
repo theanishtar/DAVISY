@@ -50,7 +50,7 @@ public class HoaDon extends javax.swing.JDialog {
     public HoaDon(java.awt.Frame parent, boolean modal, String mahd) {
         super(parent, modal);
         initComponents();
-           this.setIconImage(XImage.getAppIcon());
+        this.setIconImage(XImage.getAppIcon());
         setLocationRelativeTo(parent);
         setResizable(false);
 //        listHD = HoaDon.selectAll();
@@ -71,7 +71,7 @@ public class HoaDon extends javax.swing.JDialog {
         model.setRowCount(0);
         try {
             for (HoaDonCTEntity hd : listHD) {
-                if (maHD.equalsIgnoreCase(hd.getMaHD())) {               
+                if (maHD.equalsIgnoreCase(hd.getMaHD())) {
                     Object[] row = {hd.getMaHD(), hd.getTenSP(), hd.getNgayLap(), hd.getNgayNhap(), hd.getSl(), hd.getGiaBan(), hd.getTongTien()};
                     model.addRow(row);
                     listHDT.add(hd);
@@ -343,7 +343,7 @@ public class HoaDon extends javax.swing.JDialog {
     }//GEN-LAST:event_txtGiaBanXActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
-
+        tblHoaDon.setDefaultEditor(Object.class, null);
         int i = tblHoaDon.getSelectedRow();
         HoaDonCTEntity hd = listHDT.get(i);
         SanPhamEntity sp = sanPham.selectById(hd.getMaSP());
