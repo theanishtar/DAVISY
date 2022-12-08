@@ -156,7 +156,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     BufferedImage cloneImage, image;
     SimpleDateFormat formater = new SimpleDateFormat("dd-MM-yyyy");
     private final String MAIL_REGEX = "^[\\w\\.=-]+@[\\w\\.-]+\\.[\\w]{2,3}$";
-    private static final String TypeProduct_REGEX = "[SP]+[0-9]+[0-9]+[0-9]+[0-9]";
+    private static final String TypeProduct_REGEX = "([A-Z]){2}+([0-9]){4}";
     public static final String SDT = "^\\+?\\d{1,3}?[- .]?\\(?(?:\\d{2,3})\\)?[- .]?\\d\\d\\d[- .]?\\d\\d\\d\\d$";
     HangDAO Hang = new HangDAO();
     LoaiHangDAO Loai = new LoaiHangDAO();
@@ -238,8 +238,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         this.setIconImage(XImage.getAppIcon());
         listCV = chucVu.selectAll();
         listTK = NhanVien.selectAll();
-        getTenNhanVien("nhuomtv");
-        ktTenDN = "nhuomtv";
+        getTenNhanVien("admin");
+        ktTenDN = "admin";
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
         initMenu(); //gọi lại phương thức khởi tạo MENU
 
@@ -1797,7 +1797,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         String tenloai = (String) cboMaLoai.getSelectedItem();
         String tenhang = (String) cboMaHang.getSelectedItem();
         SanPhamEntity sp = new SanPhamEntity();
-        sp.setMaSP(txtMaSP.getText());
+        sp.setMaSP(txtMaSP.getText().toUpperCase());
         sp.setTenSP(txtTenSP.getText());
         List<LoaiHangEntity> listlh = Loai.selectAll();
         for (LoaiHangEntity lh : listlh) {
@@ -1825,6 +1825,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         SanPhamEntity sp = new SanPhamEntity();
         this.setFormSanPham(sp);
         txtNgayNhapSP.setEnabled(true);
+        txtMaSP.setEnabled(true);
         txtGiaBanSP.setText(" ");
         txtNgayNhapSP.setText(" ");
         txtGiaNhapSP.setText(" ");
@@ -2066,9 +2067,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             lblMaSP.setForeground(Color.RED);
             return false;
         } else if (!txtMaSP.getText().equals("")) {
-            Matcher matcher = Pattern.compile(TypeProduct_REGEX).matcher(txtMaSP.getText());
+            Matcher matcher = Pattern.compile(TypeProduct_REGEX).matcher(txtMaSP.getText().toUpperCase());
             if (matcher.matches() == false) {
-                MsgBox.alert(this, "Mã sản phẩm không hợp lệ (SP....)!");
+                MsgBox.alert(this, "Mã sản phẩm không hợp lệ (VD: SP0001)!");
                 txtMaSP.requestFocus();
                 lblMaSP.setForeground(Color.RED);
                 return false;
@@ -9288,6 +9289,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             this.row = tblSanPham.getSelectedRow();
             editSanPham();
             txtNgayNhapSP.setEnabled(false);
+            txtMaSP.setEnabled(false);
         }
     }//GEN-LAST:event_tblSanPhamMouseReleased
 
