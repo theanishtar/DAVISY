@@ -51,6 +51,24 @@ public class ThongKeDAO {
         String[] cols = {"MASP", "TENSP", "LUOTBAN"};
         return this.getListOfArray(sql, cols, year);
     }
+    
+        public List<Object[]> getSPBanChayGD(String day, String month, String year) {
+        String sql = "{CALL sp_ThongKeDoanhThu_SP_DMY_GD(?, ?, ?)}";
+        String[] cols = {"MASP", "TENSP", "LUOTBAN"};
+        return this.getListOfArray(sql, cols, day, month, year);
+    }
+
+    public List<Object[]> getSPBanChayGD(String month, String year) {
+        String sql = "{CALL sp_ThongKeDoanhThu_SP_MY_GD(?, ?)}";
+        String[] cols = {"MASP", "TENSP", "LUOTBAN"};
+        return this.getListOfArray(sql, cols, month, year);
+    }
+
+    public List<Object[]> getSPBanChayGD(String year) {
+        String sql = "{CALL sp_ThongKeDoanhThu_SP_Y_GD(?)}";
+        String[] cols = {"MASP", "TENSP", "LUOTBAN"};
+        return this.getListOfArray(sql, cols, year);
+    }
 
     public List<Object[]> getSPBanChayTL(String year) {
         String sql = "{CALL sp_ThongKeDoanhThu_SPLOAI_Y(?)}";
