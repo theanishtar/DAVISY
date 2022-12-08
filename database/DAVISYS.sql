@@ -1,5 +1,5 @@
 ﻿USE master
-DROP DATABASE DAVISYS
+-- DROP DATABASE DAVISYS
 CREATE DATABASE DAVISYS
 USE DAVISYS
 
@@ -145,17 +145,17 @@ VALUES
 
 INSERT INTO SANPHAM
 VALUES
-	(N'SP01', N'Tai nghe AirPod pro', N'TN', N'AP', 20, 1000000, 1200000, CAST('10-7-2022' AS DATE), 'SP01', ''),
-	(N'SP02', N'Sạc dự phòng Sony', N'SDP', N'SN', 20, 300000, 400000, CAST('11-7-2020' AS DATE), 'SP02', ''),
-	(N'SP03', N'Bàn phím RAZER', N'BP', N'RZ', 20, 800000, 1000000, CAST('1-12-2020' AS DATE), 'SP03', ''),
-	(N'SP05', N'Bàn phím cơ G15', N'BP', N'RZ', 20, 300000, 400000, CAST('11-10-2022' AS DATE), 'SP05', ''),
-	(N'SP06', N'Bàn phím G16', N'BP', N'RZ', 20, 500000, 550000, CAST('11-10-2022' AS DATE), 'SP06', ''),
-	(N'SP07', N'Tai nghe P5P', N'TN', N'AP', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP07', ''),
-	(N'SP08', N'Giá đỡ điện thoại bằng nhôm', N'GD', N'SN', 20, 20000, 50000, CAST('11-10-2022' AS DATE), 'SP08', ''),
-	(N'SP09', N'Giá đỡ bằng nhựa', N'GD', N'SN', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP09', ''),
-	(N'SP10', N'Sạc dự phòng 10000mAh', N'SDP', N'SN', 20, 500000, 600000, CAST('11-10-2022' AS DATE), 'SP10', ''),
-	(N'SP11', N'Tai nghe G3', N'TN', N'AP', 20, 500000, 650000, CAST('11-10-2022' AS DATE), 'SP11', ''),
-	(N'SP12', N'Ốp lưng SamSung', N'OL', N'SS', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP12', '')
+	(N'SP0001', N'Tai nghe AirPod pro', N'TN', N'AP', 20, 1000000, 1200000, CAST('10-7-2022' AS DATE), 'SP0001', ''),
+	(N'SP0002', N'Sạc dự phòng Sony', N'SDP', N'SN', 20, 300000, 400000, CAST('11-7-2020' AS DATE), 'SP0002', ''),
+	(N'SP0003', N'Bàn phím RAZER', N'BP', N'RZ', 20, 800000, 1000000, CAST('1-12-2020' AS DATE), 'SP0003', ''),
+	(N'SP0005', N'Bàn phím cơ G15', N'BP', N'RZ', 20, 300000, 400000, CAST('11-10-2022' AS DATE), 'SP0005', ''),
+	(N'SP0006', N'Bàn phím G16', N'BP', N'RZ', 20, 500000, 550000, CAST('11-10-2022' AS DATE), 'SP0006', ''),
+	(N'SP0007', N'Tai nghe P5P', N'TN', N'AP', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP0007', ''),
+	(N'SP0008', N'Giá đỡ điện thoại bằng nhôm', N'GD', N'SN', 20, 20000, 50000, CAST('11-10-2022' AS DATE), 'SP0008', ''),
+	(N'SP0009', N'Giá đỡ bằng nhựa', N'GD', N'SN', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP0009', ''),
+	(N'SP0010', N'Sạc dự phòng 10000mAh', N'SDP', N'SN', 20, 500000, 600000, CAST('11-10-2022' AS DATE), 'SP0010', ''),
+	(N'SP0011', N'Tai nghe G3', N'TN', N'AP', 20, 500000, 650000, CAST('11-10-2022' AS DATE), 'SP0011', ''),
+	(N'SP0012', N'Ốp lưng SamSung', N'OL', N'SS', 20, 100000, 120000, CAST('11-10-2022' AS DATE), 'SP0012', '')
 
 
 
@@ -169,7 +169,7 @@ VALUES
 
 INSERT INTO TAIKHOAN
 VALUES
-	(N'NhuomTV', 0, N'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', '123', N'Vĩnh Long', '0123654987', CAST('9-7-1985' AS DATE), 1, 1),
+	(N'Admin', 0, N'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', '123', N'Vĩnh Long', '0123654987', CAST('9-7-1985' AS DATE), 1, 1),
 	(N'DangTH', 1, N'Trần Hữu Đang', 'dangthpc04349@fpt.edu.vn', '123', N'Vĩnh Long', '0123654987', CAST('9-7-2003' AS DATE), 1, 1),
 	(N'VinhPQ', 2, N'Phùng Quốc Vinh', 'vinhpqpc04338@fpt.edu.vn', '123', N'Cần Thơ', '0123654987', CAST('11-5-2002' AS DATE), 1, 1),
 	(N'DanNK', 2, N'Nguyễn Khánh Đan', 'dannkpc04351@fpt.edu.vn', '123', N'Cần Thơ', '0123654987', CAST('11-7-2003' AS DATE), 0, 1),
@@ -196,12 +196,12 @@ VALUES
 
 INSERT INTO GIOHANGTAM
 VALUES
-	(N'0123456781', N'SP02', 1),
-	(N'0123456781', N'SP01', 1),
-	(N'0123456782', N'SP02', 1),
-	(N'0123456783', N'SP01', 1),
-	(N'0123456784', N'SP05', 1),
-	(N'0123456785', N'SP01', 2)
+	(N'0123456781', N'SP0002', 1),
+	(N'0123456781', N'SP0001', 1),
+	(N'0123456782', N'SP0002', 1),
+	(N'0123456783', N'SP0001', 1),
+	(N'0123456784', N'SP0005', 1),
+	(N'0123456785', N'SP0001', 2)
 
 INSERT INTO HOADON
 VALUES
@@ -214,13 +214,12 @@ VALUES
 
 INSERT INTO CHITIETHOADON
 VALUES
-(N'CTHD07', N'HD05', N'SP01', 'AP', 'TN', CAST('11-9-2022' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 2)
-	(N'CTHD01', N'HD01', N'SP02', 'SN', 'SDP', CAST('9-6-2021' AS DATE), N'Sạc dự phòng Sony', 'SONY', N'Sạc dự phòng', CAST('11-7-2022' AS DATE), 300000, 400000, 1),
-	(N'CTHD02', N'HD01', N'SP01', 'AP', 'TN', CAST('9-6-2021' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 1),
-	(N'CTHD03', N'HD02', N'SP02', 'SN', 'SDP', CAST('9-7-2022' AS DATE), N'Sạc dự phòng Sony', 'SONY', N'Sạc dự phòng', CAST('11-7-2022' AS DATE), 300000, 400000, 1),
-	(N'CTHD04', N'HD03', N'SP01', 'AP', 'TN', CAST('10-7-2022' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 1),
-	(N'CTHD05', N'HD04', N'SP05', 'LC', 'TSB', CAST('11-8-2022' AS DATE), N'Lót chuột in hình tùy chọn', 'TOSHIBA', N'Lót chuột', CAST('10-7-2022' AS DATE), 30000, 50000, 1),
-	(N'CTHD06', N'HD05', N'SP01', 'AP', 'TN', CAST('11-9-2022' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 2)
+	(N'CTHD01', N'HD01', N'SP0002', 'SN', 'SDP', CAST('9-6-2021' AS DATE), N'Sạc dự phòng Sony', 'SONY', N'Sạc dự phòng', CAST('11-7-2022' AS DATE), 300000, 400000, 1),
+	(N'CTHD02', N'HD01', N'SP0001', 'AP', 'TN', CAST('9-6-2021' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 1),
+	(N'CTHD03', N'HD02', N'SP0002', 'SN', 'SDP', CAST('9-7-2022' AS DATE), N'Sạc dự phòng Sony', 'SONY', N'Sạc dự phòng', CAST('11-7-2022' AS DATE), 300000, 400000, 1),
+	(N'CTHD04', N'HD03', N'SP0001', 'AP', 'TN', CAST('10-7-2022' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 1),
+	(N'CTHD05', N'HD04', N'SP0005', 'LC', 'TSB', CAST('11-8-2022' AS DATE), N'Lót chuột in hình tùy chọn', 'TOSHIBA', N'Lót chuột', CAST('10-7-2022' AS DATE), 30000, 50000, 1),
+	(N'CTHD06', N'HD05', N'SP0001', 'AP', 'TN', CAST('11-9-2022' AS DATE), N'Tai nghe AirPod pro', 'APPLE', N'Tai nghe', CAST('10-7-2022' AS DATE), 1000000, 1200000, 2)
 
 
 
@@ -450,7 +449,7 @@ GO
 
 SELECT * FROM SANPHAM
 SELECT * FROM LOAIHANG
-SELECT * FROM HANG
+SELECT * FROM TAIKHOAN
 
 
 

@@ -6117,6 +6117,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         btnNextCV.setBackground(new java.awt.Color(204, 204, 255));
         btnNextCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/arrow-right.png"))); // NOI18N
+        btnNextCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextCVActionPerformed(evt);
+            }
+        });
         jPanel22.add(btnNextCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(169, 11, -1, -1));
 
         btnFirstCV.setBackground(new java.awt.Color(204, 204, 255));
@@ -6130,6 +6135,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         btnPrevCV.setBackground(new java.awt.Color(204, 204, 255));
         btnPrevCV.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/left-arrow.png"))); // NOI18N
+        btnPrevCV.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrevCVActionPerformed(evt);
+            }
+        });
         jPanel22.add(btnPrevCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(98, 11, -1, -1));
 
         btnLastCV.setBackground(new java.awt.Color(204, 204, 255));
@@ -7946,7 +7956,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel13.setText("Tổng tiền:");
         cardGioHang.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 480, 70, 30));
 
-        txtTongtiensp.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtTongtiensp.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         txtTongtiensp.setForeground(new java.awt.Color(255, 0, 51));
         txtTongtiensp.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtTongtiensp.addCaretListener(new javax.swing.event.CaretListener() {
@@ -9108,15 +9118,15 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_btnLastLoaiActionPerformed
 
     private void btnLastHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastHangActionPerformed
-        // TODO add your handling code here:
+        lastHang();
     }//GEN-LAST:event_btnLastHangActionPerformed
 
     private void btnLastSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastSPActionPerformed
-        // TODO add your handling code here:
+        lastSanPham();
     }//GEN-LAST:event_btnLastSPActionPerformed
 
     private void btnLastNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLastNVActionPerformed
-        // TODO add your handling code here:
+        lastNV();
     }//GEN-LAST:event_btnLastNVActionPerformed
 
     private void TaiKhoantittle2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TaiKhoantittle2MousePressed
@@ -9669,7 +9679,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }//GEN-LAST:event_comboboxHDItemStateChanged
 
     private void btnFirstCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFirstCVActionPerformed
-        // TODO add your handling code here:
+        firsChucVu();
     }//GEN-LAST:event_btnFirstCVActionPerformed
 
     private void tblChucVuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblChucVuMouseReleased
@@ -10067,6 +10077,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private void cboSortActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSortActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cboSortActionPerformed
+
+    private void btnPrevCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrevCVActionPerformed
+        prevChucVu();
+    }//GEN-LAST:event_btnPrevCVActionPerformed
+
+    private void btnNextCVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextCVActionPerformed
+        nextChucVu();
+    }//GEN-LAST:event_btnNextCVActionPerformed
 //Định dạng format trang in
 
     public PageFormat getPageFormat(PrinterJob pj) {

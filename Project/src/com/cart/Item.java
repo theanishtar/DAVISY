@@ -82,7 +82,7 @@ public class Item extends javax.swing.JPanel {
         lblend.setText("Description");
 
         lbPrice.setFont(new java.awt.Font("sansserif", 1, 18)); // NOI18N
-        lbPrice.setForeground(new java.awt.Color(76, 76, 76));
+        lbPrice.setForeground(new java.awt.Color(255, 0, 51));
         lbPrice.setText("0.00");
 
         lbBrand.setFont(new java.awt.Font("sansserif", 1, 12)); // NOI18N
