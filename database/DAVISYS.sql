@@ -1,5 +1,5 @@
-﻿USE master
--- DROP DATABASE DAVISYS
+USE master
+DROP DATABASE DAVISYS
 CREATE DATABASE DAVISYS
 USE DAVISYS
 
@@ -166,7 +166,9 @@ VALUES
 	(2, N'Nhân viên', '')
 
 
-
+-- INSERT INTO TAIKHOAN
+-- VALUES
+-- 	(N'AnNguyen', 1, N'Nguyễn Bình An', 'annb@fpt.edu.vn', '123', N'Vĩnh Long', '0123654988', CAST('10-8-1995' AS DATE), 1, 1)
 INSERT INTO TAIKHOAN
 VALUES
 	(N'Admin', 0, N'Trần Văn Nhuộm', 'nhuomtv@fpt.edu.vn', '123', N'Vĩnh Long', '0123654987', CAST('9-7-1985' AS DATE), 1, 1),
