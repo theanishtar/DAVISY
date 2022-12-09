@@ -53,18 +53,17 @@ public class GioHangDAO extends DAVISY<GioHangEntity, String> {
         }
         return list.get(0);
     }
-     public GioHangEntity selectByName(String key) {
-        List<GioHangEntity> list = this.selectBySql(SELECT_BY_NAME_SQL, key);
-        if (list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
-    }
-
-//    public List<GioHangEntity> selectByName(String key) {
-//        return this.selectBySql(SELECT_BY_NAME_SQL, key);
-//
+//     public GioHangEntity selectByName(String key) {
+//        List<GioHangEntity> list = this.selectBySql(SELECT_BY_NAME_SQL, key);
+//        if (list.isEmpty()) {
+//            return null;
+//        }
+//        return list.get(0);
 //    }
+
+    public List<GioHangEntity> selectByName(String key) {
+        return this.selectBySql(SELECT_BY_NAME_SQL, key);
+    }
 
     @Override
     protected List<GioHangEntity> selectBySql(String sql, Object... args) {

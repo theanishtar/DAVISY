@@ -106,7 +106,7 @@ public class SendQR {
         }
 
         final String username = "davisy.dev@gmail.com";
-        final String password = "iqzhkriacknnlkna";//"ngemudntvdmhwwju"
+        final String password = "ofukrmzrjlfloplu";//"ngemudntvdmhwwju"
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");
         prop.put("mail.smtp.port", "587");

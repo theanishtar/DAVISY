@@ -271,6 +271,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         loadMainDone = true;
         banner();
         tblDoanhThu.setDefaultEditor(Object.class, null);
+        tblCart.setDefaultEditor(Object.class, null);
     }
 
     public Home(String tenDN) {
@@ -313,6 +314,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         loadMainDone = true;
         banner();
         tblDoanhThu.setDefaultEditor(Object.class, null);
+        tblCart.setDefaultEditor(Object.class, null);
     }
     boolean loadMainDone = false;
 
@@ -911,8 +913,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         tblSanPham.setRowHeight(30);
         TableColumnModel columnModelSanPham = tblSanPham.getColumnModel();
         columnModelSanPham.getColumn(0).setPreferredWidth(50);
-        columnModelSanPham.getColumn(1).setPreferredWidth(300);
-        columnModelSanPham.getColumn(2).setPreferredWidth(50);
+        columnModelSanPham.getColumn(1).setPreferredWidth(200);
+        columnModelSanPham.getColumn(2).setPreferredWidth(100);
         columnModelSanPham.getColumn(3).setPreferredWidth(50);
         columnModelSanPham.getColumn(4).setPreferredWidth(60);
         columnModelSanPham.getColumn(5).setPreferredWidth(60);
@@ -1698,8 +1700,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Hiển trị dữ liệu trên bảng và trạng thái ban đầu của các nút 
     public void initSanPham() {
         setLocationRelativeTo(null);
-         txtNgayNhapSP.setText(String.valueOf(formater.format(day())));
-         txtNgayNhapSP.setEnabled(false);
+        txtNgayNhapSP.setText(String.valueOf(formater.format(day())));
+        txtNgayNhapSP.setEnabled(false);
         btnazsp.setEnabled(false);
         btnzasp.setEnabled(false);
         listSPT();
@@ -1740,19 +1742,35 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     void fillTableSanPham(String tenSP) {
         DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
         model.setRowCount(0);
-        try {
-            for (SanPhamEntity sp : list) {
-                if (sp.getTenSP().toLowerCase().contains(tenSP.toLowerCase())) {
-                    LoaiHangEntity lh = Loai.selectById(sp.getMaLH());
-                    HangEntity hang = Hang.selectById(sp.getMaHang());
-                    String daytemp = formater.format(sp.getNgayNhap());
-                    Object[] row = {sp.getMaSP(), sp.getTenSP(), lh.getTenLH(), hang.getTenHang(), sp.getSl(), sp.getGiaNhap(), sp.getGiaBan(), daytemp, sp.getMoTa()};
-                    model.addRow(row);
+        String kt = (String) cboTimKiemSP.getSelectedItem();
+        if (!kt.equalsIgnoreCase(" ") && !kt.equals(null)) {
+            try {
+                for (SanPhamEntity sp : list) {
+                    if (kt.equalsIgnoreCase("Tên sản phẩm")) {
+                        if (sp.getTenSP().toLowerCase().contains(tenSP.toLowerCase())) {
+                            LoaiHangEntity lh = Loai.selectById(sp.getMaLH());
+                            HangEntity hang = Hang.selectById(sp.getMaHang());
+                            String daytemp = formater.format(sp.getNgayNhap());
+                            Object[] row = {sp.getMaSP(), sp.getTenSP(), lh.getTenLH(), hang.getTenHang(), sp.getSl(), sp.getGiaNhap(), sp.getGiaBan(), daytemp, sp.getMoTa()};
+                            model.addRow(row);
+                        }
+                    } else if (kt.equalsIgnoreCase("Mã sản phẩm")) {
+                        if (sp.getMaSP().toLowerCase().contains(tenSP.toLowerCase())) {
+                            LoaiHangEntity lh = Loai.selectById(sp.getMaLH());
+                            HangEntity hang = Hang.selectById(sp.getMaHang());
+                            String daytemp = formater.format(sp.getNgayNhap());
+                            Object[] row = {sp.getMaSP(), sp.getTenSP(), lh.getTenLH(), hang.getTenHang(), sp.getSl(), sp.getGiaNhap(), sp.getGiaBan(), daytemp, sp.getMoTa()};
+                            model.addRow(row);
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
+                System.out.println(e);
             }
-        } catch (Exception e) {
-            MsgBox.alert(this, "Lỗi truy vấn dữ liệu!");
-            System.out.println(e);
+        } else {
+            MsgBox.alert(this, "Vui lòng chọn tiêu chí tìm kiếm!");
+            return;
         }
     }
 
@@ -2139,22 +2157,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 return false;
             }
 
-//            try {
-//                double sl = Integer.valueOf(txtSoLuongSP.getText());  để mai cho nó thấy
-//                if (sl <= 0) {
-//                    MsgBox.alert(this, "Số lượng phải lớn hơn 0");
-//                    txtSoLuongSP.requestFocus();
-//                    lblSoLuongSP.setForeground(Color.RED);
-//                    return false;
-//                } else {
-//                    lblSoLuongSP.setForeground(new Color(0, 0, 255));
-//                }
-//            } catch (Exception ex) {
-//                MsgBox.alert(this, "Vui lòng không nhập số lượng nhập là ký tự hoặc chữ");
-//                txtSoLuongSP.requestFocus();
-//                lblSoLuongSP.setForeground(Color.RED);
-//                return false;
-//            }
         }
         if (txtGiaBanSP.getText().equals("")) {
             MsgBox.alert(this, "Giá bán không được để trống!");
@@ -2323,12 +2325,42 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     //Tìm kiếm theo tên khách hàng
     private void timKiemKH() {
+        String loai = (String) cbotimKiemKH.getSelectedItem();
         String keyword = txtTimKiemKH.getText();
-        listKhachHang = KhachHang.selectByKeyword(keyword);
-        this.fillTableKhachHang();
-        this.clearFormKhachHang();
-        this.row = - 1;
-        updateStatusKhachHang();
+        if (!loai.equalsIgnoreCase(" ") && !loai.equalsIgnoreCase(null)) {
+            if (loai.equalsIgnoreCase("Tên khách hàng")) {
+                listKhachHang = KhachHang.selectByKeyword(keyword);
+
+            } else {
+                listKhachHang = KhachHang.selectByDienThoai(keyword);
+            }
+            this.fillTableKhachHang();
+            this.clearFormKhachHang();
+            this.row = - 1;
+            updateStatusKhachHang();
+        } else {
+            MsgBox.alert(this, "Vui lòng chọn tiêu chí tìm kiếm!");
+            return;
+        }
+    }
+
+    private void timKiemSP() {
+        String loai = (String) cboTimKiemSP.getSelectedItem();
+        String keyword = txtTimKiemSP.getText();
+        if (!loai.equalsIgnoreCase("")) {
+            if (loai.equalsIgnoreCase("Tên sản phẩm")) {
+                list = SanPham.selectByMaSP(keyword);
+            } else {
+                list = SanPham.selectByMaSP(keyword);
+            }
+            this.fillTableSanPham();
+            this.clearFormSanPham();
+            this.row = - 1;
+            updateStatusSanPham();
+        } else {
+            MsgBox.alert(this, "Vui lòng chọn tiêu chí tìm kiếm!");
+            return;
+        }
     }
 
 //Lấy vị trí của dòng trong bảng
@@ -2467,20 +2499,18 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 //Cập nhật dữ liệu
     public void updateKhachHang() {
         listGioHang();
+        List<GioHangEntity> listGH = new ArrayList<>();
         KhachHangEntity kh = getFormKhachHang();
-        GioHangEntity gh = Giohang.selectByName(kh.getMaKH());
+        listGH = Giohang.selectByName(kh.getMaKH());
         try {
             KhachHang.update(kh);
             listKhachHang();
-            if(!kh.getDienThoai().equalsIgnoreCase(gh.getMaGH())){
-                insertGioHang(kh.getDienThoai(), kh.getMaKH(), ktTenDN);
+            for (GioHangEntity gh : listGH) {
+                if (!kh.getDienThoai().equalsIgnoreCase(gh.getMaGH()) && kh.getMaKH().equalsIgnoreCase(gh.getMaKH())) {
+                    insertGioHang(kh.getDienThoai(), kh.getMaKH(), ktTenDN);
+                    listGioHang();
+                }
             }
-//            for (GioHangEntity gh : listGiohang) {
-//                if (kh.getDienThoai().equalsIgnoreCase(gh.getMaGH())) {
-//                    insertGioHang(kh.getDienThoai(), kh.getMaKH(), ktTenDN);
-//                    listGioHang();
-//                }
-//            }
             this.fillTableKhachHang();
             this.clearFormKhachHang();
             MsgBox.alert(this, "Cập nhật thành công!");
@@ -3360,17 +3390,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             return;
         } else {
             try {
-                //HK xóa 
-//                listHD = HoaDon.selectByName(tendn);
-//                listGH = Giohang.selectByName(tendn);
-//                for (HoaDonEntity hd : listHD) {
-//                    HDCT.delete(hd.getMaHD());
-//                }
-//                HoaDon.deleteTen(tendn);
-//                for (GioHangEntity gh : listGH) {
-//                    GioHangtam.delete(gh.getMaGH());
-//                }
-//                Giohang.deleteTen(tendn);
                 NhanVien.delete(tendn);
                 listNVT();
                 this.fillTableNhanVien();
@@ -3774,7 +3793,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                     this.filltableGioHang();
                     return;
                 } else {
-                    MsgBox.alert(this, "Số lượng phải nhỏ hơn " + sp.getSl());
+                    MsgBox.alert(this, "Số lượng sản phẩm " + sp.getMaSP() + " phải nhỏ hơn hoặc bằng " + sp.getSl());
                 }
                 return;
             }
@@ -4695,8 +4714,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLastSP = new com.swing.Button();
         jLabel79 = new javax.swing.JLabel();
         lblTimKiemTempSP = new javax.swing.JLabel();
-        jLabel80 = new javax.swing.JLabel();
         txtTimKiemSP = new javax.swing.JTextField();
+        cboTimKiemSP = new com.swing.Combobox();
         cboMaLoai = new com.swing.Combobox();
         cboMaHang = new com.swing.Combobox();
         lblAnh = new javax.swing.JLabel();
@@ -4888,11 +4907,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         cardGioiThieuThanhVien = new com.swing.PanelRound();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
         cardKhachHang = new com.swing.PanelRound();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblKhachHang = new javax.swing.JTable();
@@ -4905,8 +4919,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         btnLastKH = new com.swing.Button();
         lblTimKiemKH = new javax.swing.JLabel();
         txtTimKiemKH = new javax.swing.JTextField();
-        jLabel64 = new javax.swing.JLabel();
         jLabel58 = new javax.swing.JLabel();
+        cbotimKiemKH = new com.swing.Combobox();
         jPanel3 = new javax.swing.JPanel();
         btnlamMoiKhachHang = new com.swing.Button();
         btncapNhatKhachHang = new com.swing.Button();
@@ -4932,6 +4946,22 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtmaKH = new javax.swing.JTextField();
         txtdiaChi = new javax.swing.JTextField();
         lblDiaChiKH = new javax.swing.JLabel();
+        cardCaiDat = new com.swing.PanelRound();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jTextField3 = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
 
         dateChooser1.setForeground(new java.awt.Color(0, 153, 51));
         dateChooser1.setTextRefernce(txtNgayNhapSP);
@@ -6804,10 +6834,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             }
         });
 
-        jLabel80.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel80.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/search.png"))); // NOI18N
-        jLabel80.setText("Tìm kiếm:");
-
         txtTimKiemSP.setBackground(new java.awt.Color(204, 204, 255));
         txtTimKiemSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtTimKiemSP.addCaretListener(new javax.swing.event.CaretListener() {
@@ -6820,6 +6846,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 txtTimKiemSPMouseClicked(evt);
             }
         });
+
+        cboTimKiemSP.setBackground(new java.awt.Color(204, 204, 255));
+        cboTimKiemSP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Tên sản phẩm", "Mã sản phẩm" }));
+        cboTimKiemSP.setLabeText("Tìm kiếm theo");
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -6836,9 +6866,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 .addComponent(btnLastSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)
                 .addComponent(jLabel79, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(54, 54, 54)
-                .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cboTimKiemSP, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblTimKiemTempSP, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiemSP, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -6849,12 +6879,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel80, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblTimKiemTempSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtTimKiemSP, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                .addComponent(jLabel79, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel79, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cboTimKiemSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
             .addComponent(btnLastSP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(btnNextSP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -7053,7 +7084,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         txtNgayNhapSP.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNgayNhapSP.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         cardLoai2.add(txtNgayNhapSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 200, 210, 30));
-        txtNgayNhapSP.getAccessibleContext().setAccessibleParent(null);
 
         jLabel106.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel106.setForeground(new java.awt.Color(0, 0, 255));
@@ -7094,7 +7124,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         txtMoTaSP.setColumns(20);
         txtMoTaSP.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtMoTaSP.setRows(5);
+        txtMoTaSP.setRows(3);
         jScrollPane8.setViewportView(txtMoTaSP);
 
         cardLoai2.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 210, 420, 70));
@@ -7151,7 +7181,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel14.setText("Format file Excel:");
-        cardLoai2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 280, 110, 40));
+        cardLoai2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 290, 110, 20));
 
         btnFormatFileExcel.setBackground(new java.awt.Color(255, 204, 255));
         btnFormatFileExcel.setText("Tải về");
@@ -8012,9 +8042,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 "Mã sản phẩm", "Tên sản phẩm", "Giá", "Số lượng"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -8054,12 +8091,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         });
         jScrollPane13.setViewportView(tblCart);
         if (tblCart.getColumnModel().getColumnCount() > 0) {
-            tblCart.getColumnModel().getColumn(0).setHeaderValue("Mã sản phẩm");
             tblCart.getColumnModel().getColumn(1).setResizable(false);
-            tblCart.getColumnModel().getColumn(1).setHeaderValue("Tên sản phẩm");
-            tblCart.getColumnModel().getColumn(2).setHeaderValue("Giá");
             tblCart.getColumnModel().getColumn(3).setResizable(false);
-            tblCart.getColumnModel().getColumn(3).setHeaderValue("Số lượng");
         }
 
         cardGioHang.add(jScrollPane13, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 500, 350));
@@ -8517,28 +8550,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         cardGioiThieuThanhVien.setBackground(new java.awt.Color(255, 255, 255));
         cardGioiThieuThanhVien.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel22.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel22.setText("<html> <h2>Phần mềm được phát triển bởi <a href=\"https://www.facebook.com/davisy.dev\">DAVISY TEAM</a></h2>  <!html>");
-        cardGioiThieuThanhVien.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 60, 500, -1));
-
-        jLabel23.setText("<html>  <h3> Phần mềm là dự án trong học kỳ 4 của chúng tôi tại  <a href=\"\">FPT Polytechnic College</a> </h3>  <!html>");
-        cardGioiThieuThanhVien.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, 380, -1));
-
-        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/businessman.png"))); // NOI18N
-        cardGioiThieuThanhVien.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, -1, -1));
-
-        jLabel25.setText("<html>\n<h3>Các tư liệu tham khảo</h3>  \n<ul>  \n <li> <h4> <a href=\"https://github.com/k33ptoo/\">KeepToo</a></h4></li>  \n<li> <h4><a href=\"https://github.com/DJ-Raven\">DJ-Raven</a></h4>\n</li>\n </ul> \n <!html>");
-        cardGioiThieuThanhVien.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 300, 320, 110));
-
-        jLabel26.setText("<html>  <h3>Bạn có thể tham khảo giao diện của chúng tôi tại <a href=\"https://www.github.com/theanishtar\"> đây</a> </h3>  <!html>");
-        jLabel26.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel26MouseClicked(evt);
-            }
-        });
-        cardGioiThieuThanhVien.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 150, 450, -1));
-
         cardTrangChu.add(cardGioiThieuThanhVien, "card15");
 
         cardKhachHang.setBackground(new java.awt.Color(255, 255, 255));
@@ -8647,16 +8658,16 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         });
         jPanel2.add(txtTimKiemKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 10, 210, 40));
 
-        jLabel64.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
-        jLabel64.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/search.png"))); // NOI18N
-        jLabel64.setText("Tìm kiếm:");
-        jPanel2.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 20, 110, 30));
-
         jLabel58.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         jLabel58.setForeground(new java.awt.Color(204, 0, 51));
         jLabel58.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel58.setText("DANH SÁCH KHÁCH HÀNG");
         jPanel2.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, 360, 40));
+
+        cbotimKiemKH.setBackground(new java.awt.Color(204, 204, 255));
+        cbotimKiemKH.setModel(new javax.swing.DefaultComboBoxModel(new String[] { " ", "Tên khách hàng", "Số điện thoại" }));
+        cbotimKiemKH.setLabeText("Tìm kiếm theo");
+        jPanel2.add(cbotimKiemKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 10, 180, 40));
 
         cardKhachHang.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 1150, 60));
 
@@ -8866,6 +8877,72 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         cardTrangChu.add(cardKhachHang, "card16");
 
+        cardCaiDat.setBackground(new java.awt.Color(255, 255, 255));
+        cardCaiDat.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel15.setFont(new java.awt.Font("SansSerif", 0, 28)); // NOI18N
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/businessman.png"))); // NOI18N
+        jLabel15.setText("Cài đặt");
+        jPanel9.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 474, 51));
+
+        jLabel16.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 204));
+        jLabel16.setText("Thư mục lưu đường dẫn lưu mã QR sản phẩm: ");
+        jPanel9.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 110, 680, 29));
+
+        jTextField1.setEditable(false);
+        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jTextField1.setText("src\\\\com\\\\product");
+        jPanel9.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, 593, 30));
+
+        jLabel18.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/open.png"))); // NOI18N
+        jPanel9.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 180, 41, 46));
+
+        jLabel19.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(0, 0, 204));
+        jLabel19.setText("Đường dẫn banner ảnh trang chính:");
+        jPanel9.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 270, 680, 29));
+
+        jTextField2.setEditable(false);
+        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanel9.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 370, 589, 30));
+
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/open.png"))); // NOI18N
+        jPanel9.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 360, 41, 38));
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/open.png"))); // NOI18N
+        jPanel9.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 420, 41, 38));
+
+        jTextField3.setEditable(false);
+        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanel9.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 430, 589, 29));
+
+        jTextField4.setEditable(false);
+        jTextField4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jPanel9.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 490, 589, 30));
+
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/library/icon/open.png"))); // NOI18N
+        jPanel9.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(990, 478, 41, 50));
+
+        jLabel24.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel24.setText("1:");
+        jPanel9.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 370, 32, -1));
+
+        jLabel25.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel25.setText("2:");
+        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 430, 32, -1));
+
+        jLabel26.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel26.setText("3:");
+        jPanel9.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 500, 32, -1));
+
+        cardCaiDat.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1210, 580));
+
+        cardTrangChu.add(cardCaiDat, "card15");
+
         jplContainer.add(cardTrangChu, "card2");
 
         jPanel1.add(jplContainer, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1220, 590));
@@ -8887,7 +8964,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         drawer.show();
-
         //openMenu();
     }//GEN-LAST:event_btnMenuActionPerformed
 
@@ -10219,10 +10295,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         nextChucVu();
     }//GEN-LAST:event_btnNextCVActionPerformed
 
-    private void jLabel26MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel26MouseClicked
-        openHuongDan();
-    }//GEN-LAST:event_jLabel26MouseClicked
-
     private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
         openHuongDan();
     }//GEN-LAST:event_jLabel6MouseClicked
@@ -10537,6 +10609,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
+    private com.swing.PanelRound cardCaiDat;
     private com.swing.PanelRound cardChiTietHoaDon;
     private com.swing.PanelRound cardGioHang;
     private com.swing.PanelRound cardGioiThieuSanPham;
@@ -10580,9 +10653,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private com.swing.Combobox cboSP;
     private com.swing.Combobox cboSort;
     private com.swing.Combobox cboSortNV;
+    private com.swing.Combobox cboTimKiemSP;
     private com.swing.Combobox cboVaiTro;
     private com.swing.Combobox cboYearDT;
     private com.swing.Combobox cboYearSP;
+    private com.swing.Combobox cbotimKiemKH;
     private com.swing.Combobox comboboxHD;
     private com.swing.datechooser.DateChooser dateChooser1;
     private com.swing.datechooser.DateChooser dateChooser2;
@@ -10611,8 +10686,13 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel131;
     private javax.swing.JLabel jLabel135;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
@@ -10647,7 +10727,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel62;
     private javax.swing.JLabel jLabel63;
-    private javax.swing.JLabel jLabel64;
     private javax.swing.JLabel jLabel65;
     private javax.swing.JLabel jLabel67;
     private javax.swing.JLabel jLabel68;
@@ -10662,7 +10741,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JLabel jLabel78;
     private javax.swing.JLabel jLabel79;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel80;
     private javax.swing.JLabel jLabel81;
     private javax.swing.JLabel jLabel83;
     private javax.swing.JLabel jLabel84;
@@ -10710,6 +10788,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane11;
     private javax.swing.JScrollPane jScrollPane12;
@@ -10748,6 +10827,10 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel jlbClose;
     private javax.swing.JLabel jlbState;
     private javax.swing.JPanel jplContainer;

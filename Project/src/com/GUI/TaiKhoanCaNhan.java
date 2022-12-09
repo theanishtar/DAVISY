@@ -177,44 +177,44 @@ public class TaiKhoanCaNhan extends javax.swing.JDialog {
         jLabel66.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel66.setText("Email:");
         jLabel66.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 250, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 190, 110, 30));
 
         txtEmailTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtEmailTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtEmailTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 250, 180, 30));
+        cardTaiKhoanCaNhan.add(txtEmailTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 190, 180, 30));
 
         jLabel82.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel82.setForeground(new java.awt.Color(0, 0, 255));
         jLabel82.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel82.setText("Ngày sinh:");
         jLabel82.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 320, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel82, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, 110, 30));
 
         txtNgaySinhTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtNgaySinhTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtNgaySinhTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 320, 180, 30));
+        cardTaiKhoanCaNhan.add(txtNgaySinhTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 260, 180, 30));
 
         jLabel115.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel115.setForeground(new java.awt.Color(0, 0, 255));
         jLabel115.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel115.setText("Địa chỉ:");
         jLabel115.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 460, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel115, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 400, 110, 30));
 
         txtDiaChiTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtDiaChiTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtDiaChiTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 460, 180, 30));
+        cardTaiKhoanCaNhan.add(txtDiaChiTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 400, 180, 30));
 
         jLabel116.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel116.setForeground(new java.awt.Color(0, 0, 255));
         jLabel116.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel116.setText("Số diện thoại:");
         jLabel116.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        cardTaiKhoanCaNhan.add(jLabel116, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 390, 110, 30));
+        cardTaiKhoanCaNhan.add(jLabel116, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 330, 110, 30));
 
         txtSDTNVTK.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtSDTNVTK.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
-        cardTaiKhoanCaNhan.add(txtSDTNVTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 390, 180, 30));
+        cardTaiKhoanCaNhan.add(txtSDTNVTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 330, 180, 30));
 
         jLabel122.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel122.setForeground(new java.awt.Color(0, 0, 255));
@@ -241,7 +241,7 @@ public class TaiKhoanCaNhan extends javax.swing.JDialog {
                 btnCapNhatTKActionPerformed(evt);
             }
         });
-        cardTaiKhoanCaNhan.add(btnCapNhatTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 160, 116, 39));
+        cardTaiKhoanCaNhan.add(btnCapNhatTK, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 480, 116, 39));
 
         jLabel53.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel53.setForeground(new java.awt.Color(0, 0, 255));

@@ -16,27 +16,27 @@ public class SanPhamDAO extends DAVISY<SanPhamEntity, String> {
     final String INSERT_SQL = "INSERT INTO SANPHAM (MASP, TENSP, MALH, MAHANG,SOLUONG,GIANHAP,GIABAN,NGAYNHAP,HINH,MOTA) values(?, ?,?, ?, ?, ?, ?, ?, ?, ?)";
 
     final String UPDATE_SQL = "UPDATE SANPHAM SET  TENSP = ?, MALH = ?, MAHANG = ?,SOLUONG = ?,GIANHAP = ?,GIABAN = ?,NGAYNHAP = ?,HINH = ?,MOTA = ? WHERE MASP = ?";
-    final String UPDATEHINH_SQL ="UPDATE SANPHAM SET HINH = ? WHERE HINH = 'logokhongvien-01' ADN MASP = ?"; 
+    final String UPDATEHINH_SQL = "UPDATE SANPHAM SET HINH = ? WHERE HINH = 'logokhongvien-01' ADN MASP = ?";
     final String DELETE_SQL = "DELETE FROM SANPHAM WHERE MASP = ?";
     final String SELECT_ALL_SQL = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG  ";
     final String SELECT_BY_ID_SQL = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG AND MASP = ?";
 
     @Override
     public void insert(SanPhamEntity entity) {
-        JdbcHelper.update(INSERT_SQL, entity.getMaSP(), entity.getTenSP(), entity.getMaLH(), entity.getMaHang(),entity.getSl(), entity.getGiaNhap(), entity.getGiaBan(), entity.getNgayNhap(), entity.getHinh(), entity.getMoTa());
+        JdbcHelper.update(INSERT_SQL, entity.getMaSP(), entity.getTenSP(), entity.getMaLH(), entity.getMaHang(), entity.getSl(), entity.getGiaNhap(), entity.getGiaBan(), entity.getNgayNhap(), entity.getHinh(), entity.getMoTa());
     }
 
     @Override
     public void update(SanPhamEntity entity) {
-        JdbcHelper.update(UPDATE_SQL, entity.getTenSP(), entity.getMaLH(), entity.getMaHang(),entity.getSl(), entity.getGiaNhap(), entity.getGiaBan(), entity.getNgayNhap(), entity.getHinh(), entity.getMoTa(), entity.getMaSP());
+        JdbcHelper.update(UPDATE_SQL, entity.getTenSP(), entity.getMaLH(), entity.getMaHang(), entity.getSl(), entity.getGiaNhap(), entity.getGiaBan(), entity.getNgayNhap(), entity.getHinh(), entity.getMoTa(), entity.getMaSP());
     }
-    
+
     public void updateHinh(SanPhamEntity entity) {
-        JdbcHelper.update(UPDATEHINH_SQL,entity.getHinh(), entity.getMaSP());
+        JdbcHelper.update(UPDATEHINH_SQL, entity.getHinh(), entity.getMaSP());
     }
-    
+
     public void updateSL(SanPhamEntity entity) {
-        String sql="UPDATE SANPHAM SET SOLUONG = ? WHERE MASP =?";
+        String sql = "UPDATE SANPHAM SET SOLUONG = ? WHERE MASP =?";
         JdbcHelper.update(sql, entity.getSl(), entity.getMaSP());
     }
 
@@ -60,7 +60,12 @@ public class SanPhamDAO extends DAVISY<SanPhamEntity, String> {
     }
 
     public List<SanPhamEntity> selectByKeyword(String keyword) {
-        String sql = "SELECT * FROM SANPHAM WHERE TENSP LIKE ?";
+        String sql = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG AND TENSP LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
+
+    public List<SanPhamEntity> selectByMaSP(String keyword) {
+        String sql = "select a.*,b.TENLH,c.TENHANG from SANPHAM a,LOAIHANG b,HANG c WHERE a.MALH=b.MALH AND a.MAHANG=c.MAHANG AND MASP LIKE ?";
         return this.selectBySql(sql, '%' + keyword + "%");
     }
 

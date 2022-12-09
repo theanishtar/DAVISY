@@ -22,6 +22,7 @@ import java.io.IOException;
 import javax.swing.ImageIcon;
 import java.util.List;
 import com.dao.SanPhamDAO;
+import com.gui.Login;
 
 public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactory {
 
@@ -55,7 +56,6 @@ public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactor
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jlbUserName = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quét mã sản phẩm");
@@ -86,11 +86,6 @@ public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactor
             }
         });
         jPanel1.add(jlbUserName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 270, 40));
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 153, 51));
-        jLabel1.setText("Trạng thái:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 390, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 440));
 
@@ -150,7 +145,6 @@ public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactor
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel jlbUserName;
@@ -180,6 +174,10 @@ public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactor
                 System.out.println(d);
                 if (d == 370) {
                     JOptionPane.showMessageDialog(this, "Đã quá thời hạn 3 phút\nVui lòng yêu cầu hệ thống gửi lại mã!");
+                    webcam.close();
+                    Login login = new Login();
+                    login.setVisible(true);
+                    this.dispose();
                     return;
                 }
             } catch (InterruptedException e) {
@@ -211,6 +209,7 @@ public class ScanQR extends javax.swing.JFrame implements Runnable, ThreadFactor
                 if (result.getText().equalsIgnoreCase(code)){
                     webcam.close();
                     new QuenMatKhau(this, true, email).setVisible(true);
+                    this.dispose();
                 }
                 //System.out.println(result.getText());
                 //result_field.setText(result.getText());

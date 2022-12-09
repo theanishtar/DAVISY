@@ -51,7 +51,7 @@ public class SendInforProduct {
         listSPT();
 
         final String username = "davisy.dev@gmail.com";
-        final String password = "iqzhkriacknnlkna";//"ngemudntvdmhwwju"
+        final String password = "ofukrmzrjlfloplu";//"ngemudntvdmhwwju"
 
         Properties prop = new Properties();
         prop.put("mail.smtp.host", "smtp.gmail.com");

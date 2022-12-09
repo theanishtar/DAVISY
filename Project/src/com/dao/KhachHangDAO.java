@@ -56,6 +56,10 @@ public class KhachHangDAO extends DAVISY<KhachHangEntity, String> {
         String sql = "SELECT * FROM KHACHHANG WHERE HOTEN LIKE ?";
         return this.selectBySql(sql, '%' + keyword + "%");
     }
+    public List<KhachHangEntity> selectByDienThoai(String keyword) {
+        String sql = "SELECT * FROM KHACHHANG WHERE DIENTHOAI LIKE ?";
+        return this.selectBySql(sql, '%' + keyword + "%");
+    }
     public void updateTd(KhachHangEntity entity) {
         JdbcHelper.update(UPDATETD_SQL,  entity.getTichDiem(), entity.getMaKH());
     }
