@@ -1,6 +1,5 @@
 package com.library.extensisons;
 
-import com.file.FileExtensison;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,12 +55,10 @@ public class Qr {
         return s;
     }
 
-    public void createQRProduct(String maSP) throws Exception {
+    public void createQRProduct(String maSP) {
         String qrCodeData = maSP;
         //String filePath = /*qr.getPath()*/ " " + hoTen + ".png";
-        FileExtensison fe = new FileExtensison();
-        String filePath = fe.getPath()+"\\" + maSP + ".png";
-        //String filePath = fe.GetPath()+"src\\com\\images\\product\\" + maSP + ".png";
+        String filePath = "src\\com\\images\\product\\" + maSP + ".png";
         try {
             //Trình tạo mã QR
             String charset = "UTF-8"; // or "ISO-8859-1"
@@ -193,7 +190,7 @@ public class Qr {
         //return code;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Qr qr = new Qr();
         qr.createQRProduct("SP01");
         //System.out.println(qr.createQR("QRCode"));

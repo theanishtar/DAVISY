@@ -8,7 +8,6 @@ package com.gui;
 import com.library.extensisons.ReadMoney;
 import java.awt.event.*;
 import AppPackage.AnimationClass;
-import com.GUI.CaiDat;
 import com.frame.Header;
 import java.awt.Color;
 import com.ui.drawer.scroll.Drawer;
@@ -102,7 +101,6 @@ import com.entity.GioHangTamEntity;
 import com.entity.GioHangTempEntity;
 import com.entity.HoaDonCTEntity;
 import com.entity.HoaDonEntity;
-import com.file.FileExtensison;
 import com.library.extensisons.Qr;
 import com.library.extensisons.SendInforProduct;
 import com.library.extensisons.Validate;
@@ -271,17 +269,14 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
         SanPhamHr1.setVisible(false);
         loadMainDone = true;
-        try {
-            banner();
-        } catch (Exception ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        banner();
         tblDoanhThu.setDefaultEditor(Object.class, null);
         tblCart.setDefaultEditor(Object.class, null);
     }
 
     public Home(String tenDN) {
         initComponents();
+
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
         this.setIconImage(XImage.getAppIcon());
         listCV = chucVu.selectAll();
@@ -317,36 +312,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordSP.setText(recordSanPham());
         SanPhamHr1.setVisible(false);
         loadMainDone = true;
-        try {
-            banner();
-        } catch (Exception ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        banner();
         tblDoanhThu.setDefaultEditor(Object.class, null);
         tblCart.setDefaultEditor(Object.class, null);
     }
     boolean loadMainDone = false;
-
-    //phương thức set ảnh cho banner chuyển động
-    void initBaner() throws Exception {
-        FileExtensison fe = new FileExtensison();
-        int w = banner1.getWidth();
-        int h = banner1.getHeight();
-        try {
-            File f1 = new File(fe.getImgBaner1());
-            File f2 = new File(fe.getImgBaner2());
-            File f3 = new File(fe.getImgBaner3());
-            Image img1 = ImageIO.read(f1);
-            Image img2 = ImageIO.read(f2);
-            Image img3 = ImageIO.read(f3);
-            banner1.setIcon(new ImageIcon(img1.getScaledInstance(w, h, 0)));
-            banner2.setIcon(new ImageIcon(img2.getScaledInstance(w, h, 0)));
-            banner3.setIcon(new ImageIcon(img3.getScaledInstance(w, h, 0)));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-    }
 
     void loadMain() {
 
@@ -510,7 +480,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                 .addChild(new DrawerItem("Giỏ hàng").build())
                 .addChild(new DrawerItem("Thống kê").build())
                 .addFooter(new Separator())
-                .addFooter(new DrawerItem("Cài đặt").build())
                 .addFooter(new DrawerItem("Giới thiệu").build())
                 .addFooter(new DrawerItem("Đăng xuất").build())
                 .event(new EventDrawer() {
@@ -637,10 +606,6 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                                 }
                                 break;
                             case 6:
-                                //gọi dialog cài đặt
-                                new CaiDat(new Home(), true).setVisible(true);
-                                break;
-                            case 7:
                                 //gọi trang giới thiệu
                                 if (chose == -1 || chose != 6) {
                                     hidePage();
@@ -650,9 +615,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
                                     chose = 6;
                                 }
                                 break;
-                            case 8:
+                            case 7:
                                 //gọi phương thức đăng xuất
                                 signOut();
+                                break;
+                            case 8:
+
                                 break;
                         }
                     }
@@ -663,8 +631,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     int chooserMenuIndex = 1;
 //banner chuyển động
 
-    void banner() throws Exception {
-        initBaner();
+    void banner() {
         JLabel[] arrBaner = {
             banner1, banner2, banner3
         };
@@ -1975,13 +1942,12 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     public void deleteSanPham() {
         String masp = txtMaSP.getText();
         Qr qr = new Qr();
-        FileExtensison fe = new FileExtensison();
         try {
             SanPham.delete(masp);
             listSPT();
             this.fillTableSanPham();
             this.clearFormSanPham();
-            qr.deleteQROProduct(fe.getPath() + "\\" + masp + ".png");
+            qr.deleteQROProduct("src\\com\\images\\product\\" + masp + ".png");
             qr.deleteQROProduct("src\\com\\images\\" + masp + ".png");
             MsgBox.alert(this, "Xóa thành công!");
         } catch (Exception e) {
@@ -6372,6 +6338,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblrecordCV.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordCV.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordCV.setText("2 trên 10");
         cardTaiKhoanChucVu.add(lblrecordCV, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
 
         jLabel99.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
@@ -6503,6 +6470,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblRecordNV.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblRecordNV.setForeground(new java.awt.Color(204, 0, 51));
+        lblRecordNV.setText("2 trên 10");
         cardTaiKhoanNhanVien.add(lblRecordNV, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
 
         jPanel15.setBackground(new java.awt.Color(255, 255, 255));
@@ -6952,6 +6920,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblrecordSP.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordSP.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordSP.setText("2 trên 10");
         cardLoai2.add(lblrecordSP, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 208, 40));
 
         jPanel27.setBackground(new java.awt.Color(255, 255, 255));
@@ -7558,6 +7527,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblrecordHang.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordHang.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordHang.setText("2 trên 10");
         cardLoai1.add(lblrecordHang, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 530, 208, 41));
 
         txtMaHang.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -7891,6 +7861,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblrecordLoai.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordLoai.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordLoai.setText("2 trên 10");
         cardLoai.add(lblrecordLoai, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 550, 208, 41));
 
         txtMaLoai.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -8420,7 +8391,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         lblrecordhd.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordhd.setForeground(new java.awt.Color(204, 0, 51));
         lblrecordhd.setText("2 trên 10");
-        cardHoaDon.add(lblrecordhd, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 554, 240, -1));
+        cardHoaDon.add(lblrecordhd, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 554, -1, -1));
 
         jLabel117.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jLabel117.setForeground(new java.awt.Color(0, 0, 255));
@@ -8480,6 +8451,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         txtPhanTramGG.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtPhanTramGG.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        txtPhanTramGG.setText("50");
         txtPhanTramGG.setToolTipText("");
         txtPhanTramGG.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 0, new java.awt.Color(0, 0, 0)));
         txtPhanTramGG.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -8856,6 +8828,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
         lblrecordKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
         lblrecordKH.setForeground(new java.awt.Color(204, 0, 51));
+        lblrecordKH.setText("2 trên 10");
         cardKhachHang.add(lblrecordKH, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 540, 120, 40));
 
         lblHovaTenKH.setFont(new java.awt.Font("Times New Roman", 1, 16)); // NOI18N
