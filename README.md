@@ -80,14 +80,14 @@ Phần mềm là dự án cuối môn của nhóm DAVISY trong môn dự án 1 -
 <br/> -->
 
 ## Account
-| Tên tài khoản         | Tên đăng nhập        | Chức vụ            | Email                           | Trạng Thái
-| ----------------------| ---------------------| ------------------ | ------------------------------- | ----------------
-| Trần Văn Nhuộm        | admin                | Quản trị           | nhuomtv@fpt.edu.vn              | <span style="color:green" >Đang hoạt động</span>
-| Trần Hữu Đang         | dangth               | Quản lí            | dangthpc04349@fpt.edu.vn        | <span style="color:green" >Đang hoạt động</span>
-| Nguyễn Khánh Đan      | dannk                | Nhân viên          | dannkpc04351@fpt.edu            | <span style="color:green" >Đang hoạt động</span>
-| Đoàn Hiệp Sỹ          | sydh                 | Nhân viên          | sydhpc04388@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span>
-| Phùng Quốc Vinh       | vinhpq               | Nhân viên          | vinhpqpc04338@fpt.edu.vn        | <span style="color:red" >Ngưng hoạt động</span>
-| Lê Bích Vi            | vilb                 | Nhân viên          | vilbpc04354@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span>
+| Tên tài khoản         | Tên đăng nhập        | Chức vụ            | Email                           | Trạng Thái                                       |
+| ----------------------| ---------------------| ------------------ | ------------------------------- | -------------------------------------------------|
+| Trần Văn Nhuộm        | admin                | Quản trị           | nhuomtv@fpt.edu.vn              | <span style="color:green" >Đang hoạt động</span> |
+| Trần Hữu Đang         | dangth               | Quản lí            | dangthpc04349@fpt.edu.vn        | <span style="color:green" >Đang hoạt động</span> |
+| Nguyễn Khánh Đan      | dannk                | Nhân viên          | dannkpc04351@fpt.edu            | <span style="color:green" >Đang hoạt động</span> |
+| Đoàn Hiệp Sỹ          | sydh                 | Nhân viên          | sydhpc04388@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span> |
+| Phùng Quốc Vinh       | vinhpq               | Nhân viên          | vinhpqpc04338@fpt.edu.vn        | <span style="color:red" >Ngưng hoạt động</span>  |
+| Lê Bích Vi            | vilb                 | Nhân viên          | vilbpc04354@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span> |
 <hr/>
 
 <br/>
