@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://tranhuudang.cf)<br/>
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://tranhuudang.cf)
+<br/>
 
 <br/>
 
@@ -25,7 +26,7 @@ Ngoài ra các thành viên còn đảm nhận một số nhiệm vụ khác đ�
 
 # Documents
 - [Cài đặt và sử dụng](#install)
-- [Tài khoản và phân quyền](#events)
+- [Tài khoản và phân quyền](#account)
 - [Các tính năng nâng cao](#ui-components)
   - [Tùy chỉnh giao diện (Darkmode - Lightmode)](#)
   - [Quên mật khẩu](#header-bar)
@@ -44,21 +45,29 @@ Ngoài ra các thành viên còn đảm nhận một số nhiệm vụ khác đ�
   - [Thư viện bên ngoài để mở webcam](#webcam)
   - [Lớp tiện ích để chuyển đổi giữa mã nhị phân và ASCII](#bitmap)
   - [Thư viện để xuất file excel, word, pdf,...](#file)
-  - [Vẽ biểu đồ 2D](#chart)
+  - [Thư viện Chart để vẽ biểu đồ 2D](#chart)
   - [Thư viện làm việc với email](#email)
 - [Các công cụ sử dụng](#)
+  - [Netbeans IDE](#)
+  - [MSS Management Studio 18](#)
+  - [Visual Studio Code](#)
   - [Github.com](#)
   - [Trello.com](#)
-  - [MSS Management Studio 18](#)
-  - [VS Code](#)
-  - [Netbeans IDE]()
+  - [Visio 2016](#)
+  - [Balsamiq Wireframes](#)
+  - [Microsoft Office 2016](#)
+  - [Launch 4 J](#)
+  
 - [Các tư liệu tham khảo](#draw-func)
   - [Github - DJ Raven](#draw)
-  - [YouTube - KeepToo](#gotoxy)
+  - [Github - KeepToo](#gotoxy)
   - [YouTube - Ếch học lập trình](#square)
   - [YouTube - Abner Rodrigues](#set-color)
   - [YouTube - Bro Code](#clear)
   - [YouTube - Thân Triệu](#codepage)
+<br>
+
+<br>
 
 # Mô tả chi tiết dự án
 
@@ -70,15 +79,15 @@ Phần mềm là dự án cuối môn của nhóm DAVISY trong môn dự án 1 -
 <center><img src=""></center>
 <br/> -->
 
-## Tài khoản và phân quyền
+## Account
 | Tên tài khoản         | Tên đăng nhập        | Chức vụ            | Email                           | Trạng Thái
 | ----------------------| ---------------------| ------------------ | ------------------------------- | ----------------
-| Trần Văn Nhuộm        | admin                | Quản trị           | nhuomtv@fpt.edu.vn              | Đang hoạt động
-| Trần Hữu Đang         | dangth               | Quản lí            | dangthpc04349@fpt.edu.vn        | Đang hoạt động
-| Nguyễn Khánh Đan      | dannk                | Nhân viên          | dannkpc04351@fpt.edu            | Đang hoạt động
-| Đoàn Hiệp Sỹ          | sydh                 | Nhân viên          | sydhpc04388@fpt.edu.vn          | Đang hoạt động
-| Phùng Quốc Vinh       | vinhpq               | Nhân viên          | vinhpqpc04338@fpt.edu.vn        | Ngưng hoạt động
-| Lê Bích Vi            | vilb                 | Nhân viên          | vilbpc04354@fpt.edu.vn          | Đang hoạt động
+| Trần Văn Nhuộm        | admin                | Quản trị           | nhuomtv@fpt.edu.vn              | <span style="color:green" >Đang hoạt động</span>
+| Trần Hữu Đang         | dangth               | Quản lí            | dangthpc04349@fpt.edu.vn        | <span style="color:green" >Đang hoạt động</span>
+| Nguyễn Khánh Đan      | dannk                | Nhân viên          | dannkpc04351@fpt.edu            | <span style="color:green" >Đang hoạt động</span>
+| Đoàn Hiệp Sỹ          | sydh                 | Nhân viên          | sydhpc04388@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span>
+| Phùng Quốc Vinh       | vinhpq               | Nhân viên          | vinhpqpc04338@fpt.edu.vn        | <span style="color:red" >Ngưng hoạt động</span>
+| Lê Bích Vi            | vilb                 | Nhân viên          | vilbpc04354@fpt.edu.vn          | <span style="color:green" >Đang hoạt động</span>
 <hr/>
 
 <br/>
