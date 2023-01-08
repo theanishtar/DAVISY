@@ -1,0 +1,1 @@
+src\com\asset\slide-login\bn2.jpg
