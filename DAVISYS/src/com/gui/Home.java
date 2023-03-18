@@ -16,6 +16,11 @@ import com.ui.drawer.scroll.Drawer;
 import com.ui.drawer.scroll.DrawerController;
 import com.ui.drawer.scroll.DrawerItem;
 import com.ui.drawer.scroll.EventDrawer;
+
+import com.ui.drawer.scroll.DrawerDark;
+import com.ui.drawer.scroll.DrawerControllerDark;
+import com.ui.drawer.scroll.DrawerItemDark;
+import com.ui.drawer.scroll.EventDrawerDark;
 import com.dao.HangDAO;
 import com.dao.LoaiHangDAO;
 import com.dao.SanPhamDAO;
@@ -250,6 +255,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     ArrayList<String> thanhTien = new ArrayList<>();
 
     //Menu chương trình
+    private DrawerController drawerDark;
+
+    //Menu chương trình
     private DrawerController drawer;
 
     public Home() {
@@ -262,8 +270,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         getTenNhanVien("dangth");
         ktTenDN = "dangth";
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
-        initMenu(); //gọi lại phương thức khởi tạo MENU
 
+        initDarkMenu();
+        initMenu(); //gọi lại phương thức khởi tạo MENU
         initThongKe();
         lightModeTK();
         initNhanVien();
@@ -311,8 +320,9 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
         getTenNhanVien(tenDN);
         ktTenDN = tenDN;
         loadMain(); //gọi component Loading khi đang chờ kết nối Database
-        initMenu(); //gọi lại phương thức khởi tạo MENU
 
+        initDarkMenu();
+        initMenu(); //gọi lại phương thức khởi tạo MENU
         initThongKe();
         initNhanVien();
         hideCardMenubar();
@@ -400,10 +410,188 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     void showLoadBar() {
     }
 
+    void initDarkMenu() {
+        drawerDark = DrawerDark.newDrawer(this)
+                .background(new Color(90, 90, 90))
+                .enableScroll(true)
+                .backgroundTransparent(0.3f)
+                .header(new Header())
+                .space(3)
+                .addChild(new DrawerItem("Cửa sổ chính").build())
+                .addChild(new DrawerItem("Tài khoản").build())
+                .addChild(new DrawerItem("Sản phẩm").build())
+                .addChild(new DrawerItem("Hóa đơn").build())
+                .addChild(new DrawerItem("Giỏ hàng").build())
+                .addChild(new DrawerItem("Thống kê").build())
+                .addFooter(new Separator())
+                .addFooter(new DrawerItem("Cài đặt").build())
+                .addFooter(new DrawerItem("Giới thiệu").build())
+                .addFooter(new DrawerItem("Đăng xuất").build())
+                .event(new EventDrawer() {
+                    @Override
+                    public void selected(int index, DrawerItem item) {
+                        if (drawerDark.isShow()) {
+                            drawerDark.hide();
+                        }
+                        switch (index) {
+                            case 0:
+                                //gọi trang Main
+                                if (chose == -1 || chose != 0) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarTrangChu.setVisible(true);
+                                    cardTrangChuTongQuan.setVisible(true);
+                                    chose = 0;
+                                }
+                                break;
+                            case 1:
+                                //gọi trang tài khoản
+                                if (chose == -1 || chose != 1) {
+//                                    System.out.println(CV);
+                                    if ("Nhân viên".equalsIgnoreCase(CV)) {
+                                        //nhanvien
+                                        TaiKhoanHr1.setVisible(false);
+                                        TaiKhoanHr3.setVisible(false);
+                                        TaiKhoanHr2.setVisible(true);
+                                        TaiKhoantittle1.setVisible(false);
+                                        TaiKhoantittle3.setVisible(false);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTaiKhoan.setVisible(true);
+                                        cardKhachHang.setVisible(true);
+                                    } else {
+                                        //quan li, admin
+                                        TaiKhoanHr2.setVisible(false);
+                                        TaiKhoanHr3.setVisible(false);
+                                        TaiKhoanHr1.setVisible(true);
+                                        hidePage();
+                                        hideMenu();
+                                        cardMenubarTaiKhoan.setVisible(true);
+                                        cardTaiKhoanNhanVien.setVisible(true);
+                                    }
+
+                                    chose = 1;
+                                    listNVT();
+                                    listKhachHang();
+                                    listChucVu();
+                                    fillTableNhanVien();
+                                    fillTableKhachHang();
+                                    fillTableChucVu();
+                                }
+                                break;
+                            case 2:
+                                //gọi trang sản phẩm
+                                if (chose == -1 || chose != 2) {
+                                    SanPhamHr1.setVisible(false);
+                                    SanPhamHr2.setVisible(false);
+                                    SanPhamHr.setVisible(true);
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarSanPham.setVisible(true);
+                                    cardSanPham.setVisible(true);
+                                    chose = 2;
+                                    listSPT();
+                                    listHang();
+                                    listLoai();
+                                    fillTableSanPham();
+                                    fillTableHang();
+                                    fillTableLoai();
+                                }
+                                break;
+                            case 3:
+                                //gọi trang hóa đơn
+                                if (chose == -1 || chose != 3) {
+                                    HoaDonHr1.setVisible(true);
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarHoaDon.setVisible(true);
+                                    cardHoaDon.setVisible(true);
+                                    chose = 3;
+                                    listHoaDon();
+                                    fillTableHoaDon();
+
+                                }
+                                break;
+                            case 4:
+                                //gọi trang giỏ hàng
+                                if (chose == -1 || chose != 4) {
+                                    hidePage();
+                                    hideMenu();
+                                    cartShoping("");
+                                    cardMenubarGioHang.setVisible(true);
+                                    cardGioHang.setVisible(true);
+                                    findItemCart();
+                                    chose = 4;
+                                }
+                                break;
+                            case 5:
+                                //gọi trang thống kê
+                                if (chose == -1 || chose != 5) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarThongKe.setVisible(true);
+                                    if ("Nhân viên".equalsIgnoreCase(CV)) {
+                                        ThongKeTittle1.setVisible(false);
+                                        ThongKeTittle2.setVisible(true);
+                                        ThongKeHr1.setVisible(false);
+                                        cardThongKeDoanhThu.setVisible(false);
+                                        cardThongKeSanPham.setVisible(true);
+                                        cboSort.setSelectedItem("Cao nhất");
+                                        ThongKeHr2.setVisible(true);
+                                    } else {
+                                        ThongKeTittle1.setVisible(true);
+                                        ThongKeTittle2.setVisible(true);
+                                        ThongKeHr1.setVisible(true);
+                                        ThongKeHr2.setVisible(false);
+                                        cardThongKeDoanhThu.setVisible(true);
+                                        cardThongKeSanPham.setVisible(false);
+                                        cboSort.setSelectedItem("Cao nhất");
+                                    }
+                                    chose = 5;
+                                }
+                                break;
+                            case 6:
+                                //gọi dialog cài đặt
+                                //new CaiDat(new Home(), true).setVisible(true);
+                                if (chose == -1 || chose != 6) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarCaiDat.setVisible(true);
+                                    cardCaiDatGiaoDien.setVisible(true);
+                                    CaiDatHr2.setVisible(false);
+                                    CaiDatHr1.setVisible(true);
+                                    chose = 6;
+                                }
+                                break;
+                            case 7:
+                                //gọi trang giới thiệu
+                                if (chose == -1 || chose != 7) {
+                                    hidePage();
+                                    hideMenu();
+                                    cardMenubarGioiThieu.setVisible(true);
+                                    cardGioiThieuSanPham.setVisible(true);
+                                    GioiThieuHr2.setVisible(false);
+                                    chose = 7;
+                                }
+                                break;
+                            case 8:
+                                //gọi phương thức đăng xuất
+                                signOut();
+                                break;
+                        }
+                    }
+                }).build();
+
+    }
+
     void initMenu() {
+        if(darkMode){
+            
+        }
         drawer = Drawer.newDrawer(this)
                 .background(new Color(90, 90, 90))
                 .enableScroll(true)
+                .backgroundTransparent(0.3f)
                 .header(new Header())
                 .space(3)
                 .addChild(new DrawerItem("Cửa sổ chính").build())
@@ -3009,8 +3197,8 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Cập nhật dữ liệu
     public void updateHoaDon() {
-        String maHD=(String)tblHoaDon.getValueAt(this.row, 0);
-        HoaDonEntity hd =HoaDon.selectById(maHD);
+        String maHD = (String) tblHoaDon.getValueAt(this.row, 0);
+        HoaDonEntity hd = HoaDon.selectById(maHD);
         System.out.println(maHD);
         hd.setTrangThai(true);
         try {
@@ -3051,11 +3239,11 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
 
 //Xóa hóa đơn chi tiết
     public void deleteHoaDonCT(String mahd) {
-        List<HoaDonCTEntity> listCTHD =new ArrayList<>();
+        List<HoaDonCTEntity> listCTHD = new ArrayList<>();
         listCTHD = HDCT.selectByIdSP(mahd);
-        for(HoaDonCTEntity hd :listCTHD){
-            SanPhamEntity sp =SanPham.selectById(hd.getMaSP());
-            int sl=sp.getSl()+hd.getSl();
+        for (HoaDonCTEntity hd : listCTHD) {
+            SanPhamEntity sp = SanPham.selectById(hd.getMaSP());
+            int sl = sp.getSl() + hd.getSl();
             sp.setMaSP(hd.getMaSP());
             sp.setSl(sl);
             SanPham.updateSL(sp);
@@ -9985,6 +10173,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
+        //JOptionPane.showMessageDialog(this, darkMode);
         drawer.show();
         //openMenu();
     }//GEN-LAST:event_btnMenuActionPerformed
@@ -10972,8 +11161,7 @@ public class Home extends javax.swing.JFrame implements Runnable, ThreadFactory 
             if (chon) {
                 deleteHoaDon();
             }
-        }
-        else{
+        } else {
             MsgBox.alert(this, "Bạn không được phép xóa!\nVui lòng chọn hóa đơn chưa thanh toán!");
             return;
         }

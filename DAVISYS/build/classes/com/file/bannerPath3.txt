@@ -1,1 +1,1 @@
-src\com\asset\slide-login\bn3.jpg
+src\\com\\asset\\slide-login\\bn3.jpg

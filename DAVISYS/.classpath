@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="com/swing/" kind="src" path="dist/src"/>
+	<classpathentry kind="src" path="dist/src/com/swing"/>
+	<classpathentry excluding="com/swing/" kind="src" path="src"/>
+	<classpathentry kind="src" path="src/com/swing"/>
+	<classpathentry kind="lib" path="dist/DAVISYS.jar"/>
+	<classpathentry kind="lib" path="dist/lib/AbsoluteLayout.jar"/>
+	<classpathentry kind="lib" path="dist/lib/AnimatonClass.jar"/>
+	<classpathentry kind="lib" path="dist/lib/bridj-0.6.2-windows-only.jar"/>
+	<classpathentry kind="lib" path="dist/lib/commons-codec-1.11.jar"/>
+	<classpathentry kind="lib" path="dist/lib/commons-collections4-4.2.jar"/>
+	<classpathentry kind="lib" path="dist/lib/commons-compress-1.18.jar"/>
+	<classpathentry kind="lib" path="dist/lib/core-3.3.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/filters-2.0.235.jar"/>
+	<classpathentry kind="lib" path="dist/lib/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jakarta.activation-2.0.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jakarta.mail-2.0.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/javase-3.3.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jcommon-1.0.23.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jfreechart-1.0.19-experimental.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jfreechart-1.0.19-swt.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jfreechart-1.0.19.jar"/>
+	<classpathentry kind="lib" path="dist/lib/jfreesvg-2.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/junit-4.11.jar"/>
+	<classpathentry kind="lib" path="dist/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="dist/lib/miglayout-4.0.jar"/>
+	<classpathentry kind="lib" path="dist/lib/mssql-jdbc-8.2.2.jre8.jar"/>
+	<classpathentry kind="lib" path="dist/lib/orsoncharts-1.4-eval-nofx.jar"/>
+	<classpathentry kind="lib" path="dist/lib/orsonpdf-1.6-eval.jar"/>
+	<classpathentry kind="lib" path="dist/lib/poi-4.0.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/poi-ooxml-4.0.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/poi-ooxml-schemas-4.0.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/servlet.jar"/>
+	<classpathentry kind="lib" path="dist/lib/slf4j-api-1.6.2.jar"/>
+	<classpathentry kind="lib" path="dist/lib/slf4j-log4j12-1.6.2.jar"/>
+	<classpathentry kind="lib" path="dist/lib/swing-layout-1.0.4.jar"/>
+	<classpathentry kind="lib" path="dist/lib/swing-worker-1.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/swingx-1.6.1.jar"/>
+	<classpathentry kind="lib" path="dist/lib/SwitchButton.jar"/>
+	<classpathentry kind="lib" path="dist/lib/swtgraphics2d.jar"/>
+	<classpathentry kind="lib" path="dist/lib/TimingFramework-0.55.jar"/>
+	<classpathentry kind="lib" path="dist/lib/webcam-capture-0.3.12.jar"/>
+	<classpathentry kind="lib" path="dist/lib/xmlbeans-3.0.2.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
