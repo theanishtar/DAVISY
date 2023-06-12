@@ -3,6 +3,8 @@
 
 <br/>
 
+Dự án được xuất hiện trên website của trường [(xem thêm)](https://caodang.fpt.edu.vn/tin-tuc-poly/can-tho-tin-sinh-vien/du-an-phan-mem-quan-ly-ban-phu-kien-thiet-bi-di-dong-cua-sinh-vien-fpoly-can-tho-lot-mat-xanh-cua-giang-vien.html?zarsrc=30&utm_source=zalo&utm_medium=zalo&utm_campaign=zalo)
+
 # DAVISY-PRO1014
 
 ## Tên dự án: Xây dựng ứng dụng quản lý bán hàng cho cửa hàng bán phụ kiện thiết bị di động DAVISY
